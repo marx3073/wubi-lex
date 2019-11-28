@@ -1,0 +1,26 @@
+import win.ui;
+/*DSG{{*/
+var winform = win.form(text="aardio form";right=759;bottom=513;bgcolor=16777215)
+winform.add(
+plus={cls="plus";left=27;top=59;right=718;bottom=367;align="left";font=LOGFONT(h=-16);z=1}
+)
+/*}}*/
+
+winform.plus.text = /*
+微软五笔常用快捷鍵：
+
+1、短按Shift键（或Ctrl + Space）：切换中英文输入。
+
+2、按Alt + Shift键，切换中文/英文键盘。
+
+3、Win键 + 空格键：切换输入法。
+
+4、中文输入时，按tab鍵跳到表情符号，然后回车就可以打开表情与符号软键盘。
+
+5、输入时，按回车取消输入，按空格取首个候选词，
+按分号键(;)取第二个候选词，按引号键（'）取第三个候选词。
+*/
+
+winform.show();
+win.loopMessage();
+return winform;

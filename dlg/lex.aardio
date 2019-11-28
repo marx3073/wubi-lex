@@ -1,0 +1,299 @@
+
+import fonts.fontAwesome;
+import win.ui;
+/*DSG{{*/
+var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=600;bgcolor=16777215)
+winform.add(
+bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=600;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
+btnAddFile={cls="plus";text='\uF271   添加码表文件';left=26;top=17;right=187;bottom=53;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');z=1};
+btnCopyToSystem={cls="plus";text='\uF0C7   安装到系统词库';left=196;top=17;right=389;bottom=53;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');z=2};
+lbTip={cls="plus";left=465;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=6};
+listbox={cls="listbox";left=28;top=79;right=398;bottom=594;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4};
+richedit={cls="richedit";left=404;top=79;right=1012;bottom=579;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-19);hscroll=1;multiline=1;vscroll=1;z=5}
+)
+/*}}*/
+
+import fsys;
+import fsys.dlg;
+import fsys.wubiLex;
+import win.inputBox;
+import config;
+
+winform.btnAddFile.oncommand = function(id,event){
+	var inputPath = fsys.dlg.open("二进制码表(*.lex);文本码表(*.txt)|*.lex;*.txt||",,,winform)
+	if(!inputPath){
+		return;
+	}
+	
+	var lexName;
+	while(true){
+		var inputBox = win.inputBox(winform)
+		inputBox.text = "五笔码表管理﻿工具"
+		inputBox.info.text = "请为码表指定一个友好名称"
+		
+		lexName = inputBox.doModal()
+		if(!#lexName){
+			return;
+		}
+		 
+		if(!fsys.path.validName(lexName)){
+			winform.msgboxErr(`名称不能包含空格、回车、换行、以及 / : * ? " < > ] 等字符`)
+			continue ;
+		}
+		 
+		if(config.lex.files[lexName]){
+			winform.msgboxErr(`此名称已经存在，请重新指定`)
+			continue ;
+		}
+	
+		break ;
+	}
+	
+	var lexPath = fsys.appdata("/aardio/std/wubi-lex-files/"+lexName+".lex");
+	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
+ 
+	if(string.endWith(inputPath,".txt",true)){
+		var wubiLex = fsys.wubiLex(inputPath)
+		if(!wubiLex){
+			winform.msgboxErr(`错误的码表文件`)
+			return;
+		}
+	 	wubiLex.saveLex(lexPath)		
+	}
+	else {
+		var file = ..io.open(inputPath,"rb");
+		if(!file){
+			winform.msgboxErr(`错误的码表文件`)
+			return;
+		}
+		
+		if( file.read(#"imscwubi")!=="imscwubi"){
+			winform.msgboxErr(`错误的码表文件`)
+			return;
+		}
+		
+		file.close()
+		
+		fsys.copy(inputPath,lexPath);
+	}
+	
+ 
+	config.lex.files[lexName] = lexPath;
+	table.push(config.lex.names,lexName);
+	config.saveAll();
+	
+	listLex(); 
+}
+
+if(!#config.lex.names){
+	var path98 = fsys.appdata("/aardio/std/wubi-lex-files/五笔98.lex",string.load("\res\ChsWubi98.lex"))
+	var path86 = fsys.appdata("/aardio/std/wubi-lex-files/五笔86.lex",string.load("\res\ChsWubi86.lex"))
+	
+	config.lex.files["五笔98"] = path98;
+	table.push(config.lex.names,"五笔98");
+	
+	config.lex.files["五笔86"] = path86;
+	table.push(config.lex.names,"五笔86");
+	
+	config.saveAll();
+}
+
+listLex = function(){
+	winform.listbox.clear();
+	
+	winform.listbox.add("系统码表")
+	var lexNames = config.lex.names;
+	for(i=1;#lexNames;1){
+		winform.listbox.add(lexNames[i])
+	} 
+}
+listLex();
+
+winform.listbox.oncommand = function(id,event){ 
+	if( event == 0x1/*_LBN_SELCHANGE*/ ){
+		winform.btnCopyToSystem.disabled = winform.listbox.selIndex<=1 
+		winform.lbTip.text = "";
+	}
+}
+
+winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
+	select( message ) {  
+		case 0x205/*_WM_RBUTTONUP*/{
+			winform.lbTip.text = "";
+			var x,y = win.getMessagePos();  
+			var item = winform.listbox.hitTest(x,y,true); 
+			if( item  ){
+				winform.listbox.selIndex = item;
+				
+				winform.popmenu = win.ui.popmenu(winform); 
+				if(item>1){
+					winform.popmenu.add('删除',function(id){ 
+    					var selIndex = winform.listbox.selIndex;
+						winform.listbox.delete(selIndex)
+						
+						var lexName = config.lex.names[selIndex-1];
+						if(lexName){
+							var lexPath = config.lex.files[lexName];
+							if(lexPath){
+								io.remove(lexPath)
+								config.lex.files[lexName] = null;
+							}
+							table.remove(config.lex.names,selIndex-1)
+						}
+					} ) 
+					
+					winform.popmenu.add('安装到系统词库',function(id){ 
+    					winform.btnCopyToSystem.oncommand();
+					} )  				
+				}
+				
+				winform.popmenu.add('导出文本格式词库',function(id){ 
+					import process;
+					var outputPath = fsys.dlg.save("文本码表（*.txt）|*.txt||",,,winform)
+					if(!outputPath){
+						return;
+					}
+					
+					winform.lbTip.text = "正在导出数据"
+	 
+	 				if(item>1){
+    					var lexName = config.lex.names[winform.listbox.selIndex-1];
+    					if(lexName){
+							var lexPath = config.lex.files[lexName];
+							var wubiLex = fsys.wubiLex(lexPath)
+						 
+							wubiLex.saveTxt(outputPath) 
+						} 
+					}
+					else {
+						var wubiLex = fsys.wubiLex()
+						wubiLex.saveTxt(outputPath) 
+					}
+					
+					winform.lbTip.disabledText = null;
+					winform.lbTip.text = "已完成"
+				} ) 
+
+				winform.popmenu.add('浏览字库文件',function(id){ 
+					import process;
+    				if(item>1){
+    					var lexName = config.lex.names[winform.listbox.selIndex-1];
+    					if(lexName){
+							var lexPath = config.lex.files[lexName];
+							process.exploreSelect(lexPath)
+						}
+					}
+					else {
+						process.exploreSelect(fsys.wubiLex.path()) 
+    				}
+				} ) 
+				winform.popmenu.popup(x,y,true)
+			}
+		} 
+	}
+}
+
+winform.btnCopyToSystem.oncommand = function(id,event){
+	var selIndex = winform.listbox.selIndex; 
+	var lexName = config.lex.names[selIndex-1];
+	if(lexName){
+		var srcPath = config.lex.files[lexName];
+		
+		winform.btnCopyToSystem.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}  
+		var ok,err = win.invoke(copyToSystem,srcPath) 
+		winform.lbTip.text = ok?'安装成功，如果不能输入，请按 \uF17A + 空格键切换一次输入法': string.concat( "安装失败：",err);
+		
+		import key;
+		key.combine("WIN","SPACE")
+		win.delay(500)
+		key.combine("WIN","SPACE")
+		
+		winform.btnCopyToSystem.disabledText = null;
+	}	
+}
+
+copyToSystem = function(srcPath){
+    import fsys;
+    import service;
+	import process;
+	
+	var aclGrant = function(filePath,proc){
+		import process.popen;
+		if(!..io.exist(filePath) ){ return proc() }
+		
+		var tempAclDir = io.tmpname();
+		var tempAclPath = io.joinpath(tempAclDir,"acl.dat") 
+		var ok,out,err = process.popen(,"takeown","/f",filePath).waitOne()
+		if(!ok) return false,err;
+		
+		var ok,out,err = process.popen(,"icacls",filePath,"/save",tempAclPath).wait()
+		if(!ok) return false,err;
+		
+		var ok,out,err = process.popen(,"icacls",filePath,"/grant","Administrators:(F)").wait()
+		if(!ok) return false,err;
+		
+		var ret = proc(filePath);
+		
+		var ok,out,err = process.popen(,"icacls",filePath,"/setowner","NT SERVICE\TrustedInstaller").wait()
+		if(!ok) return false,err;
+		
+		var ok,out,err = process.popen(,"icacls",filePath,"/restore",tempAclPath).wait()
+		if(!ok) return false,err; 
+	 	
+		io.remove(tempAclPath);
+		io.remove(tempAclDir);
+		
+		return ret;
+	}
+	
+	return aclGrant(..fsys.getWinDir("\InputMethod\CHS\ChsWubiNew.lex"),
+		function(chsWubiNewPath){
+			return aclGrant(..fsys.getWinDir("\InputMethod\CHS\ChsWubi.lex"),
+				function(chsWubiPath){
+					var srvMgr = service.manager();
+					srvMgr.startDisabled("TabletInputService");
+					srvMgr.stop("TabletInputService")
+				
+					for(i=1;10;1){
+    					process.kill("ctfmom.exe")
+						process.kill("ChsIME.exe")
+ 						if(chsWubiNewPath)fsys.delete(chsWubiNewPath )  
+ 						if(chsWubiPath)fsys.delete(chsWubiPath ) 
+						if((!io.exist(chsWubiNewPath)) && (!io.exist(chsWubiPath)) ){ break; }  
+						sleep(1000)
+					}
+ 				
+					var lexData = string.load(srcPath);
+					if(chsWubiNewPath){ string.save(chsWubiNewPath,lexData); }
+					if(chsWubiPath){ string.save(chsWubiPath,lexData); }
+					
+					srvMgr.startManual("TabletInputService");
+					srvMgr.start("TabletInputService")
+					process("C:\Windows\System32\InputMethod\CHS\ChsIME.exe");
+					return true;
+				}
+			);		
+		}
+	);
+	
+	publish("wubi.system.lex.change")
+}
+
+winform.btnAddFile.skin({
+	background={
+		default=0xFF8FB2B0;
+		hover=0xFF928BB3;
+		disabled=0xFFCCCCCC; 
+	}
+})
+
+winform.btnCopyToSystem.skin({
+	background={
+		default=0xFF8FB2B0;
+		hover=0xFF928BB3;
+		disabled=0xFFCCCCCC; 
+	}
+})
+
+winform.show() 
+win.loopMessage();

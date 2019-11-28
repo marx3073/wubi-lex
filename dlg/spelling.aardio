@@ -1,0 +1,58 @@
+
+import fonts.fontAwesome;
+import fsys.wubiSpelling98;
+import win.ui;
+/*DSG{{*/
+var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=610;bgcolor=16777215)
+winform.add(
+editSearch={cls="plus";left=292;top=191;right=717;bottom=226;border={bottom=1;color=-16744448};dl=1;dr=1;dt=1;editable=1;font=LOGFONT(h=-16);textPadding={top=6};z=2};
+plusCode={cls="plus";left=326;top=308;right=703;bottom=358;dl=1;dr=1;dt=1;font=LOGFONT(h=-37);z=3};
+spelling={cls="plus";left=326;top=238;right=703;bottom=294;color=255;dl=1;dr=1;dt=1;font=LOGFONT(h=-26;name='98WB-2');z=1}
+)
+/*}}*/
+
+import win.debounce;
+import fsys.wubiLex;
+import fsys.wubiSpelling98;
+
+var spelling98;
+var searchSpelling = win.debounce(function(word){
+    if(!spelling98){
+    	spelling98 = fsys.wubiSpelling98();
+    } 
+    
+	var code = winform.systemLex.find(word) 
+	winform.plusCode.text = code ? string.upper(code) : "缺少编码";
+	winform.spelling.text = spelling98.find(word); 
+	if(!#winform.spelling.text && string.len(winform.plusCode.text)==4){
+		var a,b = string.match(word,"(:)(:)") 
+			
+		if(a&&b){
+			var as = spelling98.find(a)
+			var bs = spelling98.find(b)
+			if(as&&bs){
+				var as1,as2 = string.match(as,"〔\s*(\S+)\s+(\S+)")
+				var bs1,bs2 = string.match(bs,"〔\s*(\S+)\s+(\S+)")
+			 	
+				if(as1&&as2&&bs1&&bs2){
+					winform.spelling.text = "〔 " + as1 +" "+ as2 +" "+ bs1 +" "+ bs2 + " 〕"
+				}	
+			}
+		}
+	}
+},100)
+
+winform.show() 
+winform.systemLex = fsys.wubiLex()
+subscribe("wubi.system.lex.change",function(...){
+	winform.systemLex = fsys.wubiLex()
+} )
+
+winform.editSearch.editBox.modifyEvent(,0x1/*_ENM_CHANGE*/)
+winform.editSearch.editBox.oncommand = function(id,event){
+	if(event===0x300/*_EN_CHANGE*/){
+		searchSpelling(winform.editSearch.text)
+	}
+}
+
+win.loopMessage();

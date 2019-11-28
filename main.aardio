@@ -1,0 +1,51 @@
+//RUNAS//
+import fonts.fontAwesome;
+import win.ui;
+/*DSG{{*/
+mainForm = win.form(text="五笔码表管理﻿工具";right=1040;bottom=642;bgcolor=15793151;border="none")
+mainForm.add(
+caption={cls="bkplus";text="五笔码表管理﻿工具";left=67;top=11;right=204;bottom=29;color=15780518;dl=1;dt=1;font=LOGFONT(h=-14);z=5};
+custom={cls="custom";left=-1;top=40;right=1040;bottom=648;bgcolor=16777215;db=1;dl=1;dr=1;dt=1;z=1};
+logo={cls="bkplus";text='\uF0AD';left=35;top=9;right=64;bottom=34;color=15780518;dl=1;dt=1;font=LOGFONT(h=-18;name='FontAwesome');z=4};
+nav1={cls="plus";text="词库管理";left=213;top=8;right=340;bottom=40;align="left";bkBottom=3;bkLeft=7;bkRight=8;bkTop=2;border={color=-65536};color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15}};iconText='\uF00A';notify=1;textPadding={left=42};x=0.5;y=0.20000000298023;z=3};
+nav2={cls="plus";text="字根反查";left=345;top=8;right=472;bottom=40;align="left";bkBottom=3;bkLeft=7;bkRight=8;bkTop=2;border={color=-65536};color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15}};iconText='\uF002';notify=1;textPadding={left=42};x=0.5;y=0.20000000298023;z=6};
+titleBar={cls="bkplus";left=0;top=0;right=1044;bottom=41;bgcolor=14977280;dl=1;dr=1;dt=1;z=2}
+)
+/*}}*/
+
+import win.ui.simpleWindow;
+win.ui.simpleWindow( mainForm );
+
+import win.ui.tabs;
+var tbs = win.ui.tabs( 
+	mainForm.nav1,
+	mainForm.nav2,
+);
+ 
+tbs.skin({
+	background={
+		active=0xFFFFFFFF;
+		default=0x00FFFFFF;
+		hover=0x38FFFFFF
+	};
+	color={
+		default=0xFFFFFFFF; 
+	};
+	checked={
+		background={default=0xFFFFFFFF;};
+		color={default=0xFF42A875;};
+	}
+})
+
+tbs.add({
+	text="快捷键";
+	iconText='\uF11C';
+})
+ 
+tbs.loadForm(1,"\dlg\lex.aardio" ); 
+tbs.loadForm(2,"\dlg\spelling.aardio" ); 
+tbs.loadForm(3,"\dlg\key.aardio" ); 
+tbs.selIndex = 1;
+
+mainForm.show();
+return win.loopMessage(); 

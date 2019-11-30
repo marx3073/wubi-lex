@@ -5,7 +5,7 @@ import win.ui;
 var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=600;bgcolor=16777215)
 winform.add(
 bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=600;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
-btnAddFile={cls="plus";text='\uF271   添加码表文件';left=26;top=17;right=187;bottom=53;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');z=1};
+btnAddFile={cls="plus";text='\uF271   添加码表文件';left=26;top=17;right=187;bottom=53;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=1};
 btnCopyToSystem={cls="plus";text='\uF0C7   安装到系统词库';left=196;top=17;right=389;bottom=53;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');z=2};
 lbTip={cls="plus";left=465;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=6};
 listbox={cls="listbox";left=28;top=79;right=398;bottom=594;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4};
@@ -82,7 +82,7 @@ winform.btnAddFile.oncommand = function(id,event){
 	table.push(config.lex.names,lexName);
 	config.saveAll();
 	
-	listLex(); 
+	winform.listbox.reloadLexList(); 
 }
 
 if(!#config.lex.names){
@@ -97,17 +97,6 @@ if(!#config.lex.names){
 	
 	config.saveAll();
 }
-
-listLex = function(){
-	winform.listbox.clear();
-	
-	winform.listbox.add("系统码表")
-	var lexNames = config.lex.names;
-	for(i=1;#lexNames;1){
-		winform.listbox.add(lexNames[i])
-	} 
-}
-listLex();
 
 winform.listbox.oncommand = function(id,event){ 
 	if( event == 0x1/*_LBN_SELCHANGE*/ ){
@@ -201,6 +190,8 @@ winform.btnCopyToSystem.oncommand = function(id,event){
 		
 		winform.btnCopyToSystem.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}  
 		var ok,err = win.invoke(copyToSystem,srcPath) 
+		publish("wubi.system.lex.changed");
+					
 		winform.lbTip.text = ok?'安装成功，如果不能输入，请按 \uF17A + 空格键切换一次输入法': string.concat( "安装失败：",err);
 		
 		import key;
@@ -268,15 +259,14 @@ copyToSystem = function(srcPath){
 					if(chsWubiPath){ string.save(chsWubiPath,lexData); }
 					
 					srvMgr.startManual("TabletInputService");
-					srvMgr.start("TabletInputService")
+					srvMgr.start("TabletInputService");
 					process("C:\Windows\System32\InputMethod\CHS\ChsIME.exe");
+					
 					return true;
 				}
 			);		
 		}
 	);
-	
-	publish("wubi.system.lex.change")
 }
 
 winform.btnAddFile.skin({
@@ -294,6 +284,41 @@ winform.btnCopyToSystem.skin({
 		disabled=0xFFCCCCCC; 
 	}
 })
+
+winform.listbox.systemLexName = "系统码表";
+winform.listbox.reloadLexList = function(){
+	winform.listbox.clear();
+	
+	winform.listbox.add(winform.listbox.systemLexName)
+	var lexNames = config.lex.names;
+	for(i=1;#lexNames;1){
+		winform.listbox.add(lexNames[i])
+	} 
+} 
+winform.listbox.reloadLexList()
+
+import win.debounce;
+var updateSystemLexVersion = function(){
+    winform.listbox.updateSystemLexVersion = function(ver){
+    	winform.listbox.systemLexName = "系统码表( " + ver + " )"
+    	winform.listbox.reloadLexList(); 
+    }
+    
+	thread.invoke( 
+		function(winform){
+			import fsys.wubiLex;
+			var wubiLex = fsys.wubiLex()
+			var ver = wubiLex.getVersion();
+			ver = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver]; 
+			winform.listbox.updateSystemLexVersion(ver)
+		},winform
+	)
+}
+updateSystemLexVersion();
+
+subscribe("wubi.system.lex.changed",function(...){
+	updateSystemLexVersion() 
+} )
 
 winform.show() 
 win.loopMessage();

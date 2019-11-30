@@ -21,7 +21,7 @@ var tbs = win.ui.tabs(
 	mainForm.nav1,
 	mainForm.nav2,
 );
- 
+	
 tbs.skin({
 	foreground={
 		active=0xFFFFFFFF;
@@ -38,15 +38,81 @@ tbs.skin({
 })
 
 tbs.add({
+	text="短语词库";
+	iconText='\uF0AE'; 
+})
+
+tbs.add({
 	text="帮助";
 	iconText='\uF06A';
 	hasCloseButton = true;
 })
- 
+	
 tbs.loadForm(1,"\dlg\lex.aardio" ); 
 tbs.loadForm(2,"\dlg\spelling.aardio" ); 
-tbs.loadForm(3,"\dlg\help.aardio" ); 
+tbs.loadForm(3,"\dlg\phrase.aardio" ); 
+tbs.loadForm(4,"\dlg\help.aardio" ); 
 tbs.selIndex = 1;
+
+import win.util.tray;
+mainForm.onMinimize = function(lParam){
+	mainForm.tray = win.util.tray(mainForm)  
+	mainForm.modifyStyleEx(0x40000/*_WS_EX_APPWINDOW*/,0x80/*_WS_EX_TOOLWINDOW*/)
+	mainForm.show(false); 
+	return true; 
+}
+
+mainForm.onDestroy = function(){
+	if(mainForm.tray){
+		mainForm.tray.delete()
+	}
+}
+
+import win.ui.menu;
+mainForm.wndproc = {
+	[0xACCF/*_WM_TRAYMESSAGE*/ ] = function(hwnd,message,wParam,lParam){
+		if( lParam = 0x205/*_WM_RBUTTONUP*/ ){
+			win.setForeground(mainForm.hwnd)
+			mainForm.popmenu = win.ui.popmenu(mainForm);//创建弹出菜单
+			mainForm.popmenu.add('切换词库',function(id){
+				tbs.selIndex = 1;
+				mainForm.show();
+			});
+			mainForm.popmenu.add('管理短语',function(id){
+				tbs.selIndex = 3;
+				mainForm.show();
+			});
+			mainForm.popmenu.add('字根反查',function(id){
+				tbs.selIndex = 2;
+				mainForm.show();
+				tbs.selForm.editSearch.editBox.setFocus();
+			});
+			mainForm.popmenu.add('打开本软件源代码',function(id){
+				import process;
+				process.openUrl("https://github.com/aardio/wubi-lex-tool")
+			});
+			mainForm.popmenu.add('下载最新版本',function(id){
+				import process;
+				process.openUrl("https://github.com/aardio/wubi-lex-tool/releases")
+			});
+			mainForm.popmenu.add('退出',function(id){
+				mainForm.close()
+			});
+			
+			var pt = ::POINT();
+			::User32.GetCursorPos(pt);
+			mainForm.popmenu.popup(pt.x,pt.y,true)
+		}
+		elseif( lParam = 0x202/*_WM_LBUTTONUP*/ ) {
+			mainForm.show();
+			win.setForeground(mainForm.hwnd);
+			
+			if(tbs.selIndex = 2){
+				tbs.selForm.editSearch.editBox.setFocus();
+			}
+		} 	
+	}
+}
 
 mainForm.show();
 return win.loopMessage(); 

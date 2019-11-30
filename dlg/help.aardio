@@ -26,23 +26,23 @@ winform.keyboardShortcuts.text = /*
 */
 
 winform.lnkGitHub.skin(
-    color = { 
-        hover = 0xFFFF0000; 
-        active = 0xFF00FF00; 
-    }
-    border = {
-        hover = {bottom=1;color=0xFFFF0000}
-    }
+	color = { 
+		hover = 0xFFFF0000; 
+		active = 0xFF00FF00; 
+	}
+	border = {
+		hover = {bottom=1;color=0xFFFF0000}
+	}
 )
 
 winform.lnkWebSite.skin(
-    color = { 
-        hover = 0xFFFF0000; 
-        active = 0xFF00FF00; 
-    }
-    border = {
-        hover = {bottom=1;color=0xFFFF0000}
-    }
+	color = { 
+		hover = 0xFFFF0000; 
+		active = 0xFF00FF00; 
+	}
+	border = {
+		hover = {bottom=1;color=0xFFFF0000}
+	}
 )
 
 import process;

@@ -1,0 +1,233 @@
+//RUNAS//
+import fonts.fontAwesome;
+import win.ui;
+/*DSG{{*/
+var winform = win.form(text="五笔短语词库";right=938;bottom=597;acceptfiles=1;bgcolor=16777215)
+winform.add(
+btnLoad={cls="plus";text='\uF093  读取系统短语词库';left=507;top=548;right=704;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=3};
+btnSave={cls="plus";text='\uF019   更新短语词库到系统';left=707;top=548;right=909;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
+edit={cls="edit";left=18;top=55;right=925;bottom=541;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-13);hscroll=1;multiline=1;vscroll=1;z=2};
+lbTip={cls="static";text="每行由3个部分组成，用于表示一个短语配置：
+第一部分为小写字母组合表示按键，第二部分为不含空格的输出文本，第三部分为候选词排序位置（可省略）";left=20;top=10;right=897;bottom=67;font=LOGFONT(h=-13);transparent=1;z=1}
+)
+/*}}*/
+
+var loadPhrases = function(wubiUdpPath,winform){
+	import fsys; 
+	var file = io.open(wubiUdpPath,"rb");
+	
+	if(!file){
+		winform.edit.text = "不支持当前版本的短语词库格式"
+		winform.btnLoad.disabledText = null;
+		return; 
+	}
+	
+	if(!file.size()){
+		winform.edit.text = "系统短语词库内容为空"
+		winform.btnLoad.disabledText = null;
+		file.close();
+		return; 	
+	}
+	
+	if(file.read(8)!="mschxudp"){
+		winform.edit.text = "不支持当前版本的短语词库格式"
+		winform.btnLoad.disabledText = null;
+		file.close();
+		return; 	
+	}
+	
+	var header = file.read({
+		int magic=0x00600002;
+		int version;
+		int phraseOffsetStart;
+		int phraseStart;
+		int phraseEnd;
+		int count;
+		int timestamp;
+		BYTE reserved[28];
+	})
+	
+	file.seek("set",header.phraseOffsetStart)
+	if(!header.count){
+		winform.edit.text = "系统短语词库内容为空"
+		file.close()
+		winform.btnLoad.disabledText = null;
+		return;
+	}
+	
+	var phraseOffsets = file.read({int array[]={length=header.count}}).array;
+	table.push(phraseOffsets, header.phraseEnd - header.phraseStart);
+	
+	reduce(phraseOffsets,function(prevOffset,nextOffset){
+		
+		var phrase  = file.read({
+			word cbSize = 16;
+			word cbSize2 = 16;
+			word offset;
+			byte candidate;
+			byte unknown = 6;
+			LONG reserved; 
+		})
+		
+		if(phrase.cbSize!==16){
+			winform.edit.text = "不支持当前版本的短语词库格式"
+			file.close();
+			return; 
+		}
+		
+		var code = file.readUnicode( (phrase.offset-phrase.cbSize) / 2)  
+		var text = file.readUnicode((nextOffset- prevOffset - phrase.offset)/2);
+		
+		winform.edit.print(code,text,phrase.candidate);
+		return nextOffset;
+	})
+	
+	file.close(); 
+	winform.btnLoad.disabledText = null;
+}
+
+var savePhrases = function(phraseText,winform){
+	import fsys;
+	var wubiUdpPath = fsys.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv2.lex")
+		
+	var updatePhraseFile = function(){
+		var file = io.open(wubiUdpPath,"w+b");
+		if(!file){
+			winform.msgboxErr("写入系统短语词库失败")
+			return; 
+		}
+		
+		var phraseArray = {}
+		var lineIndex = 0;
+		for line in string.lines(phraseText) {
+			lineIndex++;
+			if(!#line){continue;} 
+			
+			var phrase = string.splitEx(line,"\s+");
+			if(#phrase<2){
+				winform.msgboxErr( "第" + lineIndex + '行格式错误' )
+				file.close();
+				return;
+			}
+			
+			table.push(phraseArray,phrase);
+		}
+			
+		var phraseStart = 64+4*#phraseArray;
+		file.write({
+			BYTE proto[8] = "mschxudp";
+			int magic=0x00600002;
+			int version=1;
+			int phraseOffsetStart=64;
+			int phraseStart=64+4*#phraseArray;
+			int phraseEnd;
+			int count=#phraseArray;
+			int timestamp=tonumber(..time());
+			BYTE reserved[28];
+		})
+			
+		file.seek("cur", 4*#phraseArray)
+		var phraseOffsets = {} 
+	
+		for(i=1;#phraseArray;1){
+			table.push(phraseOffsets,file.seek()-phraseStart);
+			
+			var phrase = phraseArray[i];
+			file.write({
+				word cbSize = 16;
+				word cbSize2 = 16;
+				word offset = 16 + (#phrase[1]+1)*2;
+				byte candidate = phrase[3] ? tonumber(phrase[3]) : 1;
+				byte unknown = 6;
+				LONG reserved = 0; 
+			})
+		
+			file.write(..string.toUnicode(phrase[1]))
+			file.write('\0\0')
+			file.write(..string.toUnicode(phrase[2]))
+			file.write('\0\0')
+		} 
+		
+		file.seek("set",64)
+		if(#phraseOffsets)file.write({int offsets[]=phraseOffsets}) 
+		
+		file.seek("set",24)
+		file.write({int size=file.size()})
+		
+		file.close(); 
+	}
+	
+	import service;
+	import process;
+	
+	var srvMgr = service.manager();
+	srvMgr.startDisabled("TabletInputService");
+	srvMgr.stop("TabletInputService")
+
+	for(i=1;10;1){
+		process.kill("ctfmom.exe")
+		process.kill("ChsIME.exe")
+	
+		fsys.delete(wubiUdpPath)  
+		if(!io.exist(wubiUdpPath)){ break; }  
+		sleep(1000)
+	}
+
+	updatePhraseFile()
+
+	var wubiUdpPath1 = fsys.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
+	fsys.copy(wubiUdpPath,wubiUdpPath1);
+	
+	srvMgr.startManual("TabletInputService");
+	srvMgr.start("TabletInputService");
+	process(fsys.getWinDir("\System32\InputMethod\CHS\ChsIME.exe"));	
+	
+	winform.btnSave.disabledText = null;
+}
+
+import win.versionEx;
+winform.btnLoad.oncommand = function(id,event){
+	if( !win.version.isWin10ReleaseLater("1703") ){
+		return winform.msgboxErr("仅支持 Win10 1703以上版本的五笔短语词库")
+	}
+	
+	winform.edit.text="";
+	winform.btnLoad.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+	var wubiUdpPath = ..io.exist( fsys.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv2.lex") )
+		|| ..io.exist( fsys.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex") )
+	
+	if(!wubiUdpPath){
+		winform.edit.text="系统短语词库为空";
+		return;
+	}	
+	thread.invoke( loadPhrases ,wubiUdpPath,winform)
+}
+
+winform.btnSave.oncommand = function(id,event){
+	if( !win.version.isWin10ReleaseLater("1703") ){
+		return winform.msgboxErr("仅支持 Win10 1703以上版本的五笔短语词库")
+	}
+	
+	winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+	thread.invoke( savePhrases,winform.edit.text,winform)
+}
+
+winform.btnLoad.skin({
+	background={
+		default=0xFF8FB2B0;
+		hover=0xFF928BB3;
+		disabled=0xFFCCCCCC; 
+	}
+})
+
+winform.btnSave.skin({
+	background={
+		default=0xFF8FB2B0;
+		hover=0xFF928BB3;
+		disabled=0xFFCCCCCC; 
+	}
+})
+
+winform.show();
+win.loopMessage();
+return winform;

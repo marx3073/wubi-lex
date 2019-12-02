@@ -42,19 +42,16 @@ var searchSpelling = win.debounce(function(word){
 	}
 },100)
 
+winform.editSearch.editBox.onChange= function(){  
+	var word = string.trim(winform.editSearch.text)
+	if( #word ) searchSpelling(word) 
+}
+
 winform.show() 
 winform.systemLex = fsys.wubiLex()
 subscribe("wubi.system.lex.changed",function(...){
 	winform.systemLex = fsys.wubiLex()
 } )
-
-winform.editSearch.editBox.modifyEvent(,0x1/*_ENM_CHANGE*/)
-winform.editSearch.editBox.oncommand = function(id,event){
-	if(event===0x300/*_EN_CHANGE*/){
-		var word = string.trim(winform.editSearch.text)
-		if( #word ) searchSpelling(word)
-	}
-}
 
 winform.editSearch.editBox.setFocus()
 win.loopMessage();

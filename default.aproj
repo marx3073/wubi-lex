@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project ver="10" name="五笔码表管理(Win10)" libEmbed="true" icon="\app.ico" ui="win" output="五笔码表.exe" CompanyName="aardio" FileDescription="五笔码表管理﻿工具" LegalCopyright="Copyright (C) aardio 2019" ProductName="五笔码表管理﻿工具" InternalName="wubi-lex-tool.exe" FileVersion="1.3.0.0" ProductVersion="1.3.0.0" publishDir="/dist/" dstrip="false">
+<project ver="10" name="五笔助手(Win10)" libEmbed="true" icon="\app.ico" ui="win" output="五笔助手.exe" CompanyName="aardio" FileDescription="五笔助手" LegalCopyright="Copyright (C) aardio 2019" ProductName="五笔助手" InternalName="wubi-lex-tool.exe" FileVersion="1.5.0.02" ProductVersion="1.5.0.02" publishDir="/dist/" dstrip="false" local="false">
 	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
 	<folder name="资源文件" path="res" embed="true" local="false">
 		<file name="ChsWubi86.lex" path="res\ChsWubi86.lex" comment="res\ChsWubi86.lex"/>
@@ -10,5 +10,6 @@
 		<file name="spelling.aardio" path="dlg\spelling.aardio" comment="dlg\spelling.aardio"/>
 		<file name="help.aardio" path="dlg\help.aardio" comment="dlg\key.aardio"/>
 		<file name="phrase.aardio" path="dlg\phrase.aardio" comment="dlg\phrase.aardio"/>
+		<file name="setting.aardio" path="dlg\setting.aardio" comment="dlg\setting.aardio"/>
 	</folder>
 </project>

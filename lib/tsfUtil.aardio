@@ -1,0 +1,57 @@
+﻿import fsys;
+import service;
+import process.popen;
+import com.interface.ITfInputProcessorProfileMgr;
+
+namespace tsfUtil{
+	
+	reset = function(proc){
+		
+		var srvMgr = ..service.manager();
+		srvMgr.startDisabled("TabletInputService");
+		srvMgr.stop("TabletInputService")
+
+		var ok,out,err = ..process.popen(
+			,`schtasks /End /TN "\Microsoft\Windows\TextServicesFramework\MsCtfMonitor"`
+			).waitOne()
+	
+		..process.kill("ctfmom.exe")
+		..process.kill("ChsIME.exe")
+
+		if(proc) proc();
+		else {
+			sleep(1000)
+		}
+
+		srvMgr.startManual("TabletInputService");
+		srvMgr.start("TabletInputService") 
+		
+		var ok,out,err = ..process.popen(
+			,`schtasks /Run /TN "\Microsoft\Windows\TextServicesFramework\MsCtfMonitor"`
+			).waitOne()  
+	}
+	
+	deactivate = function(){
+		var tfpMgr = ..com.interface.ITfInputProcessorProfileMgr.Create() 
+			
+		tfpMgr.DeactivateProfile(1,0x804,
+				..win.guid.fromString("{6a498709-e00b-4c45-a018-8f9e4081ae40}"),
+				..win.guid.fromString("{82590c13-f4dd-44f4-ba1d-8667246fdf8e}"),
+				null,0x20000000);	
+	}
+	
+	activate = function(){ 
+		var tfpMgr = ..com.interface.ITfInputProcessorProfileMgr.Create() 
+	
+		tfpMgr.ActivateProfile(1,0x804,
+			..win.guid.fromString("{6a498709-e00b-4c45-a018-8f9e4081ae40}"),
+			..win.guid.fromString("{82590c13-f4dd-44f4-ba1d-8667246fdf8e}"),
+			null,0x20000000);	
+	}
+}
+
+/**intellisense(tsfUtil)
+reset(proc) = @.reset(\n	function(){\n			\n	}\n)	
+deactivate() = deactivate
+activate() = activate
+end intellisense**/

@@ -7,7 +7,7 @@ winform.add(
 btnLoad={cls="plus";text='\uF093  读取系统短语词库';left=507;top=548;right=704;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=3};
 btnSave={cls="plus";text='\uF019   更新短语词库到系统';left=707;top=548;right=909;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
 edit={cls="edit";left=18;top=55;right=925;bottom=541;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-13);hscroll=1;multiline=1;vscroll=1;z=2};
-lbTip={cls="static";text="每行由3个部分组成，用于表示一个短语配置：
+lbTip={cls="static";text="每行表示一个短语配置，由3个部分组成( 使用空格或制表符隔开 )：
 第一部分为小写字母组合表示按键，第二部分为不含空格的输出文本，第三部分为候选词排序位置（可省略）";left=20;top=10;right=897;bottom=67;font=LOGFONT(h=-13);transparent=1;z=1}
 )
 /*}}*/

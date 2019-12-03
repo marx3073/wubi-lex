@@ -4,7 +4,7 @@ import win.ui;
 /*DSG{{*/
 mainForm = win.form(text="五笔码表管理﻿工具";right=1040;bottom=642;bgcolor=15793151;border="none")
 mainForm.add(
-caption={cls="bkplus";text="五笔码表管理﻿工具";left=67;top=11;right=204;bottom=29;color=15780518;dl=1;dt=1;font=LOGFONT(h=-14);z=5};
+caption={cls="bkplus";text="五笔助手";left=67;top=11;right=204;bottom=29;color=15780518;dl=1;dt=1;font=LOGFONT(h=-14);z=5};
 custom={cls="custom";left=-1;top=40;right=1040;bottom=648;bgcolor=16777215;db=1;dl=1;dr=1;dt=1;z=1};
 logo={cls="bkplus";text='\uF0AD';left=35;top=9;right=64;bottom=34;color=15780518;dl=1;dt=1;font=LOGFONT(h=-18;name='FontAwesome');z=4};
 nav1={cls="plus";text="词库管理";left=213;top=5;right=340;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF00A';notify=1;paddingLeft=3;paddingRight=3;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=3};
@@ -43,6 +43,11 @@ tbs.add({
 })
 
 tbs.add({
+	text="设置";
+	iconText='\uF0AD';
+})
+	
+tbs.add({
 	text="帮助";
 	iconText='\uF06A';
 	hasCloseButton = true;
@@ -51,7 +56,8 @@ tbs.add({
 tbs.loadForm(1,"\dlg\lex.aardio" ); 
 tbs.loadForm(2,"\dlg\spelling.aardio" ); 
 tbs.loadForm(3,"\dlg\phrase.aardio" ); 
-tbs.loadForm(4,"\dlg\help.aardio" ); 
+tbs.loadForm(4,"\dlg\setting.aardio" ); 
+tbs.loadForm(5,"\dlg\help.aardio" ); 
 tbs.selIndex = 1;
 
 import win.util.tray;

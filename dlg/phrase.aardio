@@ -157,31 +157,25 @@ var savePhrases = function(phraseText,winform){
 		file.close(); 
 	}
 	
-	import service;
-	import process;
-	
-	var srvMgr = service.manager();
-	srvMgr.startDisabled("TabletInputService");
-	srvMgr.stop("TabletInputService")
-
-	for(i=1;10;1){
-		process.kill("ctfmom.exe")
-		process.kill("ChsIME.exe")
-	
-		fsys.delete(wubiUdpPath)  
-		if(!io.exist(wubiUdpPath)){ break; }  
-		sleep(1000)
-	}
-
-	updatePhraseFile()
-
-	var wubiUdpPath1 = fsys.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
-	fsys.copy(wubiUdpPath,wubiUdpPath1);
-	
-	srvMgr.startManual("TabletInputService");
-	srvMgr.start("TabletInputService");
-	process(fsys.getWinDir("\System32\InputMethod\CHS\ChsIME.exe"));	
-	
+	import tsfUtil;
+	tsfUtil.reset(
+		function(){ 
+			for(i=1;10;1){
+				process.kill("ctfmom.exe")
+				process.kill("ChsIME.exe")
+			
+				fsys.delete(wubiUdpPath)  
+				if(!io.exist(wubiUdpPath)){ break; }  
+				sleep(1000)
+			}
+		
+			updatePhraseFile()
+		
+			var wubiUdpPath1 = fsys.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
+			fsys.copy(wubiUdpPath,wubiUdpPath1);		
+		}
+	)
+		
 	winform.btnSave.disabledText = null;
 }
 
@@ -212,21 +206,9 @@ winform.btnSave.oncommand = function(id,event){
 	thread.invoke( savePhrases,winform.edit.text,winform)
 }
 
-winform.btnLoad.skin({
-	background={
-		default=0xFF8FB2B0;
-		hover=0xFF928BB3;
-		disabled=0xFFCCCCCC; 
-	}
-})
-
-winform.btnSave.skin({
-	background={
-		default=0xFF8FB2B0;
-		hover=0xFF928BB3;
-		disabled=0xFFCCCCCC; 
-	}
-})
+import style;
+winform.btnLoad.skin(style.button)
+winform.btnSave.skin(style.button)
 
 winform.show();
 win.loopMessage();

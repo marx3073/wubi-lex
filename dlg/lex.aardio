@@ -205,39 +205,11 @@ copyToSystem = function(srcPath,winform){
 	import fsys;
 	import service;
 	import process;
+	import tsfUtil;
 	
-	var aclGrant = function(filePath,proc){
-		import process.popen;
-		if(!..io.exist(filePath) ){ return proc() }
-		
-		var tempAclDir = io.tmpname();
-		var tempAclPath = io.joinpath(tempAclDir,"acl.dat") 
-		var ok,out,err = process.popen(,"takeown","/f",filePath).waitOne()
-		if(!ok) return false,err;
-		
-		var ok,out,err = process.popen(,"icacls",filePath,"/save",tempAclPath).wait()
-		if(!ok) return false,err;
-		
-		var ok,out,err = process.popen(,"icacls",filePath,"/grant","Administrators:(F)").wait()
-		if(!ok) return false,err;
-		
-		var ret = proc(filePath);
-		
-		var ok,out,err = process.popen(,"icacls",filePath,"/setowner","NT SERVICE\TrustedInstaller").wait()
-		if(!ok) return false,err;
-		
-		var ok,out,err = process.popen(,"icacls",filePath,"/restore",tempAclPath).wait()
-		if(!ok) return false,err; 
-			
-		io.remove(tempAclPath);
-		io.remove(tempAclDir);
-		
-		return ret;
-	}
-	
-	return aclGrant(..fsys.getWinDir("\InputMethod\CHS\ChsWubiNew.lex"),
+	return tsfUtil.aclGrant(..fsys.getWinDir("\InputMethod\CHS\ChsWubiNew.lex"),
 		function(chsWubiNewPath){
-			return aclGrant(..fsys.getWinDir("\InputMethod\CHS\ChsWubi.lex"),
+			return tsfUtil.aclGrant(..fsys.getWinDir("\InputMethod\CHS\ChsWubi.lex"),
 				function(chsWubiPath){
 					import tsfUtil;
 					tsfUtil.reset(
@@ -266,21 +238,9 @@ copyToSystem = function(srcPath,winform){
 	);
 }
 
-winform.btnAddFile.skin({
-	background={
-		default=0xFF8FB2B0;
-		hover=0xFF928BB3;
-		disabled=0xFFCCCCCC; 
-	}
-})
-
-winform.btnCopyToSystem.skin({
-	background={
-		default=0xFF8FB2B0;
-		hover=0xFF928BB3;
-		disabled=0xFFCCCCCC; 
-	}
-})
+import style
+winform.btnAddFile.skin(style.button)
+winform.btnCopyToSystem.skin(style.button)
 
 winform.listbox.systemLexName = "系统码表";
 winform.listbox.reloadLexList = function(){

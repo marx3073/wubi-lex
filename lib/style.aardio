@@ -1,0 +1,38 @@
+﻿
+namespace style{
+	button = {
+		background={
+			default=0xFF8FB2B0;
+			hover=0xFF928BB3;
+			disabled=0xFFCCCCCC; 
+		}
+	};
+	checkBox = {
+		color = { 
+			hover = 0xFFFF0000; 
+			active = 0xFF00FF00;
+		}
+		checked = {
+			text = '\uF14a'/*_FA_CHECK_SQUARE*/
+		} 	
+	};
+	radio ={
+		group = "PinyinMix";
+		color = { 
+			hover = 0xFFFF0000; 
+			active = 0xFF00FF00;
+		}
+		checked = {  
+			text = '\uF058'/*_FA_CHECK_CIRCLE*/
+		} 	
+	};
+	link = {
+		color = { 
+			hover = 0xFFFF0000; 
+			active = 0xFF00FF00; 
+		}
+		border = {
+			hover = {bottom=1;color=0xFFFF0000}
+		}
+	}
+}

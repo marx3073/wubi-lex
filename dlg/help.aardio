@@ -25,25 +25,9 @@ winform.keyboardShortcuts.text = /*
 按分号键(;)取第二个候选词，按引号键（'）取第三个候选词。
 */
 
-winform.lnkGitHub.skin(
-	color = { 
-		hover = 0xFFFF0000; 
-		active = 0xFF00FF00; 
-	}
-	border = {
-		hover = {bottom=1;color=0xFFFF0000}
-	}
-)
-
-winform.lnkWebSite.skin(
-	color = { 
-		hover = 0xFFFF0000; 
-		active = 0xFF00FF00; 
-	}
-	border = {
-		hover = {bottom=1;color=0xFFFF0000}
-	}
-)
+import style;
+winform.lnkGitHub.skin(style.link)
+winform.lnkWebSite.skin(style.link)
 
 import process;
 winform.lnkGitHub.oncommand = function(id,event){

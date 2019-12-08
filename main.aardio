@@ -120,5 +120,6 @@ mainForm.wndproc = {
 	}
 }
 
+mainForm.tabs = tbs;
 mainForm.show();
 return win.loopMessage(); 

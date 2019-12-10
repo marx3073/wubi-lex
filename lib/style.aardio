@@ -1,8 +1,15 @@
 ﻿
 namespace style{
-	button = {
+	primaryButton = {
 		background={
 			default=0xFF8FB2B0;
+			hover=0xFF928BB3;
+			disabled=0xFFCCCCCC; 
+		}
+	};
+	button = {
+		background={
+			default=0x668FB2B0;
 			hover=0xFF928BB3;
 			disabled=0xFFCCCCCC; 
 		}

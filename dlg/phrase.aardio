@@ -207,8 +207,8 @@ winform.btnSave.oncommand = function(id,event){
 }
 
 import style;
-winform.btnLoad.skin(style.button)
-winform.btnSave.skin(style.button)
+winform.btnLoad.skin(style.primaryButton)
+winform.btnSave.skin(style.primaryButton)
 
 winform.show();
 win.loopMessage();

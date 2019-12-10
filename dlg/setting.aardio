@@ -3,13 +3,14 @@ import win.ui;
 /*DSG{{*/
 var winform = win.form(text="设置";right=984;bottom=589;bgcolor=16777215)
 winform.add(
-btnSave={cls="plus";text='\uF045   更新设置';left=601;top=467;right=803;bottom=503;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
-chkDefaultModeEn={cls="plus";text='\uF0C8 默认英文模式';left=269;top=282;right=411;bottom=313;align="left";font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=2};
-chkEnableWubiUdp={cls="plus";text='\uF0C8 允许自定义短语';left=268;top=325;right=410;bottom=356;align="left";font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=7};
+btnSave={cls="plus";text='\uF045   更新设置';left=211;top=430;right=413;bottom=466;bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
+chkDefaultModeEn={cls="plus";text='\uF0C8 默认英文模式';left=215;top=282;right=357;bottom=313;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=2};
+chkEnableWubiUdp={cls="plus";text='\uF0C8 允许自定义短语';left=214;top=325;right=356;bottom=356;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=7};
 lbTip={cls="static";left=63;top=523;right=695;bottom=572;db=1;dl=1;dr=1;transparent=1;z=5};
-plusOpenMsSetting={cls="plus";text='\uF17A   打开系统五笔设置页';left=354;top=467;right=556;bottom=503;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=6};
-radioPinyinMixDisable={cls="plus";text='\uF111 纯五笔输入';left=269;top=192;right=431;bottom=223;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=1};
-radioPinyinMixEnable={cls="plus";text='\uF111 五笔拼音混输';left=269;top=231;right=431;bottom=262;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=3}
+plusOpenHotkeys={cls="plus";text='\uF11C   打开系统输入法热键设置';left=704;top=544;right=937;bottom=580;bgcolor=14935259;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=8};
+plusOpenMsSetting={cls="plus";text='\uF17A   打开系统五笔设置页';left=485;top=544;right=687;bottom=580;bgcolor=14935259;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=6};
+radioPinyinMixDisable={cls="plus";text='\uF111 纯五笔输入';left=215;top=192;right=377;bottom=223;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=1};
+radioPinyinMixEnable={cls="plus";text='\uF111 五笔拼音混输';left=215;top=231;right=377;bottom=262;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=3}
 )
 /*}}*/
 
@@ -18,8 +19,9 @@ winform.radioPinyinMixEnable.skin(style.radio)
 winform.radioPinyinMixDisable.skin(style.radio)
 winform.chkDefaultModeEn.skin(style.checkBox)  
 winform.chkEnableWubiUdp.skin(style.checkBox)
-winform.btnSave.skin(style.button)
+winform.btnSave.skin(style.primaryButton)
 winform.plusOpenMsSetting.skin(style.button)
+winform.plusOpenHotkeys.skin(style.button)
 
 import win.reg;
 var regSettings = win.reg("HKEY_CURRENT_USER\Software\Microsoft\InputMethod\Settings\CHS")
@@ -48,6 +50,11 @@ winform.btnSave.oncommand = function(id,event){
 import process;
 winform.plusOpenMsSetting.oncommand = function(id,event){
 	process.execute("ms-settings:regionlanguage-chsime-wubi");
+}
+
+import process.rundll;
+winform.plusOpenHotkeys.oncommand = function(id,event){
+	process.rundll(,"Control_RunDLL input.dll,,{C07337D3-DB2C-4D0B-9A93-B722A6C106E2}{HOTKEYS}")
 }
 
 winform.show();

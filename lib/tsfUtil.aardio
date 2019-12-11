@@ -1,9 +1,12 @@
-﻿import fsys;
+﻿//tsfUtil 输入法﻿工具
+
+import fsys;
+import fsys.acl;
 import service;
+
 import process.popen;
 import com.interface.ITfInputProcessorProfileMgr;
 
-	
 namespace tsfUtil{
 	
 	reset = function(proc){
@@ -50,33 +53,22 @@ namespace tsfUtil{
 			null,0x20000000);	
 	}
 	
-	aclGrant = function(filePath,proc){
+	aclGrant = function(filePath,fileProc){
+		if(!..io.exist(filePath) ){ return fileProc() }
 		
-		if(!..io.exist(filePath) ){ return proc() }
+		var out,err = ..fsys.acl.takeOwn(filePath);
+		if(!out) return null,err;
 		
-		var tempAclDir = ..io.tmpname();
-		var tempAclPath = ..io.joinpath(tempAclDir,"acl.dat") 
-		var ok,out,err = ..process.popen(,"takeown","/f",filePath).waitOne()
-		if(!ok) return false,err;
-		
-		var ok,out,err = ..process.popen(,"icacls",filePath,"/save",tempAclPath).wait()
-		if(!ok) return false,err;
-		
-		var ok,out,err = ..process.popen(,"icacls",filePath,"/grant","Administrators:(F)").wait()
-		if(!ok) return false,err;
-		
-		var ret = proc(filePath);
-		
-		var ok,out,err = ..process.popen(,"icacls",filePath,"/setowner","NT SERVICE\TrustedInstaller").wait()
-		if(!ok) return false,err;
-		
-		var ok,out,err = ..process.popen(,"icacls",filePath,"/restore",tempAclPath).wait()
-		if(!ok) return false,err; 
+		var out,err = ..fsys.acl.temp(filePath,function(filePath){
+			var out,err = ..fsys.acl.icacls(filePath,"/grant","Administrators:(F)")
+			if(!out) return null,err;
 			
-		..io.remove(tempAclPath);
-		..io.remove(tempAclDir);
-		
-		return ret;
+			return fileProc(filePath);
+		})
+		if( (!out) && err ) return null,err;
+			
+			var out,err = ..fsys.acl.icacls(filePath,"/setowner","NT SERVICE\TrustedInstaller");
+		return out,err;
 	}
 }
 

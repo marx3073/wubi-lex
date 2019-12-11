@@ -72,12 +72,12 @@ var searchSpelling = win.debounce(function(str){
 	}
 	
 	var getSpellingGifPath = function(char){
-		var path = fsys.appdata("aardio\std\wubi\spelling\spelling\" 
+		var path = fsys.appdata("aardio\std\wubi\spelling\" 
 				+ winform.wubiVersion + "\" + char + ".gif")
 				
 		if(!io.exist(path) ){
-			path = io.exist( fsys.appdata("aardio\std\wubi\spelling\spelling\86\" + char + ".gif") )
-				|| io.exist( fsys.appdata("aardio\std\wubi\spelling\spelling\98\" + char + ".gif") )
+			path = io.exist( fsys.appdata("aardio\std\wubi\spelling\86\" + char + ".gif") )
+				|| io.exist( fsys.appdata("aardio\std\wubi\spelling\98\" + char + ".gif") )
 		}
 		
 		return path;
@@ -119,7 +119,7 @@ var searchSpelling = win.debounce(function(str){
 			elseif(length>=4){ 
 				var wubiSpellingGifPathB = getSpellingGifPath( wchars[2] );  
 				var wubiSpellingGifPathC = getSpellingGifPath( wchars[3] );  
-				var wubiSpellingGifPathD = getSpellingGifPath( wchars[4] );  
+				var wubiSpellingGifPathD = getSpellingGifPath( wchars[#wchars] );  
 				
 				if( wubiSpellingGifPathB && wubiSpellingGifPathC && wubiSpellingGifPathD ){ 
 					var bmp = gdip.bitmap(..string.loadBuffer(wubiSpellingGifPathA)); 
@@ -206,8 +206,8 @@ subscribe("wubi.system.lex.changed",function(...){
 	var verString = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver];
 	winform.plusTitle.text = "根据当前安装的系统码表( " +verString + " )反查上面输入的汉字"
 	
-	var wubiSpellingGifPath86 = fsys.appdata("aardio\std\wubi\spelling\spelling\86");
-	var wubiSpellingGifPath98 = fsys.appdata("aardio\std\wubi\spelling\spelling\98"); 
+	var wubiSpellingGifPath86 = fsys.appdata("aardio\std\wubi\spelling\86");
+	var wubiSpellingGifPath98 = fsys.appdata("aardio\std\wubi\spelling\98"); 
 	if( !(..io.exist(wubiSpellingGifPath86) && ..io.exist(wubiSpellingGifPath98)) ){ 
 		winform.plusDownloadSpellingGif.hide = ver == "06"
 	}
@@ -246,7 +246,7 @@ import sevenZip.lzma.httpFile;
 winform.plusDownloadSpellingGif.oncommand = function(id,event){
 	var downbox = inet.downBox(winform.hwnd,"下载五笔拆分图解字库",-1);
 	var saveDir = fsys.appdata("/aardio/std/wubi/download")
-	var extraDir = fsys.appdata("/aardio/std/wubi/spelling")
+	var extraDir = fsys.appdata("/aardio/std/wubi/")
 	
 	var bmp = winform.plusSpellingGif.setBackground(null);
 	if(bmp){ bmp.dispose() }

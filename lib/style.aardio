@@ -42,5 +42,17 @@ namespace style{
 		border = {
 			hover = {bottom=1;color=0xFFFF0000}
 		}
+	};
+	dropdown = { 
+		foreground={
+			default = 0xFFFFFFFF;
+			hover= 0xFF8ADBAF;
+		};
+		checked = { 
+			foreground={
+				default = 0xFFDB8A8E;
+				hover= 0xFF8ADBAF;
+			}; 
+		}
 	}
 }

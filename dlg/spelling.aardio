@@ -163,15 +163,32 @@ import web.rest.jsonLiteClient;
 var http = web.rest.jsonLiteClient();
 var suggestion = http.api("http://suggestion.baidu.com/su?cb=&wd={0}") 
 
+import pinyin;
 import win.debounce;
 var showSuggestion = win.debounce( 
 	function(text){
-		var result =  suggestion[ text ].get();
-		if(#result[["s"]]){
-			menu.setItemTexts(result.s,6,1) //更新下拉列表	
-			var x,y,cx,cy = winform.editSearch.getPos();
-			menu.popup(true,win.toScreen(winform.hwnd,x + cx/2 - 230,y+cy))	
+		var str = pinyin.chars[text]
+		if(!str){
+			for(p,s in pinyin.chars){
+				if( string.startWith(p,text) ){
+					str = s;
+				}
+			} 
 		}
+		
+		if(#str){
+			str = ..string.left(str,8,true);
+			menu.setItemTexts(string.split(str),8,1); 
+		}
+		else {
+			var result =  suggestion[ text ].get();
+			if(!#result[["s"]]) return;
+			
+			menu.setItemTexts(result.s,8,1);
+		}
+		
+		var x,y,cx,cy = winform.editSearch.getPos();
+		menu.popup(true,win.toScreen(winform.hwnd,x + cx/2 - 230,y+cy))	
 	}
 )	
 winform.editSearch.editBox.onChange = function(){  
@@ -181,6 +198,9 @@ winform.editSearch.editBox.onChange = function(){
 			showSuggestion(str);
 		} 
 		return;
+	}
+	else {
+		menu.popup(false);
 	}
 	
 	str = string.match(str,":+");
@@ -208,8 +228,7 @@ winform.editSearch.editBox.onChange = function(){
 	if(#str)searchSpelling(str)
 }
 
-winform.editSearch.editBox.setFocus()
-
+winform.editSearch.editBox.setFocus();
 if( "IInkEdit" == winform.inkEdit.getControlTypeName() ){
 	var inkEdit = winform.inkEdit.getControl(); 
 	inkEdit.Enabled=true; //启用

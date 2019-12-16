@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<project ver="10" name="五笔助手(Win10)" libEmbed="true" icon="\app.ico" ui="win" output="五笔助手.exe" CompanyName="aardio" FileDescription="五笔助手" LegalCopyright="Copyright (C) aardio 2019" ProductName="五笔助手" InternalName="wubi-lex-tool.exe" FileVersion="2.6.0.0" ProductVersion="2.6.0.0" publishDir="/dist/" dstrip="false" local="false">
+<project ver="10" name="五笔助手(Win10)" libEmbed="true" icon="\app.ico" ui="win" output="五笔助手.exe" CompanyName="aardio" FileDescription="五笔助手" LegalCopyright="Copyright (C) aardio 2019" ProductName="五笔助手" InternalName="wubi-lex-tool.exe" FileVersion="2.7.0.0" ProductVersion="2.7.0.0" publishDir="/dist/" dstrip="false" local="false">
 	<file name="main.aardio" path="main.aardio" comment="main.aardio"/>
 	<folder name="资源文件" path="res" embed="true" local="false">
 		<file name="ChsWubi86.lex" path="res\ChsWubi86.lex" comment="res\ChsWubi86.lex"/>

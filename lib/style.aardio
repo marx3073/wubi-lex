@@ -54,5 +54,11 @@ namespace style{
 				hover= 0xFF8ADBAF;
 			}; 
 		}
+	};
+	key = {
+		foreground={
+			default = 0x00FFFFFF;
+			hover= 0xFF8ADBAF;
+		};
 	}
 }

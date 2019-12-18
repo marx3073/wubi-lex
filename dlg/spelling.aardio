@@ -46,9 +46,11 @@ plusWubiTable={cls="plus";left=258;top=561;right=730;bottom=594;color=5921370;dl
 import win.debounce;
 import fsys.wubiLex;
 import string.conv.pinyin;
-	
+import wubi.table;	
+
 var spelling98;
 var searchSpelling = win.debounce(function(str){
+	
 	if(!spelling98){
 		spelling98 = fsys.wubiSpelling98();
 	}
@@ -57,10 +59,30 @@ var searchSpelling = win.debounce(function(str){
 	winform.plusSpellingGif.background = null;
 	winform.plusTitle.text = ""
 
-	for(name,ctrl in winform.eachControl("plus","key[A-Z]") ){
-		ctrl.checked = false
-		ctrl.text = ""	
+	if(!table.find(wubi.table.levelOne,str)){
+		var ver = winform.wubiVersion;
+		for(name,ctrl in winform.eachControl("plus","key[A-Y]") ){
+			ctrl.checked = false
+			ctrl.text = ""	
+			
+			var k = string.right(name,1);
+			ctrl.iconText = k +" "+ string.charAt(wubi.table[ver][k],1);
+		}	
+		
+		winform.plusWubiTable.text = ""
 	}
+	else {
+		for(name,ctrl in winform.eachControl("plus","key[A-Y]") ){
+			ctrl.checked = false
+			ctrl.text = ""	
+			
+			var k = string.right(name,1);
+			ctrl.iconText = k +" "+ wubi.table.levelOne[k];
+		}
+		
+		winform.plusWubiTable.text = "一级简码"
+	}
+	
 		
 	var code = winform.systemLex.find(str) 
 	if(code){
@@ -327,6 +349,7 @@ subscribe("wubi.system.lex.changed",function(...){
 			
 			var k = string.right(name,1);
 			winform.plusWubiTable.text = wubi.table[winform.wubiVersion][k]
+				+ " ( 一级简码："+ wubi.table.levelOne[k] + " )"
 		}
 		ctrl.onMouseLeave = function(wParam,lParam){
 			winform.plusWubiTable.text = ""

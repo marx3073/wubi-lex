@@ -1,21 +1,17 @@
 //config 配置文件
 import fsys.config;
 config  = fsys.config( fsys.appdata("/aardio/std/wubi-lex-tool") ); 
-
-//不需要序列化的配置名字前请添加下划线
-namespace config {
-	__appName = "应用程序名";
-	__appVersion = "1.0.0.01";
-	__appDescription = "这是一个测试程序";
-	__website = "http://www.aardio.com/";
-}
-
+ 
 if(!config.lex.files){
 	config.lex.files = {}
 }
 
 if(!config.lex.names){
 	config.lex.names = {}
+}
+
+if(!config.hotkey.spelling){
+	config.hotkey.spelling = {2/*_MOD_CONTROL*/;0x71/*_VK_F2*/}
 }
 
 

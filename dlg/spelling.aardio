@@ -4,6 +4,7 @@ import win.ui;
 var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=610;bgcolor=16777215)
 winform.add(
 editSearch={cls="plus";left=287;top=191;right=712;bottom=226;border={bottom=1;color=-16744448};dl=1;dr=1;dt=1;editable=1;font=LOGFONT(h=-16);tabstop=1;textPadding={top=6};z=6};
+hotkey={cls="hotkey";left=678;top=578;right=818;bottom=598;db=1;dr=1;edge=1;hide=1;z=38};
 inkEdit={cls="atlax";text="InkEd.InkEdit";left=743;top=224;right=999;bottom=491;dr=1;dt=1;z=12};
 keyA={cls="plus";left=292;top=463;right=336;bottom=500;ah=1;align="right";aw=1;bgcolor=12712703;border={color=-4144960;radius=8;width=1};color=255;font=LOGFONT(h=-16);iconColor=32896;iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=5;top=5};valign="top"};iconText="A";notify=1;textPadding={right=6;bottom=2};valign="bottom";z=21};
 keyB={cls="plus";left=484;top=511;right=528;bottom=548;ah=1;align="right";aw=1;bgcolor=14085631;border={color=-4144960;radius=8;width=1};color=255;font=LOGFONT(h=-16);iconColor=32896;iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=5;top=5};valign="top"};iconText="B";notify=1;textPadding={right=6;bottom=2};valign="bottom";z=34};
@@ -36,10 +37,11 @@ menuItem={cls="plus";text="测试菜单三";left=361;top=228;right=631;bottom=27
 menuItem2={cls="plus";text="测试菜单三";left=361;top=273;right=631;bottom=318;align="right";bgcolor=11525002;border={left=1;right=1;bottom=1;color=-3546113};tabstop=1;textPadding={right=20};z=9};
 plusCode={cls="plus";left=265;top=277;right=499;bottom=327;align="right";dl=1;dr=1;dt=1;font=LOGFONT(h=-37);textPadding={right=10};z=7};
 plusDownloadSpellingGif={cls="plus";text='\uF019  下载五笔拆分详细图解字库';left=681;top=513;right=960;bottom=549;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');hide=1;notify=1;tabstop=1;z=15};
+plusHotkey={cls="plus";left=819;top=576;right=855;bottom=598;align="left";db=1;dr=1;font=LOGFONT(h=-13);iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=9}};iconText='\uF11C ';notify=1;tabstop=1;textPadding={left=25};z=39};
 plusSpelling={cls="plus";left=311;top=348;right=688;bottom=404;color=255;dl=1;dr=1;dt=1;z=1};
 plusSpellingGif={cls="plus";left=499;top=277;right=719;bottom=333;dl=1;dr=1;dt=1;repeat="scale";z=20};
 plusTitle={cls="plus";text="根据当前安装的系统码表反查上面输入的汉字";left=262;top=230;right=734;bottom=263;color=5921370;dl=1;dr=1;dt=1;z=17};
-plusWubiTable={cls="plus";left=258;top=561;right=730;bottom=594;color=5921370;dl=1;dr=1;dt=1;font=LOGFONT(h=-16);z=37}
+plusWubiTable={cls="plus";left=320;top=561;right=672;bottom=594;color=5921370;dl=1;dr=1;dt=1;font=LOGFONT(h=-16);z=37}
 )
 /*}}*/
 
@@ -234,7 +236,7 @@ import pinyin;
 import win.debounce;
 var showSuggestion = win.debounce( 
 	function(text){
-		var str = pinyin.chars[text]
+		var str = pinyin.chars[string.lower(text)]
 		if(!str){
 			for(p,s in pinyin.chars){
 				if( string.startWith(p,text) ){
@@ -325,7 +327,7 @@ subscribe("wubi.system.lex.changed",function(...){
 	winform.systemLex = fsys.wubiLex()
 	var ver  = winform.systemLex.getVersion()
 	var verString = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver];
-	winform.plusTitle.text = "根据当前安装的系统码表( " +verString + " )反查上面输入的汉字，可直接输入拼音"
+	winform.plusTitle.text = '根据系统码表( ' +verString + ' )反查上面输入的汉字,可直接输入拼音\n五笔编码自第二码开始可使用Z键通配任意编码（ 首码除外 ）'
 	
 	var wubiSpellingGifPath86 = fsys.appdata("aardio\std\wubi\spelling\86");
 	var wubiSpellingGifPath98 = fsys.appdata("aardio\std\wubi\spelling\98"); 
@@ -343,7 +345,7 @@ subscribe("wubi.system.lex.changed",function(...){
 	winform.plusSpelling.text = "";
 	
 	import wubi.table;
-	for(name,ctrl in winform.eachControl("plus","key[A-Y]") ){
+	for(name,ctrl in winform.eachControl("plus","^key[A-Y]") ){
 		ctrl.onMouseHover = function(wParam,lParam){
 			if(!winform.wubiVersion) return;
 			
@@ -398,4 +400,30 @@ winform.plusDownloadSpellingGif.oncommand = function(id,event){
 	}
 }
 
+winform.plusHotkey.skin(style.transButton)
+
+import config;
+winform.hotkey.sethotkey(config.hotkey.spelling[1],config.hotkey.spelling[2])
+winform.plusHotkey.onMouseHover = function(wParam,lParam){
+	winform.hotkey.hide = false;
+	owner.width = 188;
+	owner.text = "更新反查/切换窗口热键"; 
+}
+
+winform.plusHotkey.onMouseLeave = function(wParam,lParam){
+	owner.width = 36;
+	owner.text ="";
+}
+
+winform.plusHotkey.oncommand = function( id,event ){
+	winform.plusHotkey.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+	
+	var hotmod,hotkey = winform.hotkey.gethotkey()
+	config.hotkey.spelling = {hotmod;hotkey};
+	publish("spellingHotkeyChange")	
+	
+	win.delay(1000);
+	winform.plusHotkey.disabledText = null;
+}
+	
 win.loopMessage();

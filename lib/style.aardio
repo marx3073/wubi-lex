@@ -28,6 +28,10 @@ namespace style{
 			active = 0xFF00FF00;
 		}
 		checked = {
+			color = { 
+				hover = 0xFFFF0000; 
+				active = 0xFF00FF00;
+			}
 			text = '\uF14a'/*_FA_CHECK_SQUARE*/
 		} 	
 	};

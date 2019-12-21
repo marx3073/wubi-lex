@@ -2,7 +2,7 @@
 import fonts.fontAwesome;
 import win.ui;
 /*DSG{{*/
-mainForm = win.form(text="五笔码表管理﻿工具";right=1040;bottom=642;bgcolor=15793151;border="none")
+mainForm = win.form(cls="AARDIO_WUBI_FORM";text="微软五笔助手( Win10  )";right=1040;bottom=642;bgcolor=15793151;border="none")
 mainForm.add(
 caption={cls="bkplus";text="五笔助手";left=67;top=11;right=171;bottom=29;color=15780518;dl=1;dt=1;font=LOGFONT(h=-14);z=5};
 custom={cls="custom";left=-1;top=40;right=1040;bottom=648;bgcolor=16777215;db=1;dl=1;dr=1;dt=1;z=1};

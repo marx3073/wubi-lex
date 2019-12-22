@@ -1,4 +1,4 @@
-﻿//tsfUtil 输入法﻿工具
+﻿//tsfUtil ﻿工具
 
 import fsys;
 import fsys.acl;
@@ -8,9 +8,12 @@ import process.popen;
 import com.interface.ITfInputProcessorProfileMgr;
 
 namespace tsfUtil{
+    
+	var input = ..raw.loadDll("input.dll","","stdcall,unicode")
 	
 	reset = function(proc){
-		
+		input.InstallLayoutOrTip("0x0804:{6A498709-E00B-4C45-A018-8F9E4081AE40}{82590C13-F4DD-44F4-BA1D-8667246FDF8E}",0 )
+
 		var srvMgr = ..service.manager();
 		srvMgr.startDisabled("TabletInputService");
 		srvMgr.stop("TabletInputService")
@@ -26,13 +29,15 @@ namespace tsfUtil{
 		else {
 			sleep(1000)
 		}
-
+		
 		srvMgr.startManual("TabletInputService");
 		srvMgr.start("TabletInputService") 
 		
 		var ok,out,err = ..process.popen(
 			,`schtasks /Run /TN "\Microsoft\Windows\TextServicesFramework\MsCtfMonitor"`
 			).waitOne()  
+			
+		sleep(1000);
 	}
 	
 	deactivate = function(){

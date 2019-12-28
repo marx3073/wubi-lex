@@ -72,7 +72,7 @@ namespace tsfUtil{
 		})
 		if( (!out) && err ) return null,err;
 			
-			var out,err = ..fsys.acl.icacls(filePath,"/setowner","NT SERVICE\TrustedInstaller");
+		var out,err = ..fsys.acl.icacls(filePath,"/setowner","NT SERVICE\TrustedInstaller");
 		return out,err;
 	}
 }

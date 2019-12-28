@@ -1,14 +1,14 @@
 import win.ui;
 import fonts.fontAwesome;
 /*DSG{{*/
-var winform = win.form(text="aardio form";right=827;bottom=529;bgcolor=16777215)
+var winform = win.form(text="aardio form";right=1040;bottom=607;bgcolor=16777215)
 winform.add(
-keyboardShortcuts={cls="plus";left=76;top=45;right=758;bottom=373;align="left";border={color=-4144960;radius=8;width=1};dl=1;dt=1;font=LOGFONT(h=-16);textPadding={left=10;top=10;right=10;bottom=10};z=1};
-lbGitHub={cls="plus";text="本软件源码：";left=46;top=381;right=242;bottom=412;align="left";dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=3};
-lbKeyboardShortcuts={cls="plus";text="微软五笔常用快捷鍵：";left=46;top=10;right=387;bottom=41;align="left";dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=2};
-lbWebSite={cls="plus";text="官网：";left=46;top=454;right=188;bottom=485;align="left";dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=5};
-lnkGitHub={cls="plus";text="https://github.com/aardio/wubi-lex-tool";left=78;top=418;right=379;bottom=442;align="left";color=8388608;dl=1;dt=1;font=LOGFONT(h=-16);notify=1;z=4};
-lnkWebSite={cls="plus";text="www.aardio.com";left=75;top=492;right=203;bottom=516;align="left";color=8388608;dl=1;dt=1;font=LOGFONT(h=-16);notify=1;z=6}
+keyboardShortcuts={cls="plus";left=76;top=55;right=934;bottom=425;align="left";border={color=-4144960;radius=8;width=1};dl=1;dt=1;font=LOGFONT(h=-16);textPadding={left=10;top=10;right=10;bottom=10};z=1};
+lbGitHub={cls="plus";text="本软件源码：";left=46;top=436;right=242;bottom=467;align="left";dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=3};
+lbKeyboardShortcuts={cls="plus";text="微软五笔使用技巧( 建议大家更新Win10到较新的版本 )：";left=46;top=13;right=594;bottom=44;align="left";dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=2};
+lbWebSite={cls="plus";text="官网：";left=46;top=509;right=188;bottom=540;align="left";dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=5};
+lnkGitHub={cls="plus";text="https://github.com/aardio/wubi-lex-tool";left=78;top=473;right=379;bottom=497;align="left";color=8388608;dl=1;dt=1;font=LOGFONT(h=-16);notify=1;z=4};
+lnkWebSite={cls="plus";text="www.aardio.com";left=75;top=547;right=203;bottom=571;align="left";color=8388608;dl=1;dt=1;font=LOGFONT(h=-16);notify=1;z=6}
 )
 /*}}*/
 
@@ -16,15 +16,17 @@ winform.keyboardShortcuts.text = /*
 1、短按Shift键（或Ctrl + Space）：切换中英文输入。
 五笔英文模式下，按Shift + 空格键，切换全角/半角输入。
 
-2、按Alt + Shift键，切换中文/英文键盘。
+2、中文模式下，可以使用小键盘输入数字和小数点（不是句号）。
 
-3、Win键 + 空格键：切换输入法。
+3、按Alt + Shift键，切换中文/英文键盘。
 
-4、五笔编码自第二码开始可使用Z键通配任意编码（ 首码除外 ）
+4、Win键 + 空格键：切换输入法。
 
-5、中文输入时，按tab鍵跳到表情符号，然后按空格键就可打开表情与符号软键盘。
+5、五笔编码自第二码开始可使用Z键通配任意编码（ 首码除外 ）
 
-6、输入时，按回车取消输入，按空格取首个候选词，
+6、中文输入时，按tab鍵跳到表情符号，然后按空格键就可打开表情与符号软键盘。
+
+7、输入时，按回车取消输入，按空格取首个候选词，
 按分号键 ( ; ) 取第二个候选词，按引号键（'）取第三个候选词。
 */
 

@@ -1,0 +1,31 @@
+﻿//hotkey 默认热键
+namespace wubi.hotkey;
+
+default = /*******
+["~hi"] = "hello";
+["~time"] = function(){ 
+	var str = time(,"%Y年%m月%d日 %H时%M分%S秒","chs")
+	winex.say(tostring(str));
+}; 
+["Ctrl+Q,Q"] = function(){
+	import process 
+	import fsys.lnk; 
+	qqpath  = fsys.lnk.search( {"qq.exe";"QQScLauncher.exe";"QQProtect.exe"} )   
+	process.execute( qqpath )
+} 
+
+/*
+要测试打字，请写到注释语句里（也就是这里)
+配置代码使用 aardio 语法（ http://www.aardio.com )
+
+中括号里是按键名字串，等号的后面指定输入文本或者执行输入的函数。
+已导入一些常用的库，可以使用import语句引用，如果需要更多库请下载开源代码自行添加
+
+键名串里，如果第一个按键是控制键并紧嘴一个加号，
+那么后面所有键名都要使用逗号分开。
+
+注意这是真正的系统级热键，不是热字串，
+例如 ~hi 在按第一个~时不要按Shift键
+*/
+
+*******/

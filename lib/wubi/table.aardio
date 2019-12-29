@@ -1,4 +1,4 @@
-﻿
+﻿//table 字根表
 namespace wubi.table;
 
 levelOne = {

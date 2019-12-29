@@ -87,7 +87,7 @@ winform.btnSave.oncommand = function(id,event){
 				if(prev){
 					if( (prev>='0'# && prev<='9'# ) 
 						|| (prev>=0x60/*_VK_NUMPAD0*/ && prev<=0x69/*_VK_NUMPAD9*/ ) ){
-        				..winex.say(".") 
+        				..key.press(0x6E/*_VK_DECIMAL*/)
         				return true;
         			}	
 				}		

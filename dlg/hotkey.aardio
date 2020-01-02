@@ -8,8 +8,8 @@ import win.ui;
 /*DSG{{*/
 var winform = win.form(text="设置";right=984;bottom=589;bgcolor=16777215)
 winform.add(
-btnReset={cls="plus";text='\uF0E2   重置';left=509;top=529;right=690;bottom=565;bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=6};
-btnSave={cls="plus";text='\uF0C7   保存';left=702;top=529;right=886;bottom=565;bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=5};
+btnReset={cls="plus";text='\uF0E2   重置';left=509;top=529;right=690;bottom=565;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=6};
+btnSave={cls="plus";text='\uF0C7   保存';left=702;top=529;right=886;bottom=565;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=5};
 chkDecimalPoint={cls="plus";text='\uF0C8 数字后输入小数点（ 替代句号 ）';left=27;top=55;right=467;bottom=86;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=2};
 chkEnableHotkey={cls="plus";text='\uF0C8 启用超级热键';left=28;top=23;right=468;bottom=54;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=3};
 editTable={cls="edit";left=28;top=97;right=946;bottom=498;db=1;dl=1;dr=1;dt=1;edge=1;hscroll=1;multiline=1;vscroll=1;z=4};

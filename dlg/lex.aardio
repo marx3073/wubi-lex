@@ -86,7 +86,9 @@ winform.btnAddFile.oncommand = function(id,event){
 }
 
 if(!#config.lex.names){
+	//98至善词库
 	var path98 = fsys.appdata("/aardio/std/wubi-lex-files/五笔98.lex",string.load("\res\ChsWubi98.lex"))
+	//系统自带86词库
 	var path86 = fsys.appdata("/aardio/std/wubi-lex-files/五笔86.lex",string.load("\res\ChsWubi86.lex"))
 	
 	config.lex.files["五笔98"] = path98;

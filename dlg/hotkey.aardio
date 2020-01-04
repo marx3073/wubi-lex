@@ -45,6 +45,7 @@ winform.chkEnableHotkey.oncommand = function(id,event){
 import key.hotkey;
 winform.btnSave.skin(style.primaryButton)
 
+import winex;
 var hotkeyMgr;
 winform.btnSave.oncommand = function(id,event){
     if(!winform.chkEnableHotkey.checked){
@@ -86,8 +87,8 @@ winform.btnSave.oncommand = function(id,event){
 			if(vk==190/*_VK_OEM_PERIOD*/){
 				if(prev){
 					if( (prev>='0'# && prev<='9'# ) 
-						|| (prev>=0x60/*_VK_NUMPAD0*/ && prev<=0x69/*_VK_NUMPAD9*/ ) ){
-        				..key.press(0x6E/*_VK_DECIMAL*/)
+						|| (prev>=0x60/*_VK_NUMPAD0*/ && prev<=0x69/*_VK_NUMPAD9*/ ) ){ 
+        				winex.say(".");
         				return true;
         			}	
 				}		

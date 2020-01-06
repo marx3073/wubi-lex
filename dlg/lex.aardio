@@ -9,7 +9,7 @@ btnAddFile={cls="plus";text='\uF271   添加码表文件';left=26;top=17;right=1
 btnCopyToSystem={cls="plus";text='\uF0C7   安装到系统词库';left=196;top=17;right=389;bottom=53;bgcolor=11580047;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=2};
 lbTip={cls="plus";left=414;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=6};
 listbox={cls="listbox";left=28;top=79;right=398;bottom=594;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4};
-richedit={cls="richedit";left=404;top=79;right=1012;bottom=579;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-19);hscroll=1;multiline=1;vscroll=1;z=5}
+richedit={cls="richedit";left=404;top=79;right=1012;bottom=579;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-15);hscroll=1;multiline=1;vscroll=1;z=5}
 )
 /*}}*/
 
@@ -19,11 +19,8 @@ import fsys.wubiLex;
 import win.inputBox;
 import config;
 
-winform.btnAddFile.oncommand = function(id,event){
-	var inputPath = fsys.dlg.open("二进制码表(*.lex);文本码表(*.txt)|*.lex;*.txt||",,,winform)
-	if(!inputPath){
-		return;
-	}
+var addDictFile = function(inputPath){
+	if(!inputPath || ..fsys.isDir(inputPath)){ return; }
 	
 	var lexName;
 	while(true){
@@ -82,9 +79,21 @@ winform.btnAddFile.oncommand = function(id,event){
 	table.push(config.lex.names,lexName);
 	config.saveAll();
 	
-	winform.listbox.reloadLexList(); 
+	winform.listbox.reloadLexList(); 	
 }
 
+
+winform.btnAddFile.oncommand = function(id,event){
+	var inputPath = fsys.dlg.open("二进制码表(*.lex);文本码表(*.txt)|*.lex;*.txt||",,,winform)
+	addDictFile(inputPath)
+}
+
+import process.admin;
+process.admin.enableDropMsg(winform.hwnd);
+winform.onDropFiles = function(files){
+	addDictFile(files[1])
+}
+	
 if(!#config.lex.names){
 	//98至善词库
 	var path98 = fsys.appdata("/aardio/std/wubi-lex-files/五笔98.lex",string.load("\res\ChsWubi98.lex"))
@@ -278,6 +287,22 @@ updateSystemLexVersion();
 subscribe("wubi.system.lex.changed",function(...){
 	updateSystemLexVersion() 
 } )
+
+winform.richedit.setPadding(10,10,10,10)
+winform.richedit.text =/*
+可直接拖拽词库文件到当前窗口来添加词库。
+可添加微软五笔二进制词库（*.lex），也可以添加文本格式的词库（*.txt）
+
+文本格式词库可自动识别 UTF-8,UNICODE(UTF-16) 等各种编码，
+词库每行一个编码，按键组合(小写字母)与输入文本间用空格或制表符分开。
+下面的写法都是支持的，任何不符合格式要求的行都会自动忽略：
+------------------------------
+aaaa 工 㠭
+戈 a 
+节 ab
+atn 薛
+// 这是任性的注释行
+*/
 
 winform.show() 
 win.loopMessage();

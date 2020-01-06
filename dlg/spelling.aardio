@@ -216,7 +216,7 @@ var searchSpelling = win.debounce(function(str){
 		winform.plusSpellingGif.setBackground(string.loadBuffer(wubiSpellingGifPathA));
 	}
 	
-	winform.plusTitle.text = "拼音：" + string.conv.pinyin(str);
+	winform.plusTitle.text = "拼音：" + string.conv.pinyin(str,,true);
 },100)
 
 import style;
@@ -232,22 +232,13 @@ import web.rest.jsonLiteClient;
 var http = web.rest.jsonLiteClient();
 var suggestion = http.api("http://suggestion.baidu.com/su?cb=&wd={0}") 
 
-import pinyin;
+import string.conv.pinyin;
 import win.debounce;
 var showSuggestion = win.debounce( 
 	function(text){
-		var str = pinyin.chars[string.lower(text)]
-		if(!str){
-			for(p,s in pinyin.chars){
-				if( string.startWith(p,text) ){
-					str = s;
-				}
-			} 
-		}
-		
-		if(#str){
-			str = ..string.left(str,8,true);
-			menu.setItemTexts(string.split(str),8,1); 
+		var items = string.conv.pinyin( string.lower(text) ) 
+		if(#items){ 
+			menu.setItemTexts(items,8,1); 
 		}
 		else {
 			var result =  suggestion[ text ].get();

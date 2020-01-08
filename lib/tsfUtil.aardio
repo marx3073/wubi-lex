@@ -22,7 +22,7 @@ namespace tsfUtil{
 			,`schtasks /End /TN "\Microsoft\Windows\TextServicesFramework\MsCtfMonitor"`
 			).waitOne()
 	
-		..process.kill("ctfmom.exe")
+		..process.kill("ctfmon.exe")
 		..process.kill("ChsIME.exe")
 
 		if(proc) proc();

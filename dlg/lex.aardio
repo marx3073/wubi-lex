@@ -226,7 +226,7 @@ copyToSystem = function(srcPath,winform){
 					tsfUtil.reset(
 						function(){ 
 							for(i=1;10;1){
-								process.kill("ctfmom.exe")
+								process.kill("ctfmon.exe")
 								process.kill("ChsIME.exe")
 								
 								if(chsWubiNewPath)fsys.delete(chsWubiNewPath )  

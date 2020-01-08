@@ -1,0 +1,158 @@
+﻿//phrase 短语
+import fsys;
+import tsfUtil;
+
+namespace wubi.phrase;
+	
+var push = ..table.push;
+
+load = function(wubiUdpPath){
+
+	if(!wubiUdpPath){
+		return null,"短语词库为空";
+	}	
+		
+	var file = ..io.open(wubiUdpPath,"rb");
+	if(!file){
+		return null, "不支持当前版本的短语词库格式"
+	}
+	
+	if(!file.size()){ 
+		file.close();
+		return null, "短语词库内容为空" 	
+	}
+	
+	if(file.read(8)!="mschxudp"){
+		file.close();
+		return null, "不支持当前版本的短语词库格式" 	
+	}
+	
+	var header = file.read({
+		int magic=0x00600002;
+		int version;
+		int phraseOffsetStart;
+		int phraseStart;
+		int phraseEnd;
+		int count;
+		int timestamp;
+		BYTE reserved[28];
+	})
+	
+	file.seek("set",header.phraseOffsetStart)
+	if(!header.count){ 
+		file.close();
+		return null,"短语词库内容为空"
+	}
+	
+	var phraseOffsets = file.read({int array[]={length=header.count}}).array;
+	push(phraseOffsets, header.phraseEnd - header.phraseStart);
+	
+	var lines = {};
+	reduce(phraseOffsets,function(prevOffset,nextOffset){
+		
+		var phrase  = file.read({
+			word cbSize = 16;
+			word cbSize2 = 16;
+			word offset;
+			byte candidate;
+			byte unknown = 6;
+			LONG reserved; 
+		})
+		
+		if(phrase.cbSize!==16){ 
+			file.close();
+			return null,"不支持当前版本的短语词库格式";
+		}
+		
+		var code = file.readUnicode( (phrase.offset-phrase.cbSize) / 2)  
+		var text = file.readUnicode((nextOffset- prevOffset - phrase.offset)/2);
+		
+		push(lines,code,'\t',text,'\t',phrase.candidate,'\r\n');
+		return nextOffset;
+	})
+	
+	file.close(); 
+	return ..string.join(lines);
+} 
+
+save = function(phraseText){
+    if(!#phraseText){
+    	return null,"输入文本为空"; 
+    }
+    
+    var wubiUdpPath1 = ..io.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
+	var wubiUdpPath = ..io.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv2.lex")
+	
+	var file = ..io.open(wubiUdpPath1,"w+b");
+	if(!file){ 
+		return null,"写入系统短语词库失败"; 
+	}
+	file.close();
+		
+	file = ..io.open(wubiUdpPath,"w+b");
+	if(!file){ 
+		return null,"写入系统短语词库失败"; 
+	}
+	
+	var phraseArray = {}
+	var lineIndex = 0;
+	for line in ..string.lines(phraseText) {
+		lineIndex++;
+		if(!#line){continue;} 
+		
+		var code,phrase,order = ..string.match(line,"([a-z]+)\s+(.+?)(<\s+\d>?)$")  
+		push(phraseArray,{code;phrase;order});
+	}
+		
+	var phraseStart = 64+4*#phraseArray;
+	file.write({
+		BYTE proto[8] = "mschxudp";
+		int magic=0x00600002;
+		int version=1;
+		int phraseOffsetStart=64;
+		int phraseStart=64+4*#phraseArray;
+		int phraseEnd;
+		int count=#phraseArray;
+		int timestamp=tonumber(..time());
+		BYTE reserved[28];
+	})
+		
+	file.seek("cur", 4*#phraseArray)
+	var phraseOffsets = {} 
+
+	for(i=1;#phraseArray;1){
+		push(phraseOffsets,file.seek()-phraseStart);
+		
+		var phrase = phraseArray[i];
+		file.write({
+			word cbSize = 16;
+			word cbSize2 = 16;
+			word offset = 16 + (#phrase[1]+1)*2;
+			byte candidate = phrase[3] ? tonumber(phrase[3]) : 1;
+			byte unknown = 6;
+			LONG reserved = 0; 
+		})
+	
+		file.write(..string.toUnicode(phrase[1]))
+		file.write('\0\0')
+		file.write(..string.toUnicode(phrase[2]))
+		file.write('\0\0')
+	} 
+	
+	file.seek("set",64)
+	if(#phraseOffsets)file.write({int offsets[]=phraseOffsets}) 
+	
+	file.seek("set",24)
+	file.write({int size=file.size()})
+	
+	file.close();
+	
+	..fsys.copy(wubiUdpPath,wubiUdpPath1);
+	return true;	
+}
+
+
+/**intellisense(wubi.phrase)
+load(.(wubiUdpPath) =  加载短语, \n成功返回文本格式短语数据,\n失败返回null,错误信息
+save(.(phraseText) = 保存短语, \n成功返回true,\n失败返回null,错误信息
+end intellisense**/

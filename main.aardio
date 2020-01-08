@@ -86,7 +86,7 @@ mainForm.wndproc = {
 				mainForm.show();
 			});
 			mainForm.popmenu.add('管理短语',function(id){
-				tbs.selIndex = 3;
+				tbs.selIndex = 4;
 				mainForm.show();
 			});
 			mainForm.popmenu.add('字根反查',function(id){

@@ -115,14 +115,14 @@ winform.edit.enablePopMenu({
 	{
 		"保存短语文件";
 		function(id){
-			var path = fsys.dlg.save("*.txt|*.txt||","保存短语到文本文件")
+			var path = fsys.dlg.save("*.txt|*.txt||","保存短语到文本文件",,winform)
 			if(path)string.save(path,winform.edit.text )
 		} 
 	};
 	{
 		"加载短语文件";
 		function(id){
-			var path = fsys.dlg.open("*.txt|*.txt||","自文本文件加载短语")
+			var path = fsys.dlg.open("*.txt|*.txt||","自文本文件加载短语",,winform)
 			if(path) thread.invoke(loadPhraseFromFile,winform,path)
 		} 
 	}

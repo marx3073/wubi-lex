@@ -96,11 +96,11 @@ mainForm.wndproc = {
 			});
 			mainForm.popmenu.add('打开本软件源代码',function(id){
 				import process;
-				process.openUrl("https://github.com/aardio/wubi-lex-tool")
+				process.openUrl("https://github.com/aardio/wubi-lex")
 			});
 			mainForm.popmenu.add('下载最新版本',function(id){
 				import process;
-				process.openUrl("https://github.com/aardio/wubi-lex-tool/releases")
+				process.openUrl("https://github.com/aardio/wubi-lex/releases")
 			});
 			mainForm.popmenu.add('退出',function(id){
 				mainForm.close()

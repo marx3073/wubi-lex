@@ -19,8 +19,37 @@ import fsys.wubiLex;
 import win.inputBox;
 import config;
 
+var downloadDictFile = function(url,lexName){
+	
+	var lexPath = fsys.appdata("/aardio/std/wubi-lex-files/"+lexName+".lex");
+	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
+	
+    if( string.startWith(url,"http://",true) && (string.endWith(url,".lex",true))){
+		var downBox = inet.downBox(winform,"下载词库:" + lexName,1000) 
+		if( downBox.download(url,lexPath) ){
+			var file = ..io.open(lexPath,"rb");
+			if(!file){
+				winform.msgboxErr(`错误的码表文件`)
+				return;
+			}
+			
+			if( file.read(#"imscwubi")!=="imscwubi"){
+				winform.msgboxErr(`错误的码表文件`)
+				file.close();
+				return;
+			}
+		
+			file.close(); 
+			config.lex.files[lexName] = lexPath;
+			config.saveAll();
+			return lexPath;
+		}
+	}
+}
+
+
 var addDictFile = function(inputPath){
-	if(!inputPath || ..fsys.isDir(inputPath)){ return; }
+    if(!inputPath || ..fsys.isDir(inputPath)){ return; }
 	
 	var lexName;
 	while(true){
@@ -44,10 +73,33 @@ var addDictFile = function(inputPath){
 		}
 	
 		break ;
-	}
+	}	
 	
 	var lexPath = fsys.appdata("/aardio/std/wubi-lex-files/"+lexName+".lex");
 	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
+	
+    if( string.startWith(inputPath,"http://",true) && (string.endWith(inputPath,".lex",true))){
+		var downBox = inet.downBox(winform,"下载词库:" + lexName) 
+		if( downBox.download(inputPath,lexPath) ){
+			var file = ..io.open(inputPath,"rb");
+			if(!file){
+				winform.msgboxErr(`错误的码表文件`)
+				return;
+			}
+			
+			if( file.read(#"imscwubi")!=="imscwubi"){
+				file.close();
+				winform.msgboxErr(`错误的码表文件`)
+				return;
+			}
+		
+			file.close();
+			
+			config.lex.files[lexName] = lexPath;
+			config.saveAll();
+			return;
+		}
+	}
 	
 	if(string.endWith(inputPath,".txt",true)){
 		var wubiLex = fsys.wubiLex(inputPath)
@@ -55,7 +107,7 @@ var addDictFile = function(inputPath){
 			winform.msgboxErr(`错误的码表文件`)
 			return;
 		}
-			wubiLex.saveLex(lexPath)		
+		wubiLex.saveLex(lexPath)		
 	}
 	else {
 		var file = ..io.open(inputPath,"rb");
@@ -95,15 +147,11 @@ winform.onDropFiles = function(files){
 }
 	
 if(!#config.lex.names){
-	//98至善词库
-	var path98 = fsys.appdata("/aardio/std/wubi-lex-files/五笔98.lex",string.load("\res\ChsWubi98.lex"))
-	//系统自带86词库
-	var path86 = fsys.appdata("/aardio/std/wubi-lex-files/五笔86.lex",string.load("\res\ChsWubi86.lex"))
-	
-	config.lex.files["五笔98"] = path98;
+    
+	config.lex.files["五笔98"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
 	table.push(config.lex.names,"五笔98");
 	
-	config.lex.files["五笔86"] = path86;
+	config.lex.files["五笔86"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
 	table.push(config.lex.names,"五笔86");
 	
 	config.saveAll();
@@ -116,17 +164,33 @@ winform.listbox.oncommand = function(id,event){
 	}
 }
 
+import inet.downBox
 winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
-	select( message ) {  
+	select( message ) {   
 		case 0x205/*_WM_RBUTTONUP*/{
 			winform.lbTip.text = "";
 			var x,y = win.getMessagePos();  
 			var item = winform.listbox.hitTest(x,y,true); 
 			if( item  ){
-				winform.listbox.selIndex = item;
+				winform.listbox.selIndex = item; 
 				
 				winform.popmenu = win.ui.popmenu(winform); 
-				if(item>1){
+				if(item>1){	
+					winform.btnCopyToSystem.disabled = false;
+					
+					var lexName = config.lex.names[item-1];
+					var lexPath = config.lex.files[lexName];
+					
+					if( string.startWith(lexPath,"http://",true) ){
+						winform.popmenu.add('自服务器下载安装此词库',function(id){ 
+							downloadDictFile(lexPath,lexName);
+						} ) 	
+						
+						winform.popmenu.popup(x,y,true)
+						return;
+					}
+					
+					
 					winform.popmenu.add('删除',function(id){ 
 						var selIndex = winform.listbox.selIndex;
 						winform.listbox.delete(selIndex)
@@ -146,6 +210,10 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						winform.btnCopyToSystem.oncommand();
 					} )  				
 				}
+				else {
+					winform.btnCopyToSystem.disabled = true;
+				}
+				
 				
 				winform.popmenu.add('导出文本格式词库',function(id){ 
 					import process;
@@ -179,7 +247,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					if(item>1){
 						var lexName = config.lex.names[winform.listbox.selIndex-1];
 						if(lexName){
-							var lexPath = config.lex.files[lexName];
+							var lexPath = config.lex.files[lexName]; 
 							process.exploreSelect(lexPath)
 						}
 					}
@@ -198,9 +266,13 @@ winform.btnCopyToSystem.oncommand = function(id,event){
 	var selIndex = winform.listbox.selIndex; 
 	var lexName = config.lex.names[selIndex-1];
 	if(lexName){  
-		winform.richedit.setFocus(); 
-		
 		var srcPath = config.lex.files[lexName];
+		if( string.startWith(srcPath,"http://",true) ){
+			srcPath = downloadDictFile(srcPath,lexName); 
+			if(!srcPath)return;
+		}
+		
+		winform.richedit.setFocus(); 					
 		winform.btnCopyToSystem.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}  
 		var ok,err = win.invoke(copyToSystem,srcPath,winform) 
 		publish("wubi.system.lex.changed");

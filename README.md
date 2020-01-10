@@ -9,12 +9,12 @@ Win10自带的微软五笔码表安装、管理工具。
 提供微软五笔常用快捷键、用法帮助。
 
 
-![Screenshot](https://github.com/aardio/wubi-lex-tool/raw/master/screenshots/1.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/1.jpg)
 
-![Screenshot](https://github.com/aardio/wubi-lex-tool/raw/master/screenshots/2.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/2.jpg)
 
-![Screenshot](https://github.com/aardio/wubi-lex-tool/raw/master/screenshots/3.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/3.jpg)
 
-![Screenshot](https://github.com/aardio/wubi-lex-tool/raw/master/screenshots/4.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/4.jpg)
 
-![Screenshot](https://github.com/aardio/wubi-lex-tool/raw/master/screenshots/5.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/5.jpg)

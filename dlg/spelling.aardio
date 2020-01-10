@@ -52,11 +52,7 @@ import wubi.table;
 
 var spelling98;
 var searchSpelling = win.debounce(function(str){
-	
-	if(!spelling98){
-		spelling98 = fsys.wubiSpelling98();
-	}
-	
+
 	winform.plusSpelling.text = ""
 	winform.plusSpellingGif.background = null;
 	winform.plusTitle.text = ""
@@ -107,41 +103,58 @@ var searchSpelling = win.debounce(function(str){
 	
 	var wchars = string.split(str);
 	var length  = #wchars;
+	 
 	if(winform.wubiVersion=="98"){
-		winform.plusSpelling.text = spelling98.find(str); 
-		if(length && !#winform.plusSpelling.text){
-			var codes = {};
-			for(i=1;length;1){
-				var code = spelling98.find( wchars[i] ) 
-				if(!code) continue;
-				
-				code = string.match(code,"〔\s+(.+)\s+〕");
-				codes[i] = string.splitEx(code,"\s+")
-			}
+		import wubi.spelling98;
 		
-			if(#codes === length && !table.some(codes,lambda(v)v===null) ){
-				if(length==2){ 
-					if(#codes[1]>=2 && #codes[2]>=2){
-						winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[1][2] +" "+ codes[2][1] +" "+ codes[2][2] + " 〕" 
-					}	
+		if(!spelling98){
+			spelling98 = wubi.spelling98();
+			if(!spelling98){
+				wubi.spelling98.install(winform);
+				spelling98 = wubi.spelling98();
+			} 
+			 
+			wubi.spelling98.installFont();
+			winform.plusSpelling.setFont(h=-26;name='98WB-2');
+		}
+		
+		if(spelling98){ 
+			winform.plusSpelling.text = spelling98.find(str); 
+ 
+			if(length && !#winform.plusSpelling.text){
+				var codes = {};
+				for(i=1;length;1){
+					var code = spelling98.find( wchars[i] ) 
+					if(!code) continue;
+					
+					code = string.match(code,"〔\s+(.+)\s+〕");
+					codes[i] = string.splitEx(code,"\s+")
 				}
-				elseif(length==3){ 
-					if(#codes[1]>=1 && #codes[2]>=1 && #codes[3]>=2){
-						winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[2][1] +" "+ codes[3][1] +" "+ codes[3][2] + " 〕"
-					}	
+			
+				if(#codes === length && !table.some(codes,lambda(v)v===null) ){
+					if(length==2){ 
+						if(#codes[1]>=2 && #codes[2]>=2){
+							winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[1][2] +" "+ codes[2][1] +" "+ codes[2][2] + " 〕" 
+						}	
+					}
+					elseif(length==3){ 
+						if(#codes[1]>=1 && #codes[2]>=1 && #codes[3]>=2){
+							winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[2][1] +" "+ codes[3][1] +" "+ codes[3][2] + " 〕"
+						}	
+					}
+					elseif(length==4){ 
+						if(#codes[1]>=1 && #codes[2]>=1 && #codes[3]>=1 && #codes[4]>=1){
+							winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[2][1] +" "+ codes[3][1] +" "+ codes[4][1] + " 〕"
+						}	
+					}
+					elseif(length>4){ 
+						if(#codes[1]>=1 && #codes[2]>=1 && #codes[3]>=1 && #codes[#codes]>=1){
+							winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[2][1] +" "+ codes[3][1] +" "+ codes[#codes][1] + " 〕"
+						}	
+					}
 				}
-				elseif(length==4){ 
-					if(#codes[1]>=1 && #codes[2]>=1 && #codes[3]>=1 && #codes[4]>=1){
-						winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[2][1] +" "+ codes[3][1] +" "+ codes[4][1] + " 〕"
-					}	
-				}
-				elseif(length>4){ 
-					if(#codes[1]>=1 && #codes[2]>=1 && #codes[3]>=1 && #codes[#codes]>=1){
-						winform.plusSpelling.text = "〔 " + codes[1][1] +" "+ codes[2][1] +" "+ codes[3][1] +" "+ codes[#codes][1] + " 〕"
-					}	
-				}
-			}
-		}		
+			}	
+		}	
 	}
 	
 	var getSpellingGifPath = function(char){
@@ -328,7 +341,7 @@ subscribe("wubi.system.lex.changed",function(...){
 	else {
 		winform.plusDownloadSpellingGif.hide = true;
 	}
-	
+
 	winform.wubiVersion = ver;
 	winform.editSearch.text = "";
 	winform.plusCode.text =""
@@ -365,9 +378,6 @@ winform.plusTitle.text = "请稍候几秒,正在加载字根数据库..."
 
 ..win.setTimeout(
 	function(){
-		import fsys.wubiSpelling98;
-		winform.plusSpelling.setFont(h=-26;name='98WB-2');
-	
 		publish("wubi.system.lex.changed");	
 		if(mainForm) mainForm.tabs.strips[2].disabledText = null;
 	},100
@@ -384,7 +394,7 @@ winform.plusDownloadSpellingGif.oncommand = function(id,event){
 	var bmp = winform.plusSpellingGif.setBackground(null);
 	if(bmp){ bmp.dispose() }
 	
-	if( sevenZip.lzma.httpFile.download("http://download.aardio.com/wubi/spelling.tar.lzma"
+	if( sevenZip.lzma.httpFile.download("http://wubi.aardio.com/download/spelling.tar.lzma"
 		,"下载五笔拆分图解字库",saveDir,extraDir,"spelling.tar.lzma",winform) ){
 		winform.editSearch.editBox.onChange()
 		winform.plusDownloadSpellingGif.hide = true;

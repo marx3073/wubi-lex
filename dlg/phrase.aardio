@@ -13,16 +13,16 @@ lbTip={cls="static";text="每行表示一个短语配置，由3个部分组成( 
 )
 /*}}*/
 
+import wubi.phrase;
 import win.versionEx;
 winform.btnLoad.oncommand = function(id,event){
 	winform.lbResult.text = "";
 	
-	if( !win.version.isWin10ReleaseLater("1703") ){
+	if( !win.versionEx.isWin10ReleaseLater("1703") ){
 		return winform.msgboxErr("仅支持 Win10 1703以上版本的五笔短语词库")
 	}
 	
-	var wubiUdpPath = ..io.exist( ..io.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv2.lex") )
-		|| ..io.exist( ..io.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex") )
+	var wubiUdpPath = wubi.phrase.getWubiUdpPrimaryPath()
 	
 	if(!wubiUdpPath){
 		return winform.msgboxErr("系统短语词库为空");
@@ -83,6 +83,7 @@ winform.btnSave.oncommand = function(id,event){
 	
 	winform.lbResult.text = "";
 	winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+	winform.edit.setFocus();
 	thread.invoke( savePhrases,winform.edit.text,winform)
 }
 

@@ -28,7 +28,7 @@ if(!atom){
 import fsys.update.simpleMain;
 if( fsys.update.simpleMain(
 	"wubiLex( Win10 五笔助手 )",
-	"http://wubi.aardio.com/update/version.txt",
+	"http://wubi.aardio.com/update/",
 	..io.appData("aardio/wubiLex/update"),
 	function(version,description){
 		globalUpdateInfo = {

@@ -50,9 +50,6 @@ namespace style{
 			hover = 0xFFFF0000; 
 			active = 0xFF00FF00; 
 		}
-		border = {
-			hover = {bottom=1;color=0xFFFF0000}
-		}
 	};
 	dropdown = { 
 		foreground={

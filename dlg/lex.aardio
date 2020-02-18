@@ -2,16 +2,19 @@
 import fonts.fontAwesome;
 import win.ui;
 /*DSG{{*/
-var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=600;bgcolor=16777215)
+var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=607;bgcolor=16777215)
 winform.add(
-bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=600;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
-btnAddFile={cls="plus";text='\uF271   添加码表文件';left=26;top=17;right=187;bottom=53;bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=1};
-btnCopyToSystem={cls="plus";text='\uF17A   安装到系统词库';left=196;top=17;right=389;bottom=53;bgcolor=11580047;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=2};
-btnRemoveWords={cls="plus";text='\uF03A   单字化';left=765;top=551;right=883;bottom=587;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=8};
-btnSave={cls="plus";text='\uF0C7   另存为';left=896;top=552;right=1014;bottom=588;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=7};
-lbTip={cls="plus";left=414;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=6};
-listbox={cls="listbox";left=28;top=79;right=398;bottom=594;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4};
-richedit={cls="richedit";left=408;top=79;right=1016;bottom=534;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-15);multiline=1;vscroll=1;z=5}
+bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=608;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
+btnAddFile={cls="plus";text="添加码表";left=26;top=17;right=187;bottom=53;align="left";bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF271';notify=1;tabstop=1;textPadding={left=39};z=1};
+btnConvert={cls="plus";text="精简码表";left=748;top=564;right=883;bottom=600;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF03A';notify=1;tabstop=1;textPadding={left=39};z=8};
+btnCopyToSystem={cls="plus";text="安装到系统码表";left=196;top=17;right=389;bottom=53;align="left";bgcolor=11580047;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF17A ';notify=1;tabstop=1;textPadding={left=39};z=2};
+btnSave={cls="plus";text="另存为";left=896;top=565;right=1014;bottom=601;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF0C7';notify=1;tabstop=1;textPadding={left=39};z=7};
+ddChar1={cls="plus";text="仅保留单字";left=748;top=606;right=932;bottom=637;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=10};
+ddChar2={cls="plus";text="仅保留单字、双字词";left=748;top=637;right=932;bottom=668;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=9};
+ddSimplized={cls="plus";text="移除繁体字";left=748;top=668;right=932;bottom=699;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=11};
+lbTip={cls="plus";left=414;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=5};
+listbox={cls="listbox";left=28;top=79;right=398;bottom=599;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4};
+richedit={cls="richedit";left=408;top=77;right=1025;bottom=561;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-15);multiline=1;vscroll=1;z=6}
 )
 /*}}*/
 
@@ -27,7 +30,7 @@ var downloadDictFile = function(url,lexName){
 	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
 	
 	if( string.startWith(url,"http://",true) && (string.endWith(url,".lex",true))){
-		var downBox = inet.downBox(winform,"下载词库:" + lexName,1000) 
+		var downBox = inet.downBox(winform,"下载码表:" + lexName,1000) 
 		if( downBox.download(url,lexPath) ){
 			var file = ..io.open(lexPath,"rb");
 			if(!file){
@@ -81,7 +84,7 @@ var addDictFile = function(inputPath){
 	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
 	
 	if( string.startWith(inputPath,"http://",true) && (string.endWith(inputPath,".lex",true))){
-		var downBox = inet.downBox(winform,"下载词库:" + lexName) 
+		var downBox = inet.downBox(winform,"下载码表:" + lexName) 
 		if( downBox.download(inputPath,lexPath) ){
 			var file = ..io.open(inputPath,"rb");
 			if(!file){
@@ -184,7 +187,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					var lexPath = config.lex.files[lexName];
 					
 					if( string.startWith(lexPath,"http://",true) ){
-						winform.popmenu.add('自服务器下载安装此词库',function(id){ 
+						winform.popmenu.add('自服务器下载安装此码表',function(id){ 
 							downloadDictFile(lexPath,lexName);
 						} ) 	
 						
@@ -208,7 +211,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						}
 					} ) 
 					
-					winform.popmenu.add('安装到系统词库',function(id){ 
+					winform.popmenu.add('安装到系统码表',function(id){ 
 						winform.btnCopyToSystem.oncommand();
 					} )  				
 				}
@@ -219,7 +222,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 				if(item>1){
 					winform.popmenu.add();
 					
-					winform.popmenu.add('编辑字库',function(id){  
+					winform.popmenu.add('编辑码表',function(id){  
 						winform.lbTip.text = "正在加载数据"
 						
 						var lexName = config.lex.names[winform.listbox.selIndex-1];
@@ -243,7 +246,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 				
 				winform.popmenu.add();
 				
-				winform.popmenu.add('导出文本格式词库',function(id){ 
+				winform.popmenu.add('导出文本格式码表',function(id){ 
 					import process;
 					var outputPath = fsys.dlg.save("文本码表（*.txt）|*.txt||",,,winform)
 					if(!outputPath){
@@ -270,7 +273,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					winform.lbTip.text = "已完成";
 				} );
 
-				winform.popmenu.add('浏览字库文件',function(id){ 
+				winform.popmenu.add('浏览码表文件...',function(id){ 
 					import process;
 					if(item>1){
 						var lexName = config.lex.names[winform.listbox.selIndex-1];
@@ -389,11 +392,11 @@ subscribe("wubi.system.lex.changed",function(...){
 } )
 
 winform.richedit.text =/*
-可直接拖拽词库文件到当前窗口来添加词库。
-可添加微软五笔二进制词库（*.lex），也可以添加文本格式的词库（*.txt）
+可直接拖拽码表文件到当前窗口来添加码表。
+可添加微软五笔二进制码表（*.lex），也可以添加文本格式的码表（*.txt）
 
-文本格式词库可自动识别 UTF-8,UNICODE(UTF-16) 等各种编码，
-词库每行一个编码，按键组合(小写字母)与输入文本间用空格或制表符分开。
+文本格式码表可自动识别 UTF-8,UNICODE(UTF-16) 等各种编码，
+码表每行一个编码，按键组合(小写字母)与输入文本间用空格或制表符分开。
 下面的写法都是支持的，任何不符合格式要求的行都会自动忽略：
 ------------------------------
 aaaa 工 㠭
@@ -403,41 +406,10 @@ atn 薛
 // 这是任性的注释行
 */
 
-winform.btnSave.skin(style.button)
-winform.btnRemoveWords.skin(style.button)
-winform.btnRemoveWords.oncommand = function(id,event){
-	if(!#winform.richedit.text){
-		winform.msgboxErr("要保存的词库内容不能为空!")
-		return;
-	}
-			
-	thread.invoke( 
-		function(winform){
-			winform.btnRemoveWords.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-			winform.richedit.disabled = true;
-			
-			import fsys.wubiLex;
-			var wubiLex = fsys.wubiLex("");
-			wubiLex.addText(winform.richedit.text);
-						
-			wubiLex.filter(
-				function(txt,code){
-					return ..string.len(txt)==1;
-				}
-			)
-				
-			winform.richedit.text = wubiLex.tostring();
-			winform.richedit.disabled = false;
-			sleep(500)
-			
-			winform.btnRemoveWords.disabledText = null;
-		},winform
-	)
-}
-
+winform.btnSave.skin(style.button);
 winform.btnSave.oncommand = function(id,event){
 	if(!#winform.richedit.text){
-		winform.msgboxErr("要保存的词库内容不能为空!")
+		winform.msgboxErr("要保存的码表内容不能为空!")
 		return;
 	}
 	
@@ -488,6 +460,143 @@ winform.btnSave.oncommand = function(id,event){
 		},winform
 	)
 }
+
+import win.ui.tabs;
+var menu = win.ui.tabs(winform.ddChar1,winform.ddChar2,winform.ddSimplized)
+menu.skin({
+	background={
+		default=0xFF68CC95;
+		disabled=0xFFC4CCC8;
+		hover=0xFF4A522F;
+	};
+	color={
+		default=0xFF000000;
+		disabled=0xFF8A8A8A;
+		hover=0xFFFFFFFF
+	};
+})
+menu.initPopup();
+
+
+winform.btnConvert.skin(style.button)
+winform.btnConvert.oncommand = function(id,event){
+    menu.popup(true);
+}
+
+menu.onOk = function(strip){ 
+	strip.oncommand();
+}
+
+winform.ddChar1.oncommand = function(){
+	if(!#winform.richedit.text){
+		winform.msgboxErr("要转换的码表内容不能为空!")
+		return;
+	}
+			
+	thread.invoke( 
+		function(winform){
+			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+			winform.richedit.disabled = true;
+			
+			import fsys.wubiLex;
+			var wubiLex = fsys.wubiLex("");
+			wubiLex.addText(winform.richedit.text);
+						
+			wubiLex.filter(
+				function(txt,code){
+					return ..string.len(txt)==1;
+				}
+			)
+				
+			winform.richedit.text = wubiLex.tostring();
+			winform.richedit.disabled = false;
+			sleep(500)
+			
+			winform.btnConvert.disabledText = null;
+		},winform
+	)
+}
+
+winform.ddChar2.oncommand = function(){
+	if(!#winform.richedit.text){
+		winform.msgboxErr("要转换的码表内容不能为空!")
+		return;
+	}
+			
+	thread.invoke( 
+		function(winform){
+			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+			winform.richedit.disabled = true;
+			
+			import fsys.wubiLex;
+			var wubiLex = fsys.wubiLex("");
+			wubiLex.addText(winform.richedit.text);
+						
+			wubiLex.filter(
+				function(txt,code){
+					return ..string.len(txt)<=2;
+				}
+			)
+				
+			winform.richedit.text = wubiLex.tostring();
+			winform.richedit.disabled = false;
+			sleep(500)
+			
+			winform.btnConvert.disabledText = null;
+		},winform
+	)	
+}
+
+winform.ddSimplized.oncommand = function(id,event){
+	if(!#winform.richedit.text){
+		winform.msgboxErr("要转换的码表内容不能为空!")
+		return;
+	}
+			
+	thread.invoke( 
+		function(winform){
+			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
+			winform.richedit.disabled = true;
+			
+			import fsys.wubiLex;
+			var wubiLex = fsys.wubiLex("");
+			wubiLex.addText(winform.richedit.text);
+					
+			import string.conv;	
+			wubiLex.filter(
+				function(txt,code){
+					return ..string.conv.simplized(txt)===txt;
+				}
+			)
+				
+			winform.richedit.text = wubiLex.tostring();
+			winform.richedit.disabled = false;
+			sleep(500)
+			
+			winform.btnConvert.disabledText = null;
+		},winform
+	)		
+}
+
+winform.richedit.enablePopMenu({
+    { /*---分隔线---*/ };
+	{ "仅保留单字";
+		function(id){
+			winform.ddChar1.oncommand();
+		} 
+	};
+	
+	{ "仅保留单字、双字词";
+		function(id){
+			winform.ddChar2.oncommand();
+		} 
+	};
+	{ "移除繁体字";
+		function(id){
+			winform.ddSimplized.oncommand();
+		} 
+	};
+})
 
 winform.show() 
 win.loopMessage();

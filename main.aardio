@@ -4,12 +4,12 @@ import win.ui;
 /*DSG{{*/
 mainForm = win.form(cls="AARDIO_WUBI_FORM";text="微软五笔助手( Win10  )";right=1040;bottom=642;bgcolor=15793151;border="none")
 mainForm.add(
-caption={cls="bkplus";text="wubiLex 5.8";left=35;top=12;right=145;bottom=30;color=15780518;dl=1;dt=1;font=LOGFONT(h=-16);z=5};
+caption={cls="bkplus";text="wubiLex 6.0";left=35;top=12;right=145;bottom=30;color=15780518;dl=1;dt=1;font=LOGFONT(h=-16);z=5};
 custom={cls="custom";left=-1;top=40;right=1040;bottom=648;bgcolor=16777215;db=1;dl=1;dr=1;dt=1;z=1};
 logo={cls="bkplus";text='\uF0AD';left=6;top=9;right=35;bottom=34;color=15780518;dl=1;dt=1;font=LOGFONT(h=-18;name='FontAwesome');z=4};
 stripHelp={cls="plus";text="帮助";left=663;top=5;right=757;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF06A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=9};
 stripHotkey={cls="plus";text="热键";left=353;top=5;right=447;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF11C ';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=10};
-stripLex={cls="plus";text="词库";left=146;top=5;right=240;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF00A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=3};
+stripLex={cls="plus";text="码表";left=146;top=5;right=240;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF00A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=3};
 stripPhrase={cls="plus";text="短语";left=456;top=5;right=550;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF0AE';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=7};
 stripSetting={cls="plus";text="设置";left=560;top=5;right=654;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF0AD';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=8};
 stripSpelling={cls="plus";text="反查";left=249;top=5;right=343;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF002';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=6};
@@ -98,7 +98,7 @@ mainForm.wndproc = {
 		if( lParam = 0x205/*_WM_RBUTTONUP*/ ){
 			win.setForeground(mainForm.hwnd)
 			mainForm.popmenu = win.ui.popmenu(mainForm);//创建弹出菜单
-			mainForm.popmenu.add('切换词库',function(id){
+			mainForm.popmenu.add('切换码表',function(id){
 				tbs.selIndex = 1;
 				mainForm.show();
 			});

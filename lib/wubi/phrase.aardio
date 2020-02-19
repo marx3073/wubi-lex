@@ -111,9 +111,9 @@ save = function(phraseText){
 	var lineIndex = 0;
 	var trim = ..string.trim;
 	var match = ..string.match;
-	
-	phraseText = ..string.replace( phraseText,"/*.+?*/",""); 
-	
+
+	phraseText = ..string.replace( phraseText,"\/\*.+?\*\/",""); 
+
 	for line in ..string.lines(phraseText) {
 		lineIndex++;
 		
@@ -121,24 +121,42 @@ save = function(phraseText){
 		if(!#line){continue;} 
 		
 		var code,order,phrase = match(line,"([a-z]+)\s*\=\s*(\d+)\s*\,\s*(.+)");
-		if(code && phrase && order ){ 
+		if(code && phrase && order ){
 			push(phraseArray,{code;phrase;order});
 		}
 		else {
 			code,phrase = match(line,"([a-z]+)\s*\=\s*(.+)");
 			if(code && phrase  ){
-				order = "1";
+				order = null;
 			}
 			elseif(match(line,"\s+\d$")){
 				code,phrase,order = match(line,"([a-z]+)\s+(.+?)\s+(\d)$") 
 			}
 			else {
 				code,phrase = match(line,"([a-z]+)\s+(.+)");
-				order = "1";
+				order = null;
 			}
 				
 			if(code && phrase){
-				push(phraseArray,{code;phrase;order});	
+				if(!order){
+					/*
+					var arr = ..string.match(phrase,"^\$\[(.+)\]$");
+					if(#arr){
+						arr = ..string.split(arr);
+						for(i=1;#arr;1){
+							push(phraseArray,{code;arr[i];i}); 
+						}
+					}
+					else {
+						order = "1";
+					}
+					*/
+					order = "1";
+				}
+				
+				if(order){
+					push(phraseArray,{code;phrase;order});	
+				}	
 			}	
 		}
 	}

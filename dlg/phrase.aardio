@@ -49,6 +49,7 @@ var savePhrases = function(phraseText,winform){
 	import wubi.phrase;
 	import tsfUtil;
 	import fsys;
+	
 	tsfUtil.reset(
 		function(){ 
 			var wubiUdpPath1 = ..io.getSpecial(0x1a /*_CSIDL_APPDATA*/,"\Microsoft\InputMethod\Chs\ChsWubiEUDPv1.lex")
@@ -61,7 +62,6 @@ var savePhrases = function(phraseText,winform){
 				if(wubiUdpPath1)fsys.delete(wubiUdpPath1 )  
 				if(wubiUdpPath)fsys.delete(wubiUdpPath )
 				if((!io.exist(wubiUdpPath1)) && (!io.exist(wubiUdpPath)) ){ break; }  
-				
 				
 				sleep(1000)
 			}
@@ -181,7 +181,7 @@ zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
 
 winform.edit.translateAccelerator = function(msg){ 
     var vk = msg.wParam;
- 	if( (vk == 0x9/*_VK_TAB*/ ) || (vk = 0xD/*_VK_RETURN*/) ){
+ 	if( vk == 0x9/*_VK_TAB*/ ){
 		if( msg.message == 0x100/*_WM_KEYDOWN*/) {
 			winform.edit.selText = '\t'; 
 			return true;

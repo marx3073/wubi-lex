@@ -3,7 +3,7 @@ import fonts.fontAwesome;
 /*DSG{{*/
 var winform = win.form(text="wubiLex - 帮助";right=1040;bottom=607;bgcolor=16777215)
 winform.add(
-keyboardShortcuts={cls="plus";left=76;top=55;right=934;bottom=438;align="left";border={color=-4144960;radius=8;width=1};db=1;dl=1;dr=1;dt=1;font=LOGFONT(h=-16);textPadding={left=10;top=10;right=10;bottom=10};valign="top";z=1};
+keyboardShortcuts={cls="plus";left=76;top=51;right=934;bottom=438;align="left";border={color=-4144960;radius=8;width=1};db=1;dl=1;dr=1;dt=1;font=LOGFONT(h=-15);textPadding={left=10;top=10;right=10;bottom=10};valign="top";z=1};
 lbAbout={cls="plus";text="关于 wubiLex ( Win10 五笔助手 ) :";left=46;top=448;right=388;bottom=479;align="left";db=1;dl=1;font=LOGFONT(h=-16);iconColor=2960685;iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF059';textPadding={left=30};z=3};
 lbGitHub={cls="plus";text="开源代码:";left=325;top=484;right=415;bottom=515;align="right";db=1;dl=1;font=LOGFONT(h=-16);iconColor=2960685;z=7};
 lbKeyboardShortcuts={cls="plus";text="微软五笔使用技巧( 建议大家更新Win10到较新的版本 ) :";left=46;top=13;right=594;bottom=44;align="left";dl=1;dr=1;dt=1;font=LOGFONT(h=-16);iconColor=2960685;iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=2};
@@ -32,6 +32,8 @@ winform.keyboardShortcuts.text = /*
 
 7、输入时，按回车取消输入，按空格取首个候选词，
 按分号键 ( ; ) 取第二个候选词，按引号键（'）取第三个候选词。
+
+8、输入时，按 -，+ 键对候选词翻页。
 */
 
 import style;

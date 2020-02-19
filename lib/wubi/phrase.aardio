@@ -111,20 +111,36 @@ save = function(phraseText){
 	var lineIndex = 0;
 	var trim = ..string.trim;
 	var match = ..string.match;
+	
+	phraseText = ..string.replace( phraseText,"/*.+?*/",""); 
+	
 	for line in ..string.lines(phraseText) {
 		lineIndex++;
-		if(!#line){continue;} 
-		var code,phrase,order;
+		
 		line = trim(line);
-		if(match(line,"\s+\d$")){
-			code,phrase,order = match(line,"([a-z]+)\s+(.+?)\s+(\d)$") 
+		if(!#line){continue;} 
+		
+		var code,order,phrase = match(line,"([a-z]+)\s*\=\s*(\d+)\s*\,\s*(.+)");
+		if(code && phrase && order ){ 
+			push(phraseArray,{code;phrase;order});
 		}
 		else {
-			code,phrase = match(line,"([a-z]+)\s+(.+?)");
-			order = "1";
+			code,phrase = match(line,"([a-z]+)\s*\=\s*(.+)");
+			if(code && phrase  ){
+				order = "1";
+			}
+			elseif(match(line,"\s+\d$")){
+				code,phrase,order = match(line,"([a-z]+)\s+(.+?)\s+(\d)$") 
+			}
+			else {
+				code,phrase = match(line,"([a-z]+)\s+(.+)");
+				order = "1";
+			}
+				
+			if(code && phrase){
+				push(phraseArray,{code;phrase;order});	
+			}	
 		}
-			
-		push(phraseArray,{code;phrase;order});
 	}
 		
 	var phraseStart = 64+4*#phraseArray;

@@ -6,10 +6,12 @@ var winform = win.form(text="五笔短语词库";right=938;bottom=597;acceptfile
 winform.add(
 btnLoad={cls="plus";text='\uF093  读取系统短语词库';left=507;top=548;right=704;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=3};
 btnSave={cls="plus";text='\uF019   更新短语词库到系统';left=707;top=548;right=909;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
-edit={cls="richedit";left=18;top=55;right=925;bottom=541;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-13);hscroll=1;multiline=1;vscroll=1;z=2};
-lbResult={cls="static";text="可以直接拖拽文本格式短语文件（*.txt）到当前窗口";left=17;top=551;right=478;bottom=580;color=3947580;db=1;dl=1;dr=1;font=LOGFONT(h=-15);transparent=1;z=5};
-lbTip={cls="static";text="每行表示一个短语配置，由3个部分组成( 使用空格或制表符隔开 )：
-第一部分为小写字母串表示按键，第二部分为输出文本（可包含空白字符），第三部分为候选词位置（可省略）";left=20;top=10;right=897;bottom=67;dl=1;dr=1;dt=1;font=LOGFONT(h=-13);transparent=1;z=1}
+edit={cls="richedit";left=18;top=71;right=925;bottom=541;acceptfiles=1;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-13);hscroll=1;multiline=1;vscroll=1;z=2};
+lbResult={cls="static";text="可以直接拖拽文本格式短语文件（*.txt）到这里";left=17;top=551;right=478;bottom=580;color=3947580;db=1;dl=1;dr=1;font=LOGFONT(h=-15);transparent=1;z=5};
+lbTip={cls="static";text="每行表示一个短语配置，由3个部分组成：
+第一部分为小写字母串表示按键，第二部分为输出文本（可包含空白字符），第三部分为候选词排列位置（可省略）
+默认使用空格或制表符隔开3个部分，也支持 “按键=排列位置,输出文本” 的格式。
+";left=20;top=10;right=897;bottom=67;dl=1;dr=1;dt=1;font=LOGFONT(h=-13);transparent=1;z=1}
 )
 /*}}*/
 
@@ -81,6 +83,26 @@ winform.btnSave.oncommand = function(id,event){
 		return winform.msgboxErr("仅支持 Win10 1703以上版本的五笔短语词库")
 	}
 	
+	var str = string.trim(winform.edit.text);
+	if(!#str){
+		winform.edit.text = /**
+aar=aardio
+zzrq=2,%yyyy%年%mm%月%dd%日
+zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
+/*
+变量	含义
+%yyyy%	4位年
+%MM%	2位月
+%dd%	2位日
+%HH%	2位小时（24小时制）
+%mm%	2位分钟数
+%ss%	2位秒数
+*/
+**/
+		winform.msgbox("短语内容不能为空")
+		return;
+	}
+	
 	winform.lbResult.text = "";
 	winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 	winform.edit.setFocus();
@@ -90,6 +112,8 @@ winform.btnSave.oncommand = function(id,event){
 var loadPhraseFromFile = function(winform,path){
 	import fsys;
 	import wubi.phrase;
+	import fsys.codepage;
+	
 	winform.lbResult.text = "";
 	
 	if(..fsys.isDir(path)){
@@ -106,7 +130,7 @@ var loadPhraseFromFile = function(winform,path){
 		winform.edit.text = wubi.phrase.load(path)
 	}	
 	
-	winform.edit.text = string.load(path);
+	winform.edit.text = ..fsys.codepage.load(path);
 }
 
 
@@ -131,7 +155,7 @@ winform.edit.enablePopMenu({
 
 import fsys;
 import process.admin;
-process.admin.enableDropMsg(winform.hwnd)
+process.admin.enableDropMsg(winform.hwnd) 
 winform.onDropFiles = function(files){
 	thread.invoke(loadPhraseFromFile,winform,files[1])
 }
@@ -139,6 +163,31 @@ winform.onDropFiles = function(files){
 import style;
 winform.btnLoad.skin(style.primaryButton)
 winform.btnSave.skin(style.primaryButton)
+
+winform.edit.text = /**
+aar=aardio
+zzrq=2,%yyyy%年%mm%月%dd%日
+zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
+/*
+变量	含义
+%yyyy%	4位年
+%MM%	2位月
+%dd%	2位日
+%HH%	2位小时（24小时制）
+%mm%	2位分钟数
+%ss%	2位秒数
+*/
+**/
+
+winform.edit.translateAccelerator = function(msg){ 
+    var vk = msg.wParam;
+ 	if( (vk == 0x9/*_VK_TAB*/ ) || (vk = 0xD/*_VK_RETURN*/) ){
+		if( msg.message == 0x100/*_WM_KEYDOWN*/) {
+			winform.edit.selText = '\t'; 
+			return true;
+		}
+	}	
+}
 
 winform.show();
 win.loopMessage();

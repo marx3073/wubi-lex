@@ -2,7 +2,7 @@
 import fonts.fontAwesome;
 import win.ui;
 /*DSG{{*/
-var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=607;bgcolor=16777215)
+var winform = win.form(text="wubiLex - 码表管理";right=1040;bottom=607;bgcolor=16777215)
 winform.add(
 bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=608;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
 btnAddFile={cls="plus";text="添加码表";left=26;top=17;right=187;bottom=53;align="left";bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF271';notify=1;tabstop=1;textPadding={left=39};z=1};
@@ -21,7 +21,7 @@ richedit={cls="richedit";left=408;top=77;right=1025;bottom=561;db=1;dl=1;dr=1;dt
 
 import fsys;
 import fsys.dlg;
-import fsys.wubiLex;
+import wubi.lexFile;
 import win.inputBox;
 import config;
 
@@ -108,7 +108,7 @@ var addDictFile = function(inputPath){
 	}
 	
 	if(string.endWith(inputPath,".txt",true)){
-		var wubiLex = fsys.wubiLex(inputPath)
+		var wubiLex = wubi.lexFile(inputPath)
 		if(!wubiLex){
 			winform.msgboxErr(`错误的码表文件`)
 			return;
@@ -154,11 +154,17 @@ winform.onDropFiles = function(files){
 	
 if(!#config.lex.names){
 	
-	config.lex.files["五笔98"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
-	table.push(config.lex.names,"五笔98");
+	config.lex.files["五笔98( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.min.lex";
+	table.push(config.lex.names,"五笔98( 单字 )");
 	
-	config.lex.files["五笔86"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
-	table.push(config.lex.names,"五笔86");
+	config.lex.files["五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.min.lex";
+	table.push(config.lex.names,"五笔86( 单字 )");
+	
+	config.lex.files["五笔98( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
+	table.push(config.lex.names,"五笔98( 完整 )");
+	
+	config.lex.files["五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
+	table.push(config.lex.names,"五笔86( 完整 )");
 	
 	config.saveAll();
 }
@@ -229,12 +235,12 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						var lexName = config.lex.names[winform.listbox.selIndex-1];
 						if(lexName){
 							var lexPath = config.lex.files[lexName];
-							var wubiLex = fsys.wubiLex(lexPath);
+							var wubiLex = wubi.lexFile(lexPath);
 							
 							thread.invoke( 
 								function(winform,lexPath){
-									import fsys.wubiLex; 
-									var wubiLex = fsys.wubiLex(lexPath); 
+									import wubi.lexFile; 
+									var wubiLex = wubi.lexFile(lexPath); 
 									winform.richedit.text = wubiLex.tostring();
 									
 									statistics = wubiLex.statistics();	
@@ -248,6 +254,31 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						winform.lbTip.text = ""
 					} ) 
 				} 
+				else {
+					
+					
+					winform.popmenu.add('编辑码表',function(id){  
+						winform.lbTip.text = "正在加载数据";
+					 
+						thread.invoke( 
+							function(winform){
+								import wubi.lexFile; 
+								var wubiLex = wubi.lexFile(); 
+								winform.richedit.text = wubiLex.tostring();
+								
+								statistics = wubiLex.statistics();	
+								winform.lbTip.text = string.format("总编码数：%d 重码数：%d"
+									,statistics.totalTxt,statistics.coincidentTxt );
+							},winform
+						) 
+						
+						winform.lbTip.disabledText = null;
+						winform.lbTip.text = ""
+					} ) 
+					
+					winform.popmenu.add();
+				}
+				
 				
 				winform.popmenu.add();
 				
@@ -264,13 +295,13 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						var lexName = config.lex.names[winform.listbox.selIndex-1];
 						if(lexName){
 							var lexPath = config.lex.files[lexName];
-							var wubiLex = fsys.wubiLex(lexPath)
+							var wubiLex = wubi.lexFile(lexPath)
 							
 							wubiLex.saveTxt(outputPath) 
 						} 
 					}
 					else {
-						var wubiLex = fsys.wubiLex()
+						var wubiLex = wubi.lexFile()
 						wubiLex.saveTxt(outputPath) 
 					}
 					
@@ -288,11 +319,53 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						}
 					}
 					else {
-						process.exploreSelect(fsys.wubiLex.path()) 
+						process.exploreSelect(wubi.lexFile.path()) 
 					}
 				} ) 
 				winform.popmenu.popup(x,y,true)
 			}
+			else {
+				winform.popmenu = win.ui.popmenu(winform); 
+				winform.popmenu.add('重置为默认列表',function(id){
+					
+					if(!winform.msgboxTest('点击确定将清空所有添加或下载的码表，\n并加载默认列表。')){
+						return;
+					}
+					
+					for(selIndex=winform.listbox.count;2;-1){ 
+						winform.listbox.delete(selIndex)
+						
+						var lexName = config.lex.names[selIndex-1];
+						if(lexName){
+							var lexPath = config.lex.files[lexName];
+							if(lexPath){
+								io.remove(lexPath)
+								config.lex.files[lexName] = null;
+							}
+							table.remove(config.lex.names,selIndex-1)
+						} 
+					}
+					
+					config.lex.files["五笔98( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.min.lex";
+					table.push(config.lex.names,"五笔98( 单字 )");
+					
+					config.lex.files["五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.min.lex";
+					table.push(config.lex.names,"五笔86( 单字 )");
+					
+					config.lex.files["五笔98( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
+					table.push(config.lex.names,"五笔98( 完整 )");
+					
+					config.lex.files["五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
+					table.push(config.lex.names,"五笔86( 完整 )");
+					
+					config.saveAll();
+					winform.listbox.reloadLexList(); 
+					
+				} ) 
+					
+				winform.popmenu.popup(x,y,true)
+			}
+			
 		} 
 	}
 }
@@ -382,8 +455,8 @@ var updateSystemLexVersion = function(){
 	
 	thread.invoke( 
 		function(winform){
-			import fsys.wubiLex;
-			var wubiLex = fsys.wubiLex()
+			import wubi.lexFile;
+			var wubiLex = wubi.lexFile()
 			var ver = wubiLex.getVersion();
 			ver = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver]; 
 			winform.listbox.updateSystemLexVersion(ver)
@@ -441,7 +514,7 @@ winform.btnSave.oncommand = function(id,event){
 	
 		break ;
 	}	
-	
+		
 	var lexPath = fsys.appdata("/aardio/std/wubi-lex-files/"+lexName+".lex");
 	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/")) 
 	io.remove(lexPath);
@@ -451,10 +524,10 @@ winform.btnSave.oncommand = function(id,event){
 	config.saveAll();
 		 
 	thread.invoke( 
-		function(winform){
-			import fsys.wubiLex; 
+		function(winform,lexPath){
+			import wubi.lexFile; 
 			winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-			var wubiLex = fsys.wubiLex("") 
+			var wubiLex = wubi.lexFile("") 
 			wubiLex.addText(winform.richedit.text);
 			wubiLex.saveLex(lexPath)
 			
@@ -462,7 +535,7 @@ winform.btnSave.oncommand = function(id,event){
 				
 			sleep(500);
 			winform.btnSave.disabledText = null;	
-		},winform
+		},winform,lexPath
 	)
 }
 
@@ -503,8 +576,8 @@ winform.ddChar1.oncommand = function(){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 			winform.richedit.disabled = true;
 			
-			import fsys.wubiLex;
-			var wubiLex = fsys.wubiLex("");
+			import wubi.lexFile;
+			var wubiLex = wubi.lexFile("");
 			wubiLex.addText(winform.richedit.text);
 						
 			wubiLex.filter(
@@ -535,8 +608,8 @@ winform.ddChar2.oncommand = function(){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 			winform.richedit.disabled = true;
 			
-			import fsys.wubiLex;
-			var wubiLex = fsys.wubiLex("");
+			import wubi.lexFile;
+			var wubiLex = wubi.lexFile("");
 			wubiLex.addText(winform.richedit.text);
 						
 			wubiLex.filter(
@@ -567,8 +640,8 @@ winform.ddSimplized.oncommand = function(id,event){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 			winform.richedit.disabled = true;
 			
-			import fsys.wubiLex;
-			var wubiLex = fsys.wubiLex("");
+			import wubi.lexFile;
+			var wubiLex = wubi.lexFile("");
 			wubiLex.addText(winform.richedit.text);
 					
 			import string.conv;	
@@ -600,8 +673,8 @@ winform.ddGb2312.oncommand = function(id,event){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 			winform.richedit.disabled = true;
 			
-			import fsys.wubiLex;
-			var wubiLex = fsys.wubiLex("");
+			import wubi.lexFile;
+			var wubiLex = wubi.lexFile("");
 			wubiLex.addText(winform.richedit.text);
 					
 			import string.conv;	
@@ -659,8 +732,8 @@ winform.richedit.enablePopMenu({
 					winform.lbTip.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 					winform.richedit.disabled = true;
 					
-					import fsys.wubiLex;
-					var wubiLex = fsys.wubiLex("");
+					import wubi.lexFile;
+					var wubiLex = wubi.lexFile("");
 					wubiLex.addText(winform.richedit.text);
 					
 					var statistics = wubiLex.statistics(); 

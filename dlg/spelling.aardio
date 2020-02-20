@@ -46,7 +46,7 @@ plusWubiTable={cls="plus";left=205;top=560;right=800;bottom=593;clip=1;color=592
 /*}}*/
 
 import win.debounce;
-import fsys.wubiLex;
+import wubi.lexFile;
 import string.conv.pinyin;
 import wubi.table;	
 
@@ -328,7 +328,7 @@ else {
 winform.show() 
 	
 subscribe("wubi.system.lex.changed",function(...){
-	winform.systemLex = fsys.wubiLex()
+	winform.systemLex = wubi.lexFile()
 	var ver  = winform.systemLex.getVersion()
 	var verString = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver];
 	winform.plusTitle.text = '根据系统码表( ' +verString + ' )反查上面输入的汉字,可直接输入拼音\n五笔编码自第二码开始可使用Z键通配任意编码（ 首码除外 ）'

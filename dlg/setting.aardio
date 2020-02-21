@@ -5,7 +5,7 @@ var winform = win.form(text="设置";right=984;bottom=589;bgcolor=16777215)
 winform.add(
 btnSave={cls="plus";text='\uF045   更新设置';left=211;top=430;right=413;bottom=466;bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
 chkDefaultModeEn={cls="plus";text='\uF0C8 默认英文模式';left=215;top=305;right=357;bottom=336;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=2};
-chkEnableSystemRun={cls="plus";text='\uF0C8 允许开机启动 wubiLex';left=215;top=385;right=478;bottom=416;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=10};
+chkEnableSystemRun={cls="plus";text='\uF0C8 允许开机启动 wubiLex （ 启动时不再需要确认管理权限，建议开启 ）';left=215;top=385;right=791;bottom=416;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=10};
 chkEnableWubiUdp={cls="plus";text='\uF0C8 允许自定义短语';left=214;top=348;right=356;bottom=379;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=7};
 chkWubiAutoFinalize={cls="plus";text='\uF0C8 四码唯一时自动上屏（拼音混输时不建议开启）';left=216;top=266;right=656;bottom=297;align="left";dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;z=9};
 lbTip={cls="static";left=63;top=523;right=695;bottom=572;db=1;dl=1;dr=1;transparent=1;z=5};
@@ -46,24 +46,13 @@ else {
 	winform.chkWubiAutoFinalize.checked = setting["Wubi Auto-finalize Enable"]
 }
 
+import app;
+import config;
 import win.reg;
 import tsfUtil;
 winform.btnSave.oncommand = function(id,event){ 
 	winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 	
-	if(!_STUDIO_INVOKED){
-		if(winform.chkEnableSystemRun.checked){
-			reg = win.reg("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run")
-			reg.setSzValue("wubiLex", '"' + io._exepath + '" /tray' )
-			reg.close()	
-		}
-		else {
-			reg = win.reg("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run")
-			reg.delValue("wubiLex")
-			reg.close()
-		}	
-	}
-
 	regSettings.setDwValue("PinyinMixEnable",winform.radioPinyinMixEnable.checked?1:0)
 	regSettings.setDwValue("Default Mode",winform.chkDefaultModeEn.checked?1:0)
 	regSettings.setDwValue("Enable Wubi EUDP",winform.chkEnableWubiUdp.checked?1:0)
@@ -76,17 +65,20 @@ winform.btnSave.oncommand = function(id,event){
 	
 	tsfUtil.reset()
 	
+	if(!_STUDIO_INVOKED){
+		config.settings.systemStartup = winform.chkEnableSystemRun.checked;
+		if(winform.chkEnableSystemRun.checked){
+			app.systemStartup("wubiLex( 五笔助手 ) 启动任务","用于微软五笔的辅助工具。",io._exepath,"/tray")
+		}
+		else {
+			app.systemStartup("wubiLex( 五笔助手 ) 启动任务",null);
+		}	
+	}
+
 	winform.lbTip.text = "更新成功，如果不能输入，请按 Alt + Shift 来回切换一下即可"
 	winform.btnSave.disabledText = null;
 }
-
-var reg = win.reg("HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run");
-if(reg){
-	if(reg.queryValue("wubiLex")){
-		winform.chkEnableSystemRun.checked = true;
-	}
-	reg.close();	
-}
+winform.chkEnableSystemRun.checked = config.settings.systemStartup;
 
 import process;
 winform.plusOpenMsSetting.oncommand = function(id,event){

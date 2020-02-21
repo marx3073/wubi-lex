@@ -6,11 +6,11 @@ var winform = win.form(text="五笔短语词库";right=938;bottom=597;acceptfile
 winform.add(
 btnLoad={cls="plus";text='\uF093  读取系统短语词库';left=507;top=548;right=704;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=3};
 btnSave={cls="plus";text='\uF019   更新短语词库到系统';left=707;top=548;right=909;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
-edit={cls="richedit";left=18;top=71;right=925;bottom=541;acceptfiles=1;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-13);hscroll=1;multiline=1;vscroll=1;z=2};
+edit={cls="richedit";left=18;top=71;right=925;bottom=541;acceptfiles=1;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-15);hscroll=1;multiline=1;vscroll=1;z=2};
 lbResult={cls="static";text="可以直接拖拽文本格式短语文件（*.txt）到这里";left=17;top=551;right=478;bottom=580;color=3947580;db=1;dl=1;dr=1;font=LOGFONT(h=-15);transparent=1;z=5};
 lbTip={cls="static";text="每行表示一个短语配置，由3个部分组成：
 第一部分为小写字母串表示按键，第二部分为输出文本（可包含空白字符），第三部分为候选词排列位置（可省略）
-默认使用空格或制表符隔开3个部分，也支持 “按键=排列位置,输出文本” 的格式。
+默认使用空格或制表符隔开3个部分，也支持 “按键=排列位置,输出文本”以及“按键=$[字符数组]”的格式。
 ";left=20;top=10;right=897;bottom=67;dl=1;dr=1;dt=1;font=LOGFONT(h=-13);transparent=1;z=1}
 )
 /*}}*/
@@ -89,15 +89,22 @@ winform.btnSave.oncommand = function(id,event){
 aar=aardio
 zzrq=2,%yyyy%年%mm%月%dd%日
 zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
-/*
-变量	含义
-%yyyy%	4位年
-%MM%	2位月
-%dd%	2位日
-%HH%	2位小时（24小时制）
-%mm%	2位分钟数
-%ss%	2位秒数
-*/
+zzys=$[①②③④⑤⑥⑦⑧⑨⑩]
+zzsz=$[❶❷❸❹❺❻❼❽❾❿⓪]
+zzdl=$[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]
+zzxl=$[ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ]
+zzds=$[⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]
+zzzm=$[ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]
+zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
+zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
+zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
+zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
+zzts=$[℃°‰♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
+zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
+zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
+zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]
+zzts=$[℃°♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
+zzbd=$[→←↑↓·‖…∵∴☆★○●◎◇◆□■△▲※〓]
 **/
 		winform.msgbox("短语内容不能为空")
 		return;
@@ -168,15 +175,22 @@ winform.edit.text = /**
 aar=aardio
 zzrq=2,%yyyy%年%mm%月%dd%日
 zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
-/*
-变量	含义
-%yyyy%	4位年
-%MM%	2位月
-%dd%	2位日
-%HH%	2位小时（24小时制）
-%mm%	2位分钟数
-%ss%	2位秒数
-*/
+zzys=$[①②③④⑤⑥⑦⑧⑨⑩]
+zzsz=$[❶❷❸❹❺❻❼❽❾❿⓪]
+zzdl=$[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]
+zzxl=$[ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ]
+zzds=$[⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]
+zzzm=$[ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]
+zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
+zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
+zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
+zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
+zzts=$[℃°‰♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
+zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
+zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
+zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]
+zzts=$[℃°♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
+zzbd=$[→←↑↓·‖…∵∴☆★○●◎◇◆□■△▲※〓]
 **/
 
 winform.edit.translateAccelerator = function(msg){ 

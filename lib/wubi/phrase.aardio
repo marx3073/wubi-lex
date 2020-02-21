@@ -139,7 +139,6 @@ save = function(phraseText){
 				
 			if(code && phrase){
 				if(!order){
-					/*
 					var arr = ..string.match(phrase,"^\$\[(.+)\]$");
 					if(#arr){
 						arr = ..string.split(arr);
@@ -150,8 +149,6 @@ save = function(phraseText){
 					else {
 						order = "1";
 					}
-					*/
-					order = "1";
 				}
 				
 				if(order){
@@ -160,7 +157,8 @@ save = function(phraseText){
 			}	
 		}
 	}
-		
+	
+	..table.sort(phraseArray,lambda(next) owner[1]<next[1]);
 	var phraseStart = 64+4*#phraseArray;
 	file.write({
 		BYTE proto[8] = "mschxudp";

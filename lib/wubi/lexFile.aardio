@@ -24,24 +24,28 @@ class lexFile{
 			..table.clear(outputMap)
 		};
 		
+		var trim = ..string.trim;
 		var match = ..string.match;
 		var push = ..table.push;
 		this.addText = function(bin){
 			var splitEx = ..string.splitEx;
-			for line in ..string.lines(bin) { 
+			for line in ..string.lines(bin) {
 				var inputCode,outputStrs = match(line,"^([a-z]{1,4})\s+(\S.*)\s*")
 				if( !(inputCode && outputStrs) ){
-					outputStrs,inputCode = match(line,"(.*\S)\s+([a-z]{1,4})\s*$")
+					outputStrs,inputCode = match(line,"^([^\s\p]\S*)\s+([a-z]{1,4})[\s\d]*$")
 				}
-
-				if( inputCode && outputStrs ){ 
+				
+				outputStrs = outputStrs ? trim(outputStrs);
+				if( inputCode && #outputStrs ){ 
 					if(!outputMap[inputCode]){
 						outputMap[inputCode] = {};
 						push(inputCodes,inputCode);
 					}
 					
 					var strs = splitEx(outputStrs,"\s+");
-					for(i=1;#strs;1) push(outputMap[inputCode],strs[i]); 
+					for(i=1;#strs;1) {
+						push(outputMap[inputCode],strs[i]); 
+					}
 				} 
 			} 				
 		}

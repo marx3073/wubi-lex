@@ -13,12 +13,12 @@ Win10自带的微软五笔码表安装、管理工具。
 再次按Ctrl+F2可以回到原来输入的窗口，不影响继续打字。  
 
 
-![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/1.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/1.png)
 
-![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/2.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/2.png)
 
-![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/3.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/3.png)
 
-![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/4.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/4.png)
 
-![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/5.jpg)
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/5.png)

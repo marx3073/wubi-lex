@@ -85,27 +85,7 @@ winform.btnSave.oncommand = function(id,event){
 	
 	var str = string.trim(winform.edit.text);
 	if(!#str){
-		winform.edit.text = /**
-aar=aardio
-zzrq=2,%yyyy%年%mm%月%dd%日
-zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
-zzys=$[①②③④⑤⑥⑦⑧⑨⑩]
-zzsz=$[❶❷❸❹❺❻❼❽❾❿⓪]
-zzdl=$[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]
-zzxl=$[ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ]
-zzds=$[⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]
-zzzm=$[ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]
-zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
-zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
-zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
-zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
-zzts=$[℃°‰♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
-zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
-zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
-zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]
-zzts=$[℃°♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
-zzbd=$[→←↑↓·‖…∵∴☆★○●◎◇◆□■△▲※〓]
-**/
+		winform.edit.text = wubi.phrase.default;
 		winform.msgbox("短语内容不能为空")
 		return;
 	}
@@ -171,27 +151,7 @@ import style;
 winform.btnLoad.skin(style.primaryButton)
 winform.btnSave.skin(style.primaryButton)
 
-winform.edit.text = /**
-aar=aardio
-zzrq=2,%yyyy%年%mm%月%dd%日
-zzsj=2,%yyyy%年%mm%月%dd%日 %HH%:%mm%:%ss%
-zzys=$[①②③④⑤⑥⑦⑧⑨⑩]
-zzsz=$[❶❷❸❹❺❻❼❽❾❿⓪]
-zzdl=$[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]
-zzxl=$[ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ]
-zzds=$[⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]
-zzzm=$[ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]
-zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
-zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
-zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
-zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
-zzts=$[℃°‰♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
-zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
-zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
-zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]
-zzts=$[℃°♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
-zzbd=$[→←↑↓·‖…∵∴☆★○●◎◇◆□■△▲※〓]
-**/
+winform.edit.text = wubi.phrase.default;
 
 winform.edit.translateAccelerator = function(msg){ 
     var vk = msg.wParam;

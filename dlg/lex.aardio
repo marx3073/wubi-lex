@@ -162,39 +162,9 @@ winform.onDropFiles = function(files){
 	addDictFile(files[1])
 	winform.btnAddFile.disabledText = null;
 }
-	
-if(!#config.lex.names){
-	
-	config.lex.files["微软五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.min.lex";
-	table.push(config.lex.names,"微软五笔86( 单字 )");
-	
-	config.lex.files["微软五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
-	table.push(config.lex.names,"微软五笔86( 完整 )");
-	
-	config.lex.files["极点五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/freeime86.min.lex";
-	table.push(config.lex.names,"极点五笔86( 单字 )");
-	
-	config.lex.files["极点五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/freeime86.lex";
-	table.push(config.lex.names,"极点五笔86( 完整 )");
-	
-	config.lex.files["QQ五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/qq86.min.lex";
-	table.push(config.lex.names,"QQ五笔86( 单字 )");
-	
-	config.lex.files["QQ五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/qq86.lex";
-	table.push(config.lex.names,"QQ五笔86( 完整 )");
-	
-	config.lex.files["至善词库98( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.min.lex";
-	table.push(config.lex.names,"至善词库98( 单字 )");
-	
-	config.lex.files["至善词库98( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
-	table.push(config.lex.names,"至善词库98( 完整 )");
-	
-	config.lex.files["新世纪( 单字 )"] = "http://wubi.aardio.com/download/lex/06.min.lex";
-	table.push(config.lex.names,"新世纪( 单字 )");
-	
-	config.saveAll();
-}
 
+import app;
+app.loadDefaultLexFiles();
 
 winform.listbox.onSelChange = function(){ 
 	winform.lbTip.text = "";
@@ -385,36 +355,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						} 
 					}
 					
-					config.lex.files["微软五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.min.lex";
-					table.push(config.lex.names,"微软五笔86( 单字 )");
-					
-					config.lex.files["微软五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
-					table.push(config.lex.names,"微软五笔86( 完整 )");
-					
-					config.lex.files["极点五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/freeime86.min.lex";
-					table.push(config.lex.names,"极点五笔86( 单字 )");
-					
-					config.lex.files["极点五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/freeime86.lex";
-					table.push(config.lex.names,"极点五笔86( 完整 )");
-					
-					config.lex.files["QQ五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/qq86.min.lex";
-					table.push(config.lex.names,"QQ五笔86( 单字 )");
-					
-					config.lex.files["QQ五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/qq86.lex";
-					table.push(config.lex.names,"QQ五笔86( 完整 )");
-					
-					config.lex.files["至善词库98( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.min.lex";
-					table.push(config.lex.names,"至善词库98( 单字 )");
-					
-					config.lex.files["至善词库98( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
-					table.push(config.lex.names,"至善词库98( 完整 )");
-					
-					config.lex.files["新世纪( 单字 )"] = "http://wubi.aardio.com/download/lex/06.min.lex";
-					table.push(config.lex.names,"新世纪( 单字 )");
-					
-					config.saveAll();
-	
-					config.saveAll();
+					app.loadDefaultLexFiles();
 					winform.listbox.reloadLexList(); 
 					
 				} ) 

@@ -234,8 +234,31 @@ getWubiUdpPrimaryPath = function(){
 	return path;
 }
 
+default = /**
+aar=aardio
+zzrq=2,%yyyy%年%MM%月%dd%日
+zzsj=2,%yyyy%年%MM%月%dd%日 %HH%:%mm%:%ss%
+zzys=$[①②③④⑤⑥⑦⑧⑨⑩]
+zzsz=$[❶❷❸❹❺❻❼❽❾❿⓪]
+zzdl=$[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]
+zzxl=$[ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ]
+zzds=$[⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]
+zzzm=$[ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]
+zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
+zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
+zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
+zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
+zzts=$[℃°‰♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
+zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
+zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
+zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]
+zzts=$[℃°♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
+zzbd=$[→←↑↓·‖…∵∴☆★○●◎◇◆□■△▲※〓]
+**/
+
 /**intellisense(wubi.phrase)
 load(.(wubiUdpPath) =  加载短语, \n成功返回文本格式短语数据,\n失败返回null,错误信息
 save(.(phraseText) = 保存短语, \n成功返回true,\n失败返回null,错误信息
 getWubiUdpPrimaryPath() = 返回系统短语文件路径
+default = 默认短语
 end intellisense**/

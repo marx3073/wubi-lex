@@ -45,6 +45,7 @@ winform.chkEnableHotkey.oncommand = function(id,event){
 import key.hotkey;
 winform.btnSave.skin(style.primaryButton)
 
+import win.dlg.message;
 import winex;
 var hotkeyMgr;
 winform.btnSave.oncommand = function(id,event){
@@ -67,16 +68,16 @@ winform.btnSave.oncommand = function(id,event){
 		keyTable = eval(code)
 	}
 	catch(e){
-		winform.msgboxErr(e)
-		return;
+		var msgDlg = win.dlg.message(winform)
+		msgDlg.err('超级热键配置代码错误:\n'+e) 
 	}
 	
-	if(keyTable){
-		for(k,v in keyTable){ 
+	if(type(keyTable)==type.table){
+		for k,v in table.eachName(keyTable){ 
 			hotkeyMgr.regStr(k,v);
 		} 
 	}
-
+	
 	if(winform.chkDecimalPoint.checked){
 		//自定义按键处理，返回true阻止按键消息
 		//这个函数的作用是在中文输入法下，可以直接在数字后面输入小数点

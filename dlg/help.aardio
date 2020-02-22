@@ -9,7 +9,7 @@ lbGitHub={cls="plus";text="开源代码:";left=325;top=484;right=415;bottom=515;
 lbKeyboardShortcuts={cls="plus";text="微软五笔使用技巧( 建议大家更新Win10到较新的版本 ) :";left=46;top=13;right=594;bottom=44;align="left";dl=1;dr=1;dt=1;font=LOGFONT(h=-16);iconColor=2960685;iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF11C  ';textPadding={left=30};z=2};
 lbWebSite={cls="plus";text="官网:";left=87;top=484;right=150;bottom=515;align="right";db=1;dl=1;font=LOGFONT(h=-16);iconColor=3947580;z=5};
 lnkGitHub={cls="plus";text="https://github.com/aardio/wubi-lex";left=428;top=488;right=697;bottom=512;align="left";color=8388608;db=1;dl=1;dr=1;font=LOGFONT(h=-16);notify=1;textPadding={left=5};z=4};
-lnkVersion={cls="plus";text="已经是最新版本";left=109;top=559;right=470;bottom=590;align="left";color=8388608;db=1;dl=1;font=LOGFONT(h=-16);iconColor=2960685;iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome')};iconText='\uF021';notify=1;paddingLeft=20;z=8};
+lnkVersion={cls="plus";text="正在检查新版本";left=109;top=559;right=470;bottom=590;align="left";color=8388608;db=1;dl=1;font=LOGFONT(h=-16);iconColor=2960685;iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome')};iconText='\uF021';notify=1;paddingLeft=20;z=8};
 lnkWebSite={cls="plus";text="wubi.aardio.com";left=154;top=488;right=294;bottom=512;align="left";color=8388608;db=1;dl=1;font=LOGFONT(h=-16);iconColor=2960685;notify=1;textPadding={left=5};z=6};
 plus={cls="plus";text="自动更新 :";left=46;top=524;right=388;bottom=555;align="left";db=1;dl=1;font=LOGFONT(h=-16);iconColor=2960685;iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome')};iconText='\uF05A';textPadding={left=30};z=9}
 )
@@ -61,6 +61,7 @@ winform.lnkVersion.oncommand = function(id,event){
 	dlMgr.onConfirmDownload = function(isUpdated,appVersion,latestVersion,description){ 
 		dlMgr[["latestVersion"]] = latestVersion;
 		dlMgr[["updateDescription"]] = description;
+		
 		if(!isUpdated){
 			winform.lnkVersion.disabledText = null;
 			winform.lnkVersion.text = "已经是最新版本";
@@ -88,9 +89,11 @@ winform.lnkVersion.oncommand = function(id,event){
 		winform.lnkVersion.text = err;
 	}
 	
-	winform.lnkVersion.text = "正在检查新版本";
+	winform.lnkVersion.text = globalUpdateInfo[["version"]] ? "正在启动自动更新" : "正在检查新版本";
 	winform.lnkVersion.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-	dlMgr.prepareUpdate();
+	if(dlMgr.startUpdate()){
+		win.quitMessage();
+	}
 }
 
 import win.ui.tooltip;
@@ -99,7 +102,7 @@ tooltipCtrl.addTool(winform.lnkVersion,"点击检测更新" );
 
 var updateVersion = function(){
 	if(#globalUpdateInfo[["version"]]){
-		winform.lnkVersion.text = "重新启动软件更新到新版本：" + globalUpdateInfo[["version"]]
+		winform.lnkVersion.text = "点这里重新启动软件更新到新版本：" + globalUpdateInfo[["version"]]
 			
 		if(#globalUpdateInfo[["description"]]){
 			tooltipCtrl.addTool(winform.lnkVersion,globalUpdateInfo[["description"]] )

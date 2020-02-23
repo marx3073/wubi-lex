@@ -27,6 +27,7 @@ class lexFile{
 		var trim = ..string.trim;
 		var match = ..string.match;
 		var push = ..table.push;
+		var replace = ..string.replace;
 		this.addText = function(bin){
 			var splitEx = ..string.splitEx;
 			for line in ..string.lines(bin) {
@@ -44,7 +45,8 @@ class lexFile{
 					
 					var strs = splitEx(outputStrs,"\s+");
 					for(i=1;#strs;1) {
-						push(outputMap[inputCode],strs[i]); 
+						var s = replace(strs[i],"@%20"," ")
+						push(outputMap[inputCode],s); 
 					}
 				} 
 			} 				
@@ -277,44 +279,54 @@ class lexFile{
 		var wubi98 = 0;
 		var wubi06 = 0;
 		var wubi86 = 0;
+		var wubi091 = 0;
+		
 		
 		if((this.test("teb","笔"))){ 
 			wubi98++; 
 			wubi06--;
 			wubi86--;
+			wubi091--;
 		}
 		else {
 			wubi98--; 
 			wubi06++;
-			wubi86++;	
+			wubi86++;
+			wubi091++;	
 		}
 		
 		if(this.test("wf","什")){ 
 			wubi98++; 
 			wubi06--;
 			wubi86--;
+			wubi091--;
 		}
 		else {
 			wubi98--; 
 			wubi06++;
-			wubi86++;		
+			wubi86++;	
+			wubi091++;	
 		}
 		
 		if(this.test("ya","试")){ 
 			wubi98++; 
 			wubi06--;
 			wubi86--;
+			wubi091++;
 		}
 		else {
 			wubi98--; 
 			wubi06++;
 			wubi86++;
+			wubi091--;
 		}
 		
 		if(this.test("YAAG","试")){ 
 			wubi86++; 
 			wubi06--;
 			wubi98--;
+			wubi091--;
+			wubi091++;
 		}
 		else {
 			wubi86--; 
@@ -326,29 +338,75 @@ class lexFile{
 			wubi98++;
 			wubi06++;
 			wubi86--;
+			wubi091--;
 		}
 		else { 
 			wubi98--;
 			wubi06--;
 			wubi86++;
+			wubi091++; 
 		}
 		
 		if(this.test("XFXY","线")){  
 			wubi06++;
 			wubi86--;
 			wubi98--; 
+			wubi091--;
 		}
 		else {
 			wubi06--;
 			wubi86++;
 			wubi98++;
+			wubi091++; 
 		}
+		
+		if((this.test("ks","整"))){ 
+			wubi98--; 
+			wubi06--;
+			wubi86--;
+			wubi091++; 
+		}
+		else {
+			wubi98++; 
+			wubi06++;
+			wubi86++;
+			wubi091--;
+		} 
+		
+		if((this.test("lm","示"))){ 
+			wubi98--; 
+			wubi06--;
+			wubi86--;
+			wubi091++;
+		}
+		else {
+			wubi98++; 
+			wubi06++;
+			wubi86++;
+			wubi091--;
+		} 
+		
+		if((this.test("ms","刺"))){ 
+			wubi98--; 
+			wubi06--;
+			wubi86--;
+			wubi091++;
+		}
+		else {
+			wubi98++; 
+			wubi06++;
+			wubi86++;
+			wubi091--;
+		} 
 			
-		if(wubi98>wubi86 && wubi98>wubi06){
+		if(wubi98>wubi86 && wubi98>wubi06 && wubi98>wubi091){
 			return "98"; 
 		}
-		elseif(wubi06>wubi86 && wubi06>wubi98){
+		elseif(wubi06>wubi86 && wubi06>wubi98 && wubi06>wubi091){
 			return "06";
+		}
+		elseif(wubi091>wubi86 && wubi091>wubi98 && wubi091>wubi06){
+			return "091";
 		}
 		return "86";
 	} 

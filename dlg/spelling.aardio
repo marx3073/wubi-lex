@@ -56,9 +56,10 @@ var searchSpelling = win.debounce(function(str){
 	winform.plusSpelling.text = ""
 	winform.plusSpellingGif.background = null;
 	winform.plusTitle.text = ""
-
-	if(!table.find(wubi.table.levelOne,str)){
-		var ver = winform.wubiVersion;
+	
+	var ver = winform.wubiVersion;
+	var levelOne = wubi.table.levelOne[ver];
+	if(!table.find(levelOne,str)){ 
 		for(name,ctrl in winform.eachControl("plus","key[A-Y]") ){
 			ctrl.checked = false
 			ctrl.text = ""	
@@ -75,7 +76,7 @@ var searchSpelling = win.debounce(function(str){
 			ctrl.text = ""	
 			
 			var k = string.right(name,1);
-			ctrl.iconText = k +" "+ wubi.table.levelOne[k];
+			ctrl.iconText = k +" "+ levelOne[k];
 		}
 		
 		winform.plusWubiTable.text = "一级简码"
@@ -282,7 +283,7 @@ winform.editSearch.editBox.onChange = function(){
 	var char = string.charAt(str,1)
 	if(!char){
 		if(winform.wubiVersion){
-			var verString = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[winform.wubiVersion];
+			var verString = ({["98"]="98版";["86"]="86版";["091"]="09第1版";["06"]="新世纪版"})[winform.wubiVersion];
 			winform.plusTitle.text = "可在上面重复输入相同单字进行练习, 当前安装的系统码表: 五笔" +verString	
 		}
 	
@@ -330,7 +331,7 @@ winform.show()
 subscribe("wubi.system.lex.changed",function(...){
 	winform.systemLex = wubi.lexFile()
 	var ver  = winform.systemLex.getVersion()
-	var verString = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver];
+	var verString = ({["98"]="98版";["86"]="86版";["091"]="09第1版";["06"]="新世纪版"})[ver];
 	winform.plusTitle.text = '根据系统码表( ' +verString + ' )反查上面输入的汉字,可直接输入拼音\n五笔编码自第二码开始可使用Z键通配任意编码（ 首码除外 ）'
 	
 	var wubiSpellingGifPath86 = fsys.appdata("aardio\std\wubi\spelling\86");

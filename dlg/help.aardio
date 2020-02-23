@@ -103,7 +103,8 @@ tooltipCtrl.addTool(winform.lnkVersion,"点击检测更新" );
 var updateVersion = function(){
 	if(#globalUpdateInfo[["version"]]){
 		winform.lnkVersion.text = "点这里重新启动软件更新到新版本：" + globalUpdateInfo[["version"]]
-			
+		winform.lnkVersion.disabledText = null;
+		
 		if(#globalUpdateInfo[["description"]]){
 			tooltipCtrl.addTool(winform.lnkVersion,globalUpdateInfo[["description"]] )
 		}

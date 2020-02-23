@@ -24,6 +24,7 @@ import fsys.dlg;
 import wubi.lexFile;
 import win.inputBox;
 import win.dlg.message;
+import sevenZip.lzma;
 import config;
 
 var downloadDictFile = function(url,lexName){
@@ -31,9 +32,40 @@ var downloadDictFile = function(url,lexName){
 	var lexPath = fsys.appdata("/aardio/std/wubi-lex-files/"+lexName+".lex");
 	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
 	
-	if( string.startWith(url,"http://",true) && (string.endWith(url,".lex",true))){
+	if( string.startWith(url,"http://",true) ){
 		var downBox = inet.downBox(winform,"下载码表:" + lexName,1000) 
-		if( downBox.download(url,lexPath) ){
+		
+		if((string.endWith(url,".lex.lzma",true))){
+			downBox.endProc = function(){
+				downBox.text = "正在解压缩:" + lexName + ".lex"; 
+			
+				var processed = 0;
+				var step = downBox.contentLength / 1000;
+				downBox.progress.setProgressRange(1,1000);  
+				downBox.progress.hide = false;
+				
+				var peekMsg = ..win.peekPumpMessage;
+				var ret = ..sevenZip.lzma.decodeFile(lexPath + ".lzma",lexPath,function(inProcessed,outProcessed){ 
+					if( (peekMsg()!==null) && downBox.continueModal ){
+			 			processed = processed + inProcessed; 
+			 			downBox.progress.progressPos = processed / step;
+					}
+					else {
+						return true;
+					}
+				} ); 
+				
+				if(!ret){
+					downBox.complete = false;
+					downBox.endModal(); 
+					return;
+				}  
+			}			
+		}
+
+	
+		if( downBox.download(url,lexPath + ".lzma") ){
+			
 			var file = ..io.open(lexPath,"rb");
 			if(!file){
 				winform.msgboxErr(`错误的码表文件`)
@@ -55,7 +87,6 @@ var downloadDictFile = function(url,lexName){
 }
 
 var addDictFile = function(inputPath){
-   
 	if(!inputPath || ..fsys.isDir(inputPath)){ return; }
 	var lexName;
 	while(true){
@@ -82,31 +113,8 @@ var addDictFile = function(inputPath){
 		break ;
 	}	
 	
-	var lexPath = fsys.appdata("/aardio/std/wubi-lex-files/"+lexName+".lex");
-	io.createDir(fsys.appdata("/aardio/std/wubi-lex-files/"))
-	
-	if( string.startWith(inputPath,"http://",true) && (string.endWith(inputPath,".lex",true))){
-		var downBox = inet.downBox(winform,"下载码表:" + lexName) 
-		if( downBox.download(inputPath,lexPath) ){
-			var file = ..io.open(inputPath,"rb");
-			if(!file){
-				winform.msgboxErr(`错误的码表文件`)
-				return;
-			}
-			
-			if( file.read(#"imscwubi")!=="imscwubi"){
-				file.close();
-				winform.msgboxErr(`错误的码表文件`)
-				return;
-			}
-		
-			file.close();
-			
-			config.lex.files[lexName] = lexPath;
-			config.saveAll();
-			return;
-		}
-	}
+	var lexPath = io.appData("/aardio/std/wubi-lex-files/"+lexName+".lex");
+	io.createDir(io.appData("/aardio/std/wubi-lex-files/"))
 	
 	if(string.endWith(inputPath,".txt",true)){
 		..win.invoke(
@@ -122,6 +130,22 @@ var addDictFile = function(inputPath){
 			},winform,inputPath,lexPath
 		)
 	}
+	elseif(string.endWith(inputPath,".lex.lzma",true)){
+		sevenZip.lzma.decodeFile(inputPath,lexPath);
+		var file = ..io.open(lexPath,"rb");
+		if(!file){
+			winform.msgboxErr(`错误的码表文件`)
+			return;
+		}
+		
+		if( file.read(#"imscwubi")!=="imscwubi"){
+			file.close();
+			winform.msgboxErr(`错误的码表文件`)
+			return;
+		}
+		
+		file.close()
+	}
 	else {
 		var file = ..io.open(inputPath,"rb");
 		if(!file){
@@ -130,6 +154,7 @@ var addDictFile = function(inputPath){
 		}
 		
 		if( file.read(#"imscwubi")!=="imscwubi"){
+			file.close();
 			winform.msgboxErr(`错误的码表文件`)
 			return;
 		}
@@ -168,8 +193,8 @@ app.loadDefaultLexFiles();
 
 winform.listbox.onSelChange = function(){ 
 	winform.lbTip.text = "";
-	var item = winform.listbox.selIndex;
-	winform.btnCopyToSystem.disabled = item<=1 
+	var selIndex = winform.listbox.selIndex;
+	winform.btnCopyToSystem.disabled = selIndex<=1 
 }
 
 import inet.downBox
@@ -178,15 +203,15 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 		case 0x205/*_WM_RBUTTONUP*/{
 			winform.lbTip.text = "";
 			var x,y = win.getMessagePos();  
-			var item = winform.listbox.hitTest(x,y,true); 
-			if( item  ){
-				winform.listbox.selIndex = item; 
+			var selIndex = winform.listbox.hitTest(x,y,true); 
+			if( selIndex  ){
+				winform.listbox.selIndex = selIndex; 
 				
 				winform.popmenu = win.ui.popmenu(winform); 
-				if(item>1){	
+				if(selIndex>1){	
 					winform.btnCopyToSystem.disabled = false;
 					
-					var lexName = config.lex.names[item-1];
+					var lexName = config.lex.names[selIndex-1];
 					var lexPath = config.lex.files[lexName];
 					
 					if( string.startWith(lexPath,"http://",true) ){
@@ -195,7 +220,6 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						} ) 
 						
 						winform.popmenu.add('删除',function(id){ 
-							var selIndex = winform.listbox.selIndex;
 							winform.listbox.delete(selIndex)
 							
 							var lexName = config.lex.names[selIndex-1];
@@ -211,7 +235,6 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					
 					
 					winform.popmenu.add('删除',function(id){ 
-						var selIndex = winform.listbox.selIndex;
 						winform.listbox.delete(selIndex)
 						
 						var lexName = config.lex.names[selIndex-1];
@@ -233,7 +256,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					winform.btnCopyToSystem.disabled = true;
 				}
 				
-				if(item>1){
+				if(selIndex>1){
 					winform.popmenu.add();
 					
 					winform.popmenu.add('编辑码表',function(id){  
@@ -241,7 +264,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 						winform.lbTip.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 					 	winform.richedit.disabled = true;
 					 	
-						var lexName = config.lex.names[winform.listbox.selIndex-1];
+						var lexName = config.lex.names[selIndex-1];
 						if(lexName){
 							var lexPath = config.lex.files[lexName];
 							
@@ -300,8 +323,8 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					
 					winform.lbTip.text = "正在导出数据"
 		
-					if(item>1){
-						var lexName = config.lex.names[winform.listbox.selIndex-1];
+					if(selIndex>1){
+						var lexName = config.lex.names[selIndex-1];
 						if(lexName){
 							var lexPath = config.lex.files[lexName];
 							var wubiLex = wubi.lexFile(lexPath)
@@ -317,11 +340,32 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					winform.lbTip.disabledText = null;
 					winform.lbTip.text = "已完成";
 				} );
+				
+				if(selIndex>1){
+					winform.popmenu.add('导出 lzma 压缩码表',function(id){ 
+						import process;
+						var outputPath = fsys.dlg.save("压缩码表（*.lex.lzma）|*.lex.lzma||",,,winform)
+						if(!outputPath){
+							return;
+						}
+						
+						winform.lbTip.text = "正在导出压缩码表"
+						var lexName = config.lex.names[selIndex-1];
+					
+						if(lexName){
+							var lexPath = config.lex.files[lexName];
+							sevenZip.lzma.encodeFile(lexPath,outputPath); 
+						} 
+						
+						winform.lbTip.disabledText = null;
+						winform.lbTip.text = "已完成";
+					} );
+				}
 
 				winform.popmenu.add('浏览码表文件...',function(id){ 
 					import process;
-					if(item>1){
-						var lexName = config.lex.names[winform.listbox.selIndex-1];
+					if(selIndex>1){
+						var lexName = config.lex.names[selIndex-1];
 						if(lexName){
 							var lexPath = config.lex.files[lexName]; 
 							process.exploreSelect(lexPath)
@@ -463,7 +507,7 @@ var updateSystemLexVersion = function(){
 			import wubi.lexFile;
 			var wubiLex = wubi.lexFile()
 			var ver = wubiLex.getVersion();
-			ver = ({["98"]="98版";["86"]="86版";["06"]="新世纪版"})[ver]; 
+			ver = ({["98"]="98版";["86"]="86版";["091"]="09第1版";["06"]="新世纪版"})[ver]; 
 			winform.listbox.updateSystemLexVersion(ver)
 		},winform
 	)
@@ -485,7 +529,7 @@ winform.richedit.text =/*
 aaaa 工 㠭
 戈 a 
 节 ab
-atn 薛
+atn 可以用%20表示空格
 // 这是任性的注释行
 */
 

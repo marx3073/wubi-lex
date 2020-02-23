@@ -41,31 +41,34 @@ loadDefaultLexFiles = function(){
     
 	if(!#config.lex.names){
 		
-		config.lex.files["微软五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.min.lex";
+		config.lex.files["微软五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.min.lex.lzma";
 		..table.push(config.lex.names,"微软五笔86( 单字 )");
 		
-		config.lex.files["微软五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex";
+		config.lex.files["微软五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi86.lex.lzma";
 		..table.push(config.lex.names,"微软五笔86( 完整 )");
 		
-		config.lex.files["极点五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/freeime86.min.lex";
+		config.lex.files["极点五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/freeime86.min.lex.lzma";
 		..table.push(config.lex.names,"极点五笔86( 单字 )");
 		
-		config.lex.files["极点五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/freeime86.lex";
+		config.lex.files["极点五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/freeime86.lex.lzma";
 		..table.push(config.lex.names,"极点五笔86( 完整 )");
 		
-		config.lex.files["QQ五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/qq86.min.lex";
+		config.lex.files["QQ五笔86( 单字 )"] = "http://wubi.aardio.com/download/lex/qq86.min.lex.lzma";
 		..table.push(config.lex.names,"QQ五笔86( 单字 )");
 		
-		config.lex.files["QQ五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/qq86.lex";
+		config.lex.files["QQ五笔86( 完整 )"] = "http://wubi.aardio.com/download/lex/qq86.lex.lzma";
 		..table.push(config.lex.names,"QQ五笔86( 完整 )");
 		
-		config.lex.files["至善词库98( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.min.lex";
+		config.lex.files["至善词库98( 单字 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.min.lex.lzma";
 		..table.push(config.lex.names,"至善词库98( 单字 )");
 		
-		config.lex.files["至善词库98( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex";
+		config.lex.files["至善词库98( 完整 )"] = "http://wubi.aardio.com/download/lex/ChsWubi98.lex.lzma";
 		..table.push(config.lex.names,"至善词库98( 完整 )");
 		
-		config.lex.files["新世纪( 单字 )"] = "http://wubi.aardio.com/download/lex/06.min.lex";
+		config.lex.files["点儿09( 完整 )"] = "http://wubi.aardio.com/download/lex/091.lex.lzma";
+		..table.push(config.lex.names,"点儿09( 完整 )");
+		
+		config.lex.files["新世纪( 单字 )"] = "http://wubi.aardio.com/download/lex/06.min.lex.lzma";
 		..table.push(config.lex.names,"新世纪( 单字 )");
 		
 		config.saveAll();

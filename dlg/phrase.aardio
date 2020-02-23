@@ -1,12 +1,13 @@
 //RUNAS//
 import fonts.fontAwesome;
+import win.ui.menu;
 import win.ui;
 /*DSG{{*/
 var winform = win.form(text="五笔短语词库";right=938;bottom=597;acceptfiles=1;bgcolor=16777215)
 winform.add(
 btnLoad={cls="plus";text='\uF093  读取系统短语词库';left=507;top=548;right=704;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=3};
 btnSave={cls="plus";text='\uF019   更新短语词库到系统';left=707;top=548;right=909;bottom=584;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');notify=1;tabstop=1;z=4};
-edit={cls="richedit";left=18;top=71;right=925;bottom=541;acceptfiles=1;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-15);hscroll=1;multiline=1;vscroll=1;z=2};
+editPhrase={cls="edit";left=18;top=71;right=925;bottom=541;acceptfiles=1;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-16);hscroll=1;multiline=1;vscroll=1;z=2};
 lbResult={cls="static";text="可以直接拖拽文本格式短语文件（*.txt）到这里";left=17;top=551;right=478;bottom=580;color=3947580;db=1;dl=1;dr=1;font=LOGFONT(h=-15);transparent=1;z=5};
 lbTip={cls="static";text="每行表示一个短语配置，由3个部分组成：
 第一部分为小写字母串表示按键，第二部分为输出文本（可包含空白字符），第三部分为候选词排列位置（可省略）
@@ -30,7 +31,7 @@ winform.btnLoad.oncommand = function(id,event){
 		return winform.msgboxErr("系统短语词库为空");
 	}	
 	
-	winform.edit.text="";
+	winform.editPhrase.text="";
 	winform.btnLoad.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'} 
 	thread.invoke( function(winform,wubiUdpPath){
 		import wubi.phrase;
@@ -39,7 +40,7 @@ winform.btnLoad.oncommand = function(id,event){
 			winform.msgboxErr(err:"未知错误")	
 		}
 		else {
-			winform.edit.text = data 
+			winform.editPhrase.text = data 
 		} 
 		winform.btnLoad.disabledText = null;
 	},winform,wubiUdpPath)
@@ -83,17 +84,17 @@ winform.btnSave.oncommand = function(id,event){
 		return winform.msgboxErr("仅支持 Win10 1703以上版本的五笔短语词库")
 	}
 	
-	var str = string.trim(winform.edit.text);
+	var str = string.trim(winform.editPhrase.text);
 	if(!#str){
-		winform.edit.text = wubi.phrase.default;
+		winform.editPhrase.text = wubi.phrase.default;
 		winform.msgbox("短语内容不能为空")
 		return;
 	}
 	
 	winform.lbResult.text = "";
 	winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-	winform.edit.setFocus();
-	thread.invoke( savePhrases,winform.edit.text,winform)
+	winform.editPhrase.setFocus();
+	thread.invoke( savePhrases,winform.editPhrase.text,winform)
 }
 
 var loadPhraseFromFile = function(winform,path){
@@ -114,21 +115,21 @@ var loadPhraseFromFile = function(winform,path){
 		
 	if(file.read(8)=="mschxudp"){
 		file.close();
-		winform.edit.text = wubi.phrase.load(path)
+		winform.editPhrase.text = wubi.phrase.load(path)
 	}	
 	
-	winform.edit.text = ..fsys.codepage.load(path);
+	winform.editPhrase.text = ..fsys.codepage.load(path);
 }
 
 
 import fsys.dlg;
-winform.edit.enablePopMenu({
+winform.editPhrase.enablePopMenu({
 	{ /*---分隔线---*/ };
 	{
 		"保存短语文件";
 		function(id){
 			var path = fsys.dlg.save("*.txt|*.txt||","保存短语到文本文件",,winform)
-			if(path)string.save(path,winform.edit.text )
+			if(path)string.save(path,winform.editPhrase.text )
 		} 
 	};
 	{
@@ -137,7 +138,14 @@ winform.edit.enablePopMenu({
 			var path = fsys.dlg.open("*.txt|*.txt||","自文本文件加载短语",,winform)
 			if(path) thread.invoke(loadPhraseFromFile,winform,path)
 		} 
-	}
+	};
+	{ /*---分隔线---*/ };
+	{
+		"恢复到范例";
+		function(id){
+			winform.editPhrase.text = wubi.phrase.default;
+		} 
+	};
 })
 
 import fsys;
@@ -151,13 +159,14 @@ import style;
 winform.btnLoad.skin(style.primaryButton)
 winform.btnSave.skin(style.primaryButton)
 
-winform.edit.text = wubi.phrase.default;
+winform.editPhrase.limit = 0;
+winform.editPhrase.text = wubi.phrase.default;
 
-winform.edit.translateAccelerator = function(msg){ 
+winform.editPhrase.translateAccelerator = function(msg){ 
     var vk = msg.wParam;
  	if( vk == 0x9/*_VK_TAB*/ ){
 		if( msg.message == 0x100/*_WM_KEYDOWN*/) {
-			winform.edit.selText = '\t'; 
+			winform.editPhrase.selText = '\t'; 
 			return true;
 		}
 	}	

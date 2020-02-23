@@ -239,7 +239,7 @@ class lexFile{
 			var texts = this.outputMap[code]
 			for(i=1;#texts;1){
 				var txt = texts[i];
-				strBuilder.append(code+'\t'+txt+'\n');
+				strBuilder.append(code+'\t'+txt+'\r\n');
 			}
 		}; 
 		

@@ -1,21 +1,22 @@
 //RUNAS//
 import fonts.fontAwesome;
+import win.ui.menu;
 import win.ui;
 /*DSG{{*/
 var winform = win.form(text="wubiLex - 码表管理";right=1040;bottom=607;bgcolor=16777215)
 winform.add(
 bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=608;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
 btnAddFile={cls="plus";text="添加码表";left=26;top=17;right=187;bottom=53;align="left";bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF271';notify=1;tabstop=1;textPadding={left=39};z=1};
-btnConvert={cls="plus";text="精简码表";left=748;top=566;right=883;bottom=602;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF03A';notify=1;tabstop=1;textPadding={left=39};z=8};
+btnConvert={cls="plus";text="精简码表";left=748;top=564;right=883;bottom=600;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF03A';notify=1;tabstop=1;textPadding={left=39};z=8};
 btnCopyToSystem={cls="plus";text="安装到系统码表";left=196;top=17;right=389;bottom=53;align="left";bgcolor=11580047;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF17A ';notify=1;tabstop=1;textPadding={left=39};z=2};
-btnSave={cls="plus";text="另存为";left=896;top=567;right=1014;bottom=603;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF0C7';notify=1;tabstop=1;textPadding={left=39};z=7};
-ddChar1={cls="plus";text="仅保留单字";left=748;top=440;right=948;bottom=471;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=10};
-ddChar2={cls="plus";text="仅保留单字、双字词";left=748;top=471;right=948;bottom=502;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=9};
-ddGb2312={cls="plus";text="仅保留 GB2312 常用汉字";left=748;top=533;right=948;bottom=564;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=12};
-ddSimplized={cls="plus";text="移除繁体字";left=748;top=502;right=948;bottom=533;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=11};
+btnSave={cls="plus";text="另存为";left=896;top=565;right=1014;bottom=601;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF0C7';notify=1;tabstop=1;textPadding={left=39};z=7};
+ddChar1={cls="plus";text="仅保留单字";left=748;top=438;right=948;bottom=469;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=10};
+ddChar2={cls="plus";text="仅保留单字、双字词";left=748;top=469;right=948;bottom=500;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=9};
+ddGb2312={cls="plus";text="仅保留 GB2312 常用汉字";left=748;top=531;right=948;bottom=562;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=12};
+ddSimplized={cls="plus";text="移除繁体字";left=748;top=500;right=948;bottom=531;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=11};
+editLex={cls="edit";left=408;top=73;right=1025;bottom=557;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-16);multiline=1;vscroll=1;z=6};
 lbTip={cls="plus";left=414;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=5};
-listbox={cls="listbox";left=28;top=79;right=398;bottom=599;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4};
-richedit={cls="richedit";left=408;top=77;right=1025;bottom=561;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-15);multiline=1;vscroll=1;z=6}
+listbox={cls="listbox";left=28;top=73;right=398;bottom=596;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4}
 )
 /*}}*/
 
@@ -262,7 +263,7 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					winform.popmenu.add('编辑码表',function(id){  
 						winform.lbTip.text = "正在加载码表数据，可能需要数分钟..."
 						winform.lbTip.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-					 	winform.richedit.disabled = true;
+					 	winform.editLex.disabled = true;
 					 	
 						var lexName = config.lex.names[selIndex-1];
 						if(lexName){
@@ -272,11 +273,11 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 								function(winform,lexPath){
 									import wubi.lexFile; 
 									var wubiLex = wubi.lexFile(lexPath); 
-									winform.richedit.text = wubiLex.tostring();
+									winform.editLex.text = wubiLex.tostring();
 									
 									statistics = wubiLex.statistics();
 									
-									winform.richedit.disabled = false;
+									winform.editLex.disabled = false;
 									winform.lbTip.disabledText = null;
 									winform.lbTip.text = string.format("总编码数：%d 重码数：%d"
 										,statistics.totalTxt,statistics.coincidentTxt );
@@ -286,21 +287,19 @@ winform.listbox.wndproc = function(hwnd,message,wParam,lParam){
 					} ) 
 				} 
 				else {
-					
-					
 					winform.popmenu.add('编辑码表',function(id){  
 						winform.lbTip.text = "正在加载数据";
 						winform.lbTip.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-					 	winform.richedit.disabled = true;
+					 	winform.editLex.disabled = true;
 					 	
 						thread.invoke( 
 							function(winform){
 								import wubi.lexFile; 
 								var wubiLex = wubi.lexFile(); 
-								winform.richedit.text = wubiLex.tostring();
+								winform.editLex.text = wubiLex.tostring();
 								statistics = wubiLex.statistics();
 								
-								winform.richedit.disabled = false;
+								winform.editLex.disabled = false;
 								winform.lbTip.disabledText = null;
 								winform.lbTip.text = string.format("总编码数：%d 重码数：%d"
 									,statistics.totalTxt,statistics.coincidentTxt );
@@ -428,7 +427,7 @@ winform.btnCopyToSystem.oncommand = function(id,event){
 			return;
 		}
 		
-		winform.richedit.setFocus(); 					
+		winform.editLex.setFocus(); 					
 		winform.btnCopyToSystem.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}  
 		var ok,err = win.invoke(copyToSystem,srcPath,winform) 
 		publish("wubi.system.lex.changed");
@@ -518,24 +517,38 @@ subscribe("wubi.system.lex.changed",function(...){
 	updateSystemLexVersion() 
 } )
 
-winform.richedit.text =/*
-可直接拖拽码表文件到当前窗口来添加码表。
-可添加微软五笔二进制码表（*.lex），也可以添加文本格式的码表（*.txt）
+winform.editLex.limit = 0;
+winform.editLex.text =/*
+可拖拽码表文件到当前窗口（不是编辑框）。
+可添加二进制码表（*.lex）或文本格式码表（*.txt）
+注意：z为通配键不能用于码表(但是可以在短语词库中参与编码)
 
-文本格式码表可自动识别 UTF-8,UNICODE(UTF-16) 等各种编码，
-码表每行一个编码，按键组合(小写字母)与输入文本间用空格或制表符分开。
-下面的写法都是支持的，任何不符合格式要求的行都会自动忽略：
-------------------------------
+文本格式码表支持 UTF-8,UNICODE(UTF-16) 等各种编码，
+码表每行一个编码，按键(小写字母)与输入文本间用空格或制表符分开。
+不符合格式要求的行（例如行首有标点、空白行）都会自动忽略：
+下面的写法都是支持的：
+------------------------------------------------------------
+
 aaaa 工 㠭
 戈 a 
 节 ab
 atn 可以用%20表示空格
-// 这是任性的注释行
+// 行首是任意标点即为注释
 */
+
+winform.editLex.translateAccelerator = function(msg){ 
+    var vk = msg.wParam;
+ 	if( vk == 0x9/*_VK_TAB*/ ){
+		if( msg.message == 0x100/*_WM_KEYDOWN*/) {
+			winform.editLex.selText = '\t'; 
+			return true;
+		}
+	}	
+}
 
 winform.btnSave.skin(style.button);
 winform.btnSave.oncommand = function(id,event){
-	if(!#winform.richedit.text){
+	if(!#winform.editLex.text){
 		winform.msgboxErr("要保存的码表内容不能为空!")
 		return;
 	}
@@ -577,7 +590,7 @@ winform.btnSave.oncommand = function(id,event){
 			import wubi.lexFile; 
 			winform.btnSave.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 			var wubiLex = wubi.lexFile("") 
-			wubiLex.addText(winform.richedit.text);
+			wubiLex.addText(winform.editLex.text);
 			wubiLex.saveLex(lexPath)
 			
 			winform.listbox.reloadLexList(); 
@@ -607,7 +620,7 @@ menu.initPopup();
 
 winform.btnConvert.skin(style.button)
 winform.btnConvert.oncommand = function(id,event){
-    menu.popup(true);
+    menu.popup(true,winform.btnConvert,"up");
 }
 
 menu.onOk = function(strip){ 
@@ -615,7 +628,7 @@ menu.onOk = function(strip){
 }
 
 winform.ddChar1.oncommand = function(){
-	if(!#winform.richedit.text){
+	if(!#winform.editLex.text){
 		winform.msgboxErr("要转换的码表内容不能为空!")
 		return;
 	}
@@ -623,11 +636,11 @@ winform.ddChar1.oncommand = function(){
 	thread.invoke( 
 		function(winform){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-			winform.richedit.disabled = true;
+			winform.editLex.disabled = true;
 			
 			import wubi.lexFile;
 			var wubiLex = wubi.lexFile("");
-			wubiLex.addText(winform.richedit.text);
+			wubiLex.addText(winform.editLex.text);
 			
 			var lenStr = ..string.len;			
 			wubiLex.filter(
@@ -638,8 +651,8 @@ winform.ddChar1.oncommand = function(){
 				
 			statistics = wubiLex.statistics();	
 			winform.lbTip.text = string.format("总编码数：%d 重码数：%d",statistics.totalTxt,statistics.coincidentTxt );
-			winform.richedit.text = wubiLex.tostring();
-			winform.richedit.disabled = false;
+			winform.editLex.text = wubiLex.tostring();
+			winform.editLex.disabled = false;
 			sleep(500)
 			
 			winform.btnConvert.disabledText = null;
@@ -648,7 +661,7 @@ winform.ddChar1.oncommand = function(){
 }
 
 winform.ddChar2.oncommand = function(){
-	if(!#winform.richedit.text){
+	if(!#winform.editLex.text){
 		winform.msgboxErr("要转换的码表内容不能为空!")
 		return;
 	}
@@ -656,11 +669,11 @@ winform.ddChar2.oncommand = function(){
 	thread.invoke( 
 		function(winform){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-			winform.richedit.disabled = true;
+			winform.editLex.disabled = true;
 			
 			import wubi.lexFile;
 			var wubiLex = wubi.lexFile("");
-			wubiLex.addText(winform.richedit.text);
+			wubiLex.addText(winform.editLex.text);
 			
 			var lenStr = ..string.len;				
 			wubiLex.filter(
@@ -671,8 +684,8 @@ winform.ddChar2.oncommand = function(){
 				
 			statistics = wubiLex.statistics();	
 			winform.lbTip.text = string.format("总编码数：%d 重码数：%d",statistics.totalTxt,statistics.coincidentTxt );
-			winform.richedit.text = wubiLex.tostring();
-			winform.richedit.disabled = false;
+			winform.editLex.text = wubiLex.tostring();
+			winform.editLex.disabled = false;
 			sleep(500)
 			
 			winform.btnConvert.disabledText = null;
@@ -681,7 +694,7 @@ winform.ddChar2.oncommand = function(){
 }
 
 winform.ddSimplized.oncommand = function(id,event){
-	if(!#winform.richedit.text){
+	if(!#winform.editLex.text){
 		winform.msgboxErr("要转换的码表内容不能为空!")
 		return;
 	}
@@ -689,11 +702,11 @@ winform.ddSimplized.oncommand = function(id,event){
 	thread.invoke( 
 		function(winform){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-			winform.richedit.disabled = true;
+			winform.editLex.disabled = true;
 			
 			import wubi.lexFile;
 			var wubiLex = wubi.lexFile("");
-			wubiLex.addText(winform.richedit.text);
+			wubiLex.addText(winform.editLex.text);
 					
 			import string.conv;	
 			wubiLex.filter(
@@ -704,8 +717,8 @@ winform.ddSimplized.oncommand = function(id,event){
 				
 			statistics = wubiLex.statistics();	
 			winform.lbTip.text = string.format("总编码数：%d 重码数：%d",statistics.totalTxt,statistics.coincidentTxt );
-			winform.richedit.text = wubiLex.tostring();
-			winform.richedit.disabled = false;
+			winform.editLex.text = wubiLex.tostring();
+			winform.editLex.disabled = false;
 			sleep(500)
 			
 			winform.btnConvert.disabledText = null;
@@ -714,7 +727,7 @@ winform.ddSimplized.oncommand = function(id,event){
 }
 
 winform.ddGb2312.oncommand = function(id,event){
-	if(!#winform.richedit.text){
+	if(!#winform.editLex.text){
 		winform.msgboxErr("要转换的码表内容不能为空!")
 		return;
 	}
@@ -722,11 +735,11 @@ winform.ddGb2312.oncommand = function(id,event){
 	thread.invoke( 
 		function(winform){
 			winform.btnConvert.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-			winform.richedit.disabled = true;
+			winform.editLex.disabled = true;
 			
 			import wubi.lexFile;
 			var wubiLex = wubi.lexFile("");
-			wubiLex.addText(winform.richedit.text);
+			wubiLex.addText(winform.editLex.text);
 					
 			import string.conv;	
 			wubiLex.filter(
@@ -738,8 +751,8 @@ winform.ddGb2312.oncommand = function(id,event){
 			
 			statistics = wubiLex.statistics();	
 			winform.lbTip.text = string.format("总编码数：%d 重码数：%d",statistics.totalTxt,statistics.coincidentTxt )
-			winform.richedit.text = wubiLex.tostring();
-			winform.richedit.disabled = false;
+			winform.editLex.text = wubiLex.tostring();
+			winform.editLex.disabled = false;
 			sleep(500)
 			
 			winform.btnConvert.disabledText = null;
@@ -749,7 +762,7 @@ winform.ddGb2312.oncommand = function(id,event){
 
 var showStatistics = 
 
-winform.richedit.enablePopMenu({
+winform.editLex.enablePopMenu({
     { /*---分隔线---*/ };
 	{ "仅保留单字";
 		function(id){
@@ -781,15 +794,15 @@ winform.richedit.enablePopMenu({
 			thread.invoke( 
 				function(winform){
 					winform.lbTip.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
-					winform.richedit.disabled = true;
+					winform.editLex.disabled = true;
 					
 					import wubi.lexFile;
 					var wubiLex = wubi.lexFile("");
-					wubiLex.addText(winform.richedit.text);
+					wubiLex.addText(winform.editLex.text);
 					
 					var statistics = wubiLex.statistics(); 
 					winform.lbTip.disabledText = null;
-					winform.richedit.disabled = false;
+					winform.editLex.disabled = false;
 					
 					winform.lbTip.text = string.format("总编码数：%d 重码数：%d",statistics.totalTxt,statistics.coincidentTxt )
 				},winform

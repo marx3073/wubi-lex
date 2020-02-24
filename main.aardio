@@ -5,15 +5,14 @@ import win.ui;
 /*DSG{{*/
 mainForm = win.form(cls="AARDIO_WUBI_FORM";text="wubiLex ( Win10 五笔助手 )";right=1040;bottom=642;bgcolor=15793151;border="none")
 mainForm.add(
-caption={cls="bkplus";text="wubiLex 8.1";left=35;top=12;right=145;bottom=30;color=15780518;dl=1;dt=1;font=LOGFONT(h=-16);z=5};
+caption={cls="bkplus";text="wubiLex 8.5";left=35;top=12;right=145;bottom=30;color=15780518;dl=1;dt=1;font=LOGFONT(h=-16);z=5};
 custom={cls="custom";left=0;top=40;right=1040;bottom=643;bgcolor=16777215;db=1;dl=1;dr=1;dt=1;z=1};
 logo={cls="bkplus";text='\uF0AD';left=6;top=9;right=35;bottom=34;color=15780518;dl=1;dt=1;font=LOGFONT(h=-18;name='FontAwesome');z=4};
-stripHelp={cls="plus";text="帮助";left=663;top=5;right=757;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF06A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=9};
-stripHotkey={cls="plus";text="热键";left=353;top=5;right=447;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF11C ';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=10};
-stripLex={cls="plus";text="码表";left=146;top=5;right=240;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF00A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=3};
-stripPhrase={cls="plus";text="短语";left=456;top=5;right=550;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF0AE';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=7};
-stripSetting={cls="plus";text="设置";left=560;top=5;right=654;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF0AD';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=8};
-stripSpelling={cls="plus";text="反查";left=249;top=5;right=343;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=15;top=3}};iconText='\uF002';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=42;top=3};x=0.5;y=0.2;z=6};
+stripHelp={cls="plus";text="帮助";left=551;top=5;right=645;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=12;top=3}};iconText='\uF06A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=38};x=0.5;y=0.2;z=8};
+stripHotkey={cls="plus";text="热键";left=349;top=5;right=443;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=12;top=3}};iconText='\uF11C ';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=38};x=0.5;y=0.2;z=9};
+stripLex={cls="plus";text="词库";left=146;top=5;right=240;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=12;top=3}};iconText='\uF00A';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=38};x=0.5;y=0.2;z=3};
+stripSetting={cls="plus";text="设置";left=450;top=5;right=544;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=12;top=3}};iconText='\uF0AD';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=38};x=0.5;y=0.2;z=7};
+stripSpelling={cls="plus";text="反查";left=247;top=5;right=341;bottom=40;align="left";color=16777215;dl=1;dt=1;font=LOGFONT(h=-16);iconStyle={align="left";font=LOGFONT(h=-19;name='FontAwesome');padding={left=12;top=3}};iconText='\uF002';notify=1;paddingLeft=1;paddingRight=1;paddingTop=3;textPadding={left=38};x=0.5;y=0.2;z=6};
 titleBar={cls="bkplus";left=0;top=0;right=1042;bottom=41;bgcolor=14977280;dl=1;dr=1;dt=1;z=2}
 )
 /*}}*/
@@ -51,7 +50,6 @@ var tbs = win.ui.tabs(
 	mainForm.stripLex,
 	mainForm.stripSpelling,
 	mainForm.stripHotkey,
-	mainForm.stripPhrase,
 	mainForm.stripSetting,
 	mainForm.stripHelp
 );
@@ -71,12 +69,11 @@ tbs.skin({
 	}
 })
 	
-tbs.loadForm(1,"\dlg\lex.aardio" ); 
+tbs.loadForm(1,"\dlg\dict\dict.aardio" ); 
 tbs.loadForm(2,"\dlg\spelling.aardio" ); 
 tbs.loadForm(3,"\dlg\hotkey.aardio" ); tbs.preloadForm(3,false)
-tbs.loadForm(4,"\dlg\phrase.aardio" ); 
-tbs.loadForm(5,"\dlg\setting.aardio" ); 
-tbs.loadForm(6,"\dlg\help.aardio" ); 
+tbs.loadForm(4,"\dlg\setting.aardio" ); 
+tbs.loadForm(5,"\dlg\help\help.aardio" ); 
 tbs.selIndex = 1;
 
 import win.util.tray;
@@ -100,6 +97,7 @@ mainForm.onDestroy = function(){
 	}
 }
 
+import process;
 import win.ui.menu;
 mainForm.wndproc = {
 	[0xACCF/*_WM_TRAYMESSAGE*/ ] = function(hwnd,message,wParam,lParam){
@@ -107,32 +105,44 @@ mainForm.wndproc = {
 			win.setForeground(mainForm.hwnd)
 			mainForm.popmenu = win.ui.popmenu(mainForm);//创建弹出菜单
 			mainForm.popmenu.add('五笔设置',function(id){
-				tbs.selIndex =5;
-				mainForm.show();
-			});
-			mainForm.popmenu.add();
-			
-			mainForm.popmenu.add('切换码表',function(id){
-				tbs.selIndex = 1;
-				mainForm.show();
-			});
-			mainForm.popmenu.add('管理短语',function(id){
 				tbs.selIndex = 4;
 				mainForm.show();
 			});
+			mainForm.popmenu.add('超级热键',function(id){
+				tbs.selIndex = 3;
+				mainForm.show(); 
+			});
+			mainForm.popmenu.add();
+			
+			mainForm.popmenu.add('管理系统码表',function(id){
+				tbs.selIndex = 1;
+				tbs.selForm.showLex();
+				mainForm.show();
+			});
+			
+			mainForm.popmenu.add('管理用户短语词库',function(id){
+				tbs.selIndex = 1;
+				tbs.selForm.showPhrase();
+				mainForm.show();
+			});
+			
+			mainForm.popmenu.add();
 			mainForm.popmenu.add('字根反查',function(id){
 				tbs.selIndex = 2;
 				mainForm.show();
-				tbs.selForm.editSearch.editBox.setFocus();
+				tbs.selForm.editSpelling.setFocus();
+			});
+			
+			mainForm.popmenu.add('查看字根键位图',function(id){
+				publish("showEtymon");
+				mainForm.show();
 			});
 			mainForm.popmenu.add();
 			
 			mainForm.popmenu.add('打开本软件源代码',function(id){
-				import process;
 				process.openUrl("https://github.com/aardio/wubi-lex")
 			});
 			mainForm.popmenu.add('打开官网: wubi.aardio.com',function(id){
-				import process;
 				process.openUrl("http://wubi.aardio.com")
 			});
 			mainForm.popmenu.add();
@@ -149,8 +159,8 @@ mainForm.wndproc = {
 			mainForm.show();
 			win.setForeground(mainForm.hwnd);
 			
-			if(tbs.selIndex = 2){
-				tbs.selForm.editSearch.editBox.setFocus();
+			if(tbs.selIndex = 2 && tbs.selForm[["editSpelling"]]){
+				tbs.selForm.editSpelling.setFocus();
 			}
 		} 	
 	}
@@ -172,13 +182,18 @@ subscribe("spellingHotkeyChange",function(...){
 				tbs.selIndex = 2;
 				mainForm.show();
 				win.setForeground(mainForm.hwnd);
-				tbs.selForm.editSearch.editBox.setFocus();		
+				tbs.selForm.editSpelling.setFocus();		
 			} 
 
 		},config.hotkey.spelling[1],config.hotkey.spelling[2])    	
 	}
 } )
 publish("spellingHotkeyChange");
+
+subscribe("showEtymon",function(...){
+	tbs.selIndex = 5;
+	tbs.selForm.showEtymon();
+} )
 
 mainForm.tabs = tbs;
 

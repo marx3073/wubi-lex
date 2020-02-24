@@ -3,20 +3,19 @@ import fonts.fontAwesome;
 import win.ui.menu;
 import win.ui;
 /*DSG{{*/
-var winform = win.form(text="wubiLex - 码表管理";right=1040;bottom=607;bgcolor=16777215)
+var winform = win.form(text="wubiLex - 码表管理";right=977;bottom=602;bgcolor=16777215)
 winform.add(
-bkplus={cls="bkplus";left=0;top=304;right=1041;bottom=608;bgcolor=16777215;db=1;dl=1;dr=1;forecolor=15780518;linearGradient=90;z=3};
-btnAddFile={cls="plus";text="添加码表";left=26;top=17;right=187;bottom=53;align="left";bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF271';notify=1;tabstop=1;textPadding={left=39};z=1};
-btnConvert={cls="plus";text="精简码表";left=748;top=564;right=883;bottom=600;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF03A';notify=1;tabstop=1;textPadding={left=39};z=8};
-btnCopyToSystem={cls="plus";text="安装到系统码表";left=196;top=17;right=389;bottom=53;align="left";bgcolor=11580047;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF17A ';notify=1;tabstop=1;textPadding={left=39};z=2};
-btnSave={cls="plus";text="另存为";left=896;top=565;right=1014;bottom=601;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF0C7';notify=1;tabstop=1;textPadding={left=39};z=7};
-ddChar1={cls="plus";text="仅保留单字";left=748;top=438;right=948;bottom=469;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=10};
-ddChar2={cls="plus";text="仅保留单字、双字词";left=748;top=469;right=948;bottom=500;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=9};
-ddGb2312={cls="plus";text="仅保留 GB2312 常用汉字";left=748;top=531;right=948;bottom=562;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=12};
-ddSimplized={cls="plus";text="移除繁体字";left=748;top=500;right=948;bottom=531;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=11};
-editLex={cls="edit";left=408;top=73;right=1025;bottom=557;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-16);multiline=1;vscroll=1;z=6};
-lbTip={cls="plus";left=414;top=27;right=1009;bottom=61;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=5};
-listbox={cls="listbox";left=28;top=73;right=398;bottom=596;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=4}
+btnAddFile={cls="plus";text="添加码表";left=31;top=12;right=192;bottom=45;align="left";bgcolor=11580047;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF271';notify=1;tabstop=1;textPadding={left=39};z=1};
+btnConvert={cls="plus";text="精简码表";left=691;top=560;right=826;bottom=596;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF03A';notify=1;tabstop=1;textPadding={left=39};z=7};
+btnCopyToSystem={cls="plus";text="安装到系统码表";left=201;top=12;right=394;bottom=45;align="left";bgcolor=11580047;disabled=1;dl=1;dt=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF17A ';notify=1;tabstop=1;textPadding={left=39};z=2};
+btnSave={cls="plus";text="另存为";left=839;top=561;right=957;bottom=597;align="left";bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');iconStyle={align="left";font=LOGFONT(h=-16;name='FontAwesome');padding={left=15}};iconText='\uF0C7';notify=1;tabstop=1;textPadding={left=39};z=6};
+ddChar1={cls="plus";text="仅保留单字";left=691;top=434;right=891;bottom=465;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=9};
+ddChar2={cls="plus";text="仅保留单字、双字词";left=691;top=465;right=891;bottom=496;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=8};
+ddGb2312={cls="plus";text="仅保留 GB2312 常用汉字";left=691;top=527;right=891;bottom=558;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=11};
+ddSimplized={cls="plus";text="移除繁体字";left=691;top=496;right=891;bottom=527;align="left";bgcolor=-6960024;border={color=-9920564;radius=1;width=1};font=LOGFONT(h=-15);notify=1;tabstop=1;textPadding={left=20};z=10};
+editLex={cls="edit";left=281;top=59;right=969;bottom=556;db=1;dl=1;dr=1;dt=1;edge=1;font=LOGFONT(h=-16);multiline=1;vscroll=1;z=5};
+lbTip={cls="plus";left=410;top=15;right=946;bottom=49;color=2960685;font=LOGFONT(h=-16;name='FontAwesome');z=4};
+listbox={cls="listbox";left=11;top=59;right=275;bottom=595;db=1;dl=1;dt=1;edge=1;font=LOGFONT(h=-16);items={};vscroll=1;z=3}
 )
 /*}}*/
 
@@ -175,6 +174,11 @@ var addDictFile = function(inputPath){
 
 
 winform.btnAddFile.oncommand = function(id,event){
+   
+	import win.dlg.ctrlColor;
+	win.dlg.ctrlColor(winform.btnAddFile);
+	return ; 
+
     winform.btnAddFile.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 	var inputPath = fsys.dlg.open("二进制码表(*.lex);文本码表(*.txt)|*.lex;*.txt||",,,winform)
 	addDictFile(inputPath)

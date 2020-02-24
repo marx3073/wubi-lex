@@ -55,6 +55,8 @@ load = function(wubiUdpPath){
 	push(phraseOffsets, header.phraseEnd - header.phraseStart);
 	
 	var lines = {};
+	
+	var phraseMap  = {};
 	reduce(phraseOffsets,function(prevOffset,nextOffset){
 		
 		var phrase  = file.read({
@@ -74,17 +76,64 @@ load = function(wubiUdpPath){
 			return null,"不支持当前版本的短语词库格式";
 		}
 		
-		var code = file.readUnicode( (phrase.offset-phrase.cbSize) / 2)  
-		var text = file.readUnicode((nextOffset- prevOffset - phrase.offset)/2);
+		
+		var code = file.readUnicode( (phrase.offset-phrase.cbSize) / 2);  
+		var textLen = (nextOffset- prevOffset - phrase.offset)/2;
+		var text = file.readUnicode(textLen);
 		
 		if(!phrase.deleted){
-			push(lines,code,'\t',text,'\t',phrase.candidate,'\r\n');	
+			if(!phraseMap[code]){
+				phraseMap[code] = {{text;phrase.candidate;textLen-1}}	
+			}
+			else {
+				push(phraseMap[code],{text;phrase.candidate;textLen-1});
+			} 
 		}
 		
 		return nextOffset;
 	})
 	
 	file.close(); 
+	
+	var codeList = {}
+	for(code,phrases in phraseMap){ 
+		push(codeList,code);
+	}
+	..table.sort(codeList);
+	
+	var len = ..string.len;
+	var sort = ..table.sort;
+	var join = ..string.join;
+	var lines = {};
+
+	for(i=1;#codeList;1){ 
+		var code = codeList[i];
+		var phrases = phraseMap[code];
+		
+		sort(phrases,lambda(b)owner[2]<b[2]);
+		if(#phrases>1 && phrases[1][3]==1&& phrases[2][3]==1){
+			var chars = {}
+			for(i=1;#phrases;1){
+		 		var p = phrases[i];
+		 		if(p[2]!=i || p[3]!=1){
+		 			break
+		 		}
+		 		chars[i] = p[1]
+			}
+			
+			if(#phrases == #chars){
+		 		push(lines,code,'\t$[',join(chars),']\r\n');
+		 		continue
+			}
+		}
+		 
+		for(i=1;#phrases;1){
+			var p = phrases[i];
+			push(lines,code,'\t',p[1],'\t',p[2],'\r\n');
+		}
+	}
+	
+	
 	return ..string.join(lines);
 } 
 
@@ -248,7 +297,6 @@ zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
 zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
 zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
 zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
-zzts=$[℃°‰♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
 zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
 zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
 zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]

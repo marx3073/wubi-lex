@@ -1,3 +1,5 @@
-﻿.build/default.main.aardio
-.build/default.Manifest.xml
+﻿/.build/default.main.aardio
+/.build/default.Manifest.xml
+/.build/update-maker.table
+/.build/update-maker.aardio
 dist/

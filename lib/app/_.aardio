@@ -68,6 +68,9 @@ loadDefaultLexFiles = function(){
 		config.lex.files["点儿09( 完整 )"] = "http://wubi.aardio.com/download/lex/091.lex.lzma";
 		..table.push(config.lex.names,"点儿09( 完整 )");
 		
+		config.lex.files["新世纪( 完整 )"] = "http://wubi.aardio.com/download/lex/06.lex.lzma";
+		..table.push(config.lex.names,"新世纪( 完整 )");
+		
 		config.lex.files["新世纪( 单字 )"] = "http://wubi.aardio.com/download/lex/06.min.lex.lzma";
 		..table.push(config.lex.names,"新世纪( 单字 )");
 		

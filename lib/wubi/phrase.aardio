@@ -104,6 +104,7 @@ load = function(wubiUdpPath){
 	var len = ..string.len;
 	var sort = ..table.sort;
 	var join = ..string.join;
+	var indexOf = ..string.indexOf;
 	var lines = {};
 
 	for(i=1;#codeList;1){ 
@@ -111,18 +112,18 @@ load = function(wubiUdpPath){
 		var phrases = phraseMap[code];
 		
 		sort(phrases,lambda(b)owner[2]<b[2]);
-		if(#phrases>1 && phrases[1][3]==1&& phrases[2][3]==1){
+		if(#phrases>1){
 			var chars = {}
 			for(i=1;#phrases;1){
 		 		var p = phrases[i];
-		 		if(p[2]!=i || p[3]!=1){
+		 		if(p[2]!=i || (p[1][3]>1 && indexOf(p[1]," ") ) ){
 		 			break
 		 		}
 		 		chars[i] = p[1]
 			}
 			
 			if(#phrases == #chars){
-		 		push(lines,code,'\t$[',join(chars),']\r\n');
+		 		push(lines,code,'\t$[',join(chars," "),']\r\n');
 		 		continue
 			}
 		}
@@ -160,7 +161,9 @@ save = function(phraseText){
 	var lineIndex = 0;
 	var trim = ..string.trim;
 	var match = ..string.match;
-
+	var split = ..string.split;
+	var indexOf = ..string.indexOf;
+	
 	phraseText = ..string.replace( phraseText,"\/\*.+?\*\/",""); 
 
 	for line in ..string.lines(phraseText) {
@@ -188,9 +191,9 @@ save = function(phraseText){
 				
 			if(code && phrase){
 				if(!order){
-					var arr = ..string.match(phrase,"^\$\[(.+)\]$");
+					var arr = match(phrase,"^\$\[(.+)\]$");
 					if(#arr){
-						arr = ..string.split(arr);
+						arr = indexOf(arr," ") ? split(arr," ") : split(arr);
 						for(i=1;#arr;1){
 							push(phraseArray,{code;arr[i];i}); 
 						}
@@ -287,6 +290,11 @@ default = /**
 aar=aardio
 zzrq=2,%yyyy%年%MM%月%dd%日
 zzsj=2,%yyyy%年%MM%月%dd%日 %HH%:%mm%:%ss%
+zzbd=$[…… … · ── ─ ‖ ∵ ∴ ☆ ★ ○ ● ◎ ◇ ◆ □ ■ △ ▲ ※ 〓]
+zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
+zzfh=$[☹☺☻✔✘☑☒✎✍☚☛☜☞☝☟✈✂✄♀♂✉☎☏✆☠☢☣☭☯☆★✧✦]
+zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
+zzjt=$[→↑←↓↖↗↘↔↕↰↱↲↳↴↵↶↷↼↽↾↿⇀⇁⇂⇃↹↺↻⇄⇅⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇚⇛⇜⇝⇞⇟⇠⇡⇢⇣⇤⇥⇦⇧⇨⇩⇪]
 zzys=$[①②③④⑤⑥⑦⑧⑨⑩⓪]
 zzsz=$[❶❷❸❹❺❻❼❽❾❿]
 zzdl=$[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ]
@@ -294,14 +302,16 @@ zzxl=$[ⅰⅱⅲⅳⅴⅵⅶⅷⅸⅹ]
 zzds=$[⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛]
 zzzm=$[ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ]
 zzzs=$[㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩]
+zzqx=$[☀☁☂☃☼♨☄๑]
+zzts=$[℃°♂♀§№＃＆＠＼＾＿￣]
 zzxx=$[αβγδεζηθικλμνξοπρστυφχψω]
 zzzy=$[ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ]
-zzsx=$[.%‰√×÷＋－＜＝＞±∈∏∑∕∝∞∟∠∣∥∧∨∩∪∫∮∴∵∷∽≈≌≒≠≡≤≥≦≧≮≯⊕⊙⊥⊿]
 zzxe=$[абвгдежзийклмнопрстуфхцчшщъыьэюяё]
-zzkh=$[「」『』〖〗《》〈〉〔〕【】≮≯≤≥]
 zzpy=$[āáǎàōóǒòêēéěèīíǐìǖǘǚǜüūúǔù]
-zzts=$[℃°♂♀§№☆★○●◎◇◆□■△▲※〓＃＆＠＼＾＿￣]
-zzbd=$[→←↑↓·‖…∵∴☆★○●◎◇◆□■△▲※〓]
+zzdz=$[子丑寅卯辰巳午未申酉戌亥]
+zzxq=$[♔♕♖♗♘♙♚♛♜♝♞♟]
+zzpk=$[♠♡♢♣♤♥♦♧]
+zzwx=$[♩♪♫♬♭♮♯]
 **/
 
 /**intellisense(wubi.phrase)

@@ -23,3 +23,5 @@ Win10自带的微软五笔码表安装、管理工具。
 ![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/4.png)
 
 ![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/5.png)
+
+![Screenshot](https://github.com/aardio/wubi-lex/raw/master/screenshots/6.jpg)

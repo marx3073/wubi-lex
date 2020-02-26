@@ -78,7 +78,7 @@ class lexFile{
 						WORD codeLength;
 						WORD inputCode[4]; 
 					})
-						if(!record) return null;
+					if(!record) return null;
 				
 					var len =  (record.length-16); 
 					var outputStr = file.readUnicode(len/2)
@@ -202,11 +202,12 @@ class lexFile{
 		
 		file.close();
 	}
-	find = function(outputStr){
+	find = function(outputStr,min){
 		for(code,outputStrs in this.outputMap){
 			for(i=1;#outputStrs;1){
 				var str = outputStrs[i]
 				if(outputStr===str){
+					if(min && #code<min ) continue
 					return code,str;
 				} 
 			} 
@@ -230,6 +231,47 @@ class lexFile{
 			}
 		}; 	
 	}
+	simplified = function(){
+		var remove = ..table.remove;
+		var len = ..string.len;
+		
+		var map = {}
+		for(i=#this.inputCodes;1;-1){
+			var code = this.inputCodes[i]  
+			var texts = this.outputMap[code]
+			for(i=#texts;1;-1){
+				var txt = texts[i];
+				if(len(txt)==1){
+					if(!map[txt] || (#code<map[txt])){
+						map[txt] = #code;
+					} 
+				}  
+			}
+			
+			if(!#texts){
+				this.outputMap[code] = null;
+				remove(this.inputCodes,i);
+			}
+		}; 
+		
+		for(i=#this.inputCodes;1;-1){
+			var code = this.inputCodes[i]  
+			var texts = this.outputMap[code]
+			for(i=#texts;1;-1){
+				var txt = texts[i];
+				if(map[txt] && (#code>map[txt])){
+					if(!map[txt] || (#code>map[txt])){
+						remove(texts,i);
+					} 
+				}  
+			}
+			
+			if(!#texts){
+				this.outputMap[code] = null;
+				remove(this.inputCodes,i);
+			}
+		}; 		
+	}; 
 	tostring = function(filter){
 		..table.sort(this.inputCodes);
 		
@@ -268,8 +310,41 @@ class lexFile{
 			coincidentTxt = coincidentTxt;
 		}	
 	}
+	isEmpty = function(){
+		return !#this.inputCodes;
+	}
 	getCode = function(code){
 		return this.outputMap[code]
+	}
+	combineCode = function(str){
+		var arr = ..string.split(str);
+		if(#arr<2){return;}
+		
+		var codes = {}
+		codes[1] = this.find(arr[1],2);
+		codes[2] = this.find(arr[2],2);
+		
+		if(!(codes[1]&&codes[2])){return;}
+		
+		if(arr[3]){
+			codes[3] = this.find(arr[3],2);
+			if(!(codes[3]))return;
+		}
+		
+		if(#arr>=4){
+			codes[4]= this.find(arr[#arr],2);
+			if(!(codes[4]))return;
+		}
+		
+		if(#arr==2){ 
+			return codes[1][[1]] ++ codes[1][[2]] ++ codes[2][[1]] ++ codes[2][[2]]
+		}
+		elseif(#arr==3){ 
+			return codes[1][[1]] ++ codes[2][[1]] ++ codes[3][[1]] ++ codes[3][[2]]
+		}
+		elseif(#arr>=4){ 
+			return codes[1][[1]] ++ codes[2][[1]] ++ codes[3][[1]] ++ codes[4][[1]]
+		}
 	}
 	test = function(code,str){
 		var outputStrs = this.outputMap[code];
@@ -282,7 +357,7 @@ class lexFile{
 		var wubi091 = 0;
 		
 		
-		if((this.test("teb","笔"))){ 
+		if(this.test("teb","笔") || this.test("teb","筆") ){ 
 			wubi98++; 
 			wubi06--;
 			wubi86--;
@@ -308,7 +383,7 @@ class lexFile{
 			wubi091++;	
 		}
 		
-		if(this.test("ya","试")){ 
+		if(this.test("ya","试") || this.test("ya","試") ){ 
 			wubi98++; 
 			wubi06--;
 			wubi86--;
@@ -321,7 +396,7 @@ class lexFile{
 			wubi091--;
 		}
 		
-		if(this.test("YAAG","试")){ 
+		if(this.test("YAAG","试") || this.test("YAAG","試")){ 
 			wubi86++; 
 			wubi06--;
 			wubi98--;
@@ -334,7 +409,7 @@ class lexFile{
 			wubi98++;
 		}
 		
-		if(this.test("xyn","编")){
+		if(this.test("xyn","编") || this.test("xyn","編")){
 			wubi98++;
 			wubi06++;
 			wubi86--;
@@ -347,7 +422,7 @@ class lexFile{
 			wubi091++; 
 		}
 		
-		if(this.test("XFXY","线")){  
+		if(this.test("XFXY","线") || this.test("XFXY","線") ){  
 			wubi06++;
 			wubi86--;
 			wubi98--; 
@@ -360,7 +435,7 @@ class lexFile{
 			wubi091++; 
 		}
 		
-		if((this.test("ks","整"))){ 
+		if(this.test("ks","整")){ 
 			wubi98--; 
 			wubi06--;
 			wubi86--;
@@ -373,7 +448,7 @@ class lexFile{
 			wubi091--;
 		} 
 		
-		if((this.test("lm","示"))){ 
+		if(this.test("lm","示")){ 
 			wubi98--; 
 			wubi06--;
 			wubi86--;
@@ -386,7 +461,7 @@ class lexFile{
 			wubi091--;
 		} 
 		
-		if((this.test("ms","刺"))){ 
+		if(this.test("ms","刺")){ 
 			wubi98--; 
 			wubi06--;
 			wubi86--;
@@ -440,10 +515,13 @@ saveTxt(.(filePath,reverse) = 输出文本格式码表 *.txt 文件\n参数@file
 add(.(inputCode,outputStr) = 添加编码\n参数code为表示按键的字母串，长度不能大于4，\nstr为输入文本
 addText(.(txt) = 使用文本格式添加多个编码,\n每一行都必须由表示按键的字母串、制表符或空格、要输入的文本组成，\n字母组成的键名在行首，后面跟一个空格以及要输入的字符串,\n如果一组键名对应多个输入文本,文本间用空格分开,\n兼容键名在行尾的格式
 clear() = 清空数据
-find(__) = 反查编码，\n参数输入文本，返回匹配的编码，文本
+find(__) = 反查编码，\n参数输入文本，返回匹配的编码，文本\n可选用第二个参数指定编码的最小长度
 getCode(__) = 返回指定编码的输出文本数组
 getVersion() = 返回输入法类型，\n可能返回的值为"98","86","06"，06版本为新世纪编码
 tostring() = 返回文本格式词库
 filter(过滤函数) = @.filter(\n	function(txt,code){\n		return true;__/*返回true保留，返回false删除该词条*/\n	}\n)	
 statistics() = 返回统计数据
+simplified() = 出简不出全
+combineCode(__) = 参数中输入词组，返回自动生成的编码,\n此函数使用五笔规则生成编码，不需要在码表中查找词组\n失败返回null,成功返回编码
+isEmpty() = 如果码表为空则返回true
 end intellisense**/

@@ -47,6 +47,21 @@ namespace style{
 	};
 	link = {
 		color = { 
+			default = 0xFF000080;
+			hover = 0xFFFF0000; 
+			active = 0xFF00FF00; 
+		}
+	};
+	link = {
+		color = { 
+			default = 0xFF000080;
+			hover = 0xFFFF0000; 
+			active = 0xFF00FF00; 
+		}
+	};
+	plainButton = {
+		color = { 
+			default = 0xFF3C3C3C;
 			hover = 0xFFFF0000; 
 			active = 0xFF00FF00; 
 		}

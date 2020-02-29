@@ -105,11 +105,12 @@ load = function(wubiUdpPath){
 	var sort = ..table.sort;
 	var join = ..string.join;
 	var indexOf = ..string.indexOf;
+	var replace = ..string.replace;
 	var lines = {};
 
 	for(i=1;#codeList;1){ 
 		var code = codeList[i];
-		var phrases = phraseMap[code];
+		var phrases = phraseMap[code]; 
 		
 		sort(phrases,lambda(b)owner[2]<b[2]);
 		if(#phrases>1){
@@ -123,14 +124,16 @@ load = function(wubiUdpPath){
 			}
 			
 			if(#phrases == #chars){
-		 		push(lines,code,'\t$[',join(chars," "),']\r\n');
+				var txt = replace(join(chars," "),'\n',"%0A");
+		 		push(lines,code,'\t$[',txt,']\r\n');
 		 		continue
 			}
 		}
 		 
 		for(i=1;#phrases;1){
 			var p = phrases[i];
-			push(lines,code,'\t',p[1],'\t',p[2],'\r\n');
+			var txt = replace(p[1],'\n',"%0A");
+			push(lines,code,'\t',txt,'\t',p[2],'\r\n');
 		}
 	}
 	
@@ -166,6 +169,7 @@ save = function(phraseText){
 	
 	phraseText = ..string.replace( phraseText,"\/\*.+?\*\/",""); 
 
+	var orderMap = {}
 	for line in ..string.lines(phraseText) {
 		lineIndex++;
 		
@@ -197,13 +201,16 @@ save = function(phraseText){
 						for(i=1;#arr;1){
 							push(phraseArray,{code;arr[i];i}); 
 						}
+						
+						orderMap[code] = #arr;
 					}
 					else {
-						order = "1";
+						order = (orderMap[code]:0) + 1;
 					}
 				}
 				
 				if(order){
+					orderMap[code] = order;
 					push(phraseArray,{code;phrase;order});	
 				}	
 			}	
@@ -227,6 +234,7 @@ save = function(phraseText){
 	file.seek("cur", 4*#phraseArray)
 	var phraseOffsets = {} 
 
+	var replace = ..string.replace;
 	for(i=1;#phraseArray;1){
 		push(phraseOffsets,file.seek()-phraseStart);
 		
@@ -245,7 +253,9 @@ save = function(phraseText){
 	
 		file.write(..string.toUnicode(phrase[1]))
 		file.write('\0\0')
-		file.write(..string.toUnicode(phrase[2]))
+		
+		var txt = replace(phrase[2],"@%0A",'\n')
+		file.write(..string.toUnicode(txt))
 		file.write('\0\0')
 	} 
 	

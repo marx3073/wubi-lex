@@ -4,6 +4,7 @@ import win.ui;
 var winform = win.form(text="五笔码表管理﻿工具";right=1040;bottom=602;bgcolor=16777215)
 winform.add(
 editSpelling={cls="plus";left=287;top=146;right=712;bottom=181;border={bottom=1;color=-16744448};dl=1;dr=1;dt=1;editable=1;font=LOGFONT(h=-16);tabstop=1;textPadding={top=6};z=8};
+etymonImage={cls="plus";left=148;top=208;right=265;bottom=327;db=1;dl=1;dr=0.75;dt=1;repeat="scale";z=41};
 hotkey={cls="hotkey";left=647;top=573;right=787;bottom=593;clip=1;db=1;dr=1;edge=1;hide=1;z=1};
 inkEdit={cls="atlax";text="InkEd.InkEdit";left=743;top=179;right=999;bottom=446;dr=1;dt=1;z=14};
 keyA={cls="plus";left=292;top=418;right=336;bottom=455;ah=1;align="right";aw=1;bgcolor=12712703;border={color=-4144960;radius=8;width=1};color=255;font=LOGFONT(h=-16);iconColor=32896;iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=5;top=5};valign="top"};iconText="A";notify=1;textPadding={right=6;bottom=2};valign="bottom";z=23};
@@ -35,14 +36,14 @@ keyZ={cls="plus";left=308;top=466;right=352;bottom=503;ah=1;align="right";aw=1;b
 lbInk={cls="static";text="手写输入:";left=743;top=156;right=863;bottom=173;dr=1;dt=1;transparent=1;z=15};
 menuItem={cls="plus";text="下拉列表项模板1";left=361;top=183;right=631;bottom=228;align="right";bgcolor=11525002;border={left=1;right=1;bottom=1;color=-3546113};tabstop=1;textPadding={right=20};z=5};
 menuItem2={cls="plus";text="下拉列表项模板2";left=361;top=228;right=631;bottom=273;align="right";bgcolor=11525002;border={left=1;right=1;bottom=1;color=-3546113};tabstop=1;textPadding={right=20};z=11};
-plusCode={cls="plus";left=265;top=232;right=499;bottom=282;align="right";dl=1;dr=1;dt=1;font=LOGFONT(h=-37);textPadding={right=10};z=9};
+plusCode={cls="plus";left=265;top=232;right=499;bottom=282;align="right";dr=0.52;dt=1;font=LOGFONT(h=-37);textPadding={right=10};z=9};
 plusDownloadSpellingGif={cls="plus";text='\uF019  下载五笔拆分详细图解字库';left=681;top=468;right=960;bottom=504;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');hide=1;notify=1;tabstop=1;z=17};
 plusEtymon={cls="plus";text="字根图";left=885;top=572;right=981;bottom=594;align="left";db=1;dr=1;font=LOGFONT(h=-13);iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=9}};iconText='\uF0E8';notify=1;tabstop=1;textPadding={left=25};z=40};
 plusHotkey={cls="plus";text="设置热键";left=788;top=572;right=884;bottom=594;align="left";db=1;dr=1;font=LOGFONT(h=-13);iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=9}};iconText='\uF11C ';notify=1;tabstop=1;textPadding={left=25};z=39};
 plusSpelling={cls="plus";left=311;top=303;right=688;bottom=359;color=255;dl=1;dr=1;dt=1;z=3};
-plusSpellingGif={cls="plus";left=499;top=232;right=719;bottom=288;dl=1;dr=1;dt=1;repeat="scale";z=22};
-plusTitle={cls="plus";text="根据当前安装的系统码表反查上面输入的汉字";left=262;top=185;right=734;bottom=218;color=5921370;dl=1;dr=1;dt=1;z=19};
-plusWubiTable={cls="plus";left=163;top=520;right=854;bottom=553;clip=1;color=5921370;dl=1;dr=1;dt=1;font=LOGFONT(h=-16);z=2}
+plusSpellingGif={cls="plus";left=499;top=232;right=719;bottom=288;dl=0.48;dt=1;repeat="scale";z=22};
+plusTitle={cls="plus";text="根据当前安装的系统码表反查上面输入的汉字";left=262;top=185;right=734;bottom=218;aw=1;color=5921370;dt=1;z=19};
+plusWubiTable={cls="plus";left=163;top=520;right=854;bottom=553;clip=1;color=5921370;db=0.08;dl=1;dr=1;font=LOGFONT(h=-16);z=2}
 )
 /*}}*/
 
@@ -50,6 +51,26 @@ import win.debounce;
 import wubi.lexFile;
 import string.conv.pinyin;
 import wubi.table;	
+
+var showEtymonImage = function(ver,k){
+	var path = io.appData("/aardio/std/wubi-lex-files/etymon/v1/"+ver+"/"+k+".jpg")
+	if(!..io.exist(path) ){
+		thread.invoke( 
+			function(winform,ver,k,path){
+				import inet.http;
+				var bin = inet.http().get("http://wubi.aardio.com/download/etymon/"+ver+"/"+k+".jpg");
+				
+				if(bin){
+					string.save(path,bin)
+					winform.etymonImage.background = path;
+				}	
+			},winform,ver,k,path
+		)
+	} 
+	else {
+		winform.etymonImage.background = path;
+	} 	
+}
 
 var spelling98;
 var searchSpelling = win.debounce(function(str){
@@ -90,10 +111,13 @@ var searchSpelling = win.debounce(function(str){
 		winform.plusCode.text = code;
 			
 		if(#code<=4){
-			var numbers = {"①";"②";"③";"④";}
-			var codes = string.split(code);
-			for(i=#codes;1;-1){ 
-				var ctrl = winform["key" + codes[i]];
+			if(winform.wubiVersion){
+				showEtymonImage(winform.wubiVersion,code[[1]]);
+			}
+			
+			var numbers = {"①";"②";"③";"④";} 
+			for(i=#code;1;-1){ 
+				var ctrl = winform[ "key" + code[[i]] ];
 				ctrl.text = numbers[i];
 				ctrl.checked = true; 
 			}	
@@ -266,6 +290,7 @@ var showSuggestion = win.debounce(
 		menu.popup(true,win.toScreen(winform.hwnd,x + cx/2 - 230,y+cy))	
 	}
 )	
+
 winform.editSpelling.editBox.onChange = function(){  
 	var str = string.trim(winform.editSpelling.text) 
 	if(string.match(str,"^[a-zA-Z]+$")){
@@ -358,6 +383,8 @@ subscribe("wubi.system.lex.changed",function(...){
 			
 			var k = string.right(name,1);
 			winform.plusWubiTable.text = wubi.table[winform.wubiVersion][k]
+			
+			showEtymonImage(winform.wubiVersion,k);
 		}
 		ctrl.onMouseLeave = function(wParam,lParam){
 			winform.plusWubiTable.text = ""
@@ -365,6 +392,7 @@ subscribe("wubi.system.lex.changed",function(...){
 		
 		var k = string.right(name,1);
 		ctrl.iconText = k +" "+ string.charAt(wubi.table[ver][k],1);
+		
 		ctrl.text = ""; 
 		ctrl.skin(style.key)
 	}

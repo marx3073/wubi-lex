@@ -37,14 +37,14 @@ tbs.skin({
 
 var showImage = function(winform,ver){
     winform.etymonImage.background = null;
-	var path = io.appData("/aardio/std/wubi-lex-files/etymon/v1/"+ver+".png")
+	var path = io.appData("/aardio/std/wubi-lex-files/etymon/v1/"+ver+".jpg")
 	
 	if(!..io.exist(path)){  
 		winform.etymonImage.text = "请稍候，正在努力下载字根图 ......";
 		winform.etymonImage.disabledText = {'\uF254';'\uF251';'\uF252';'\uF253';'\uF250'}
 		
 		import inet.http;
-		var bin = inet.http().get("http://wubi.aardio.com/download/etymon/"+ver+".png");
+		var bin = inet.http().get("http://wubi.aardio.com/download/etymon/"+ver+".jpg");
 		
 		if(bin){
 			string.save(path,bin)

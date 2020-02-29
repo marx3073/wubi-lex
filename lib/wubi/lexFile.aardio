@@ -45,7 +45,9 @@ class lexFile{
 					
 					var strs = splitEx(outputStrs,"\s+");
 					for(i=1;#strs;1) {
-						var s = replace(strs[i],"@%20"," ")
+						var s = replace(strs[i],"@%20",' ')
+						s = replace(s,"@%09",'\t') 
+						s = replace(s,"@%0A",'\n')
 						push(outputMap[inputCode],s); 
 					}
 				} 
@@ -214,6 +216,8 @@ class lexFile{
 		} 
 	}
 	filter = function(f){
+		..table.sort(this.inputCodes);
+		
 		var remove = ..table.remove;
 		for(i=#this.inputCodes;1;-1){
 			var code = this.inputCodes[i]  
@@ -230,6 +234,36 @@ class lexFile{
 				remove(this.inputCodes,i);
 			}
 		}; 	
+	}
+	unique = function(){
+		..table.sort(this.inputCodes);
+		
+		var len = ..string.len;
+		var remove = ..table.remove;
+		var push = ..table.push;
+		for(i=#this.inputCodes;1;-1){
+			var code = this.inputCodes[i]  
+			var texts = this.outputMap[code]
+			if(#texts<=1){
+				continue;
+			}
+			
+			var newText = {}
+			var word;
+			for(i=1;#texts){
+				var txt = texts[i];
+				var l = len(txt);
+				if(l>1){ 
+					if( !word  ) {
+						push(newText,txt)
+						word = true;
+					}
+				}  
+				else{ push(newText,txt) }
+			}
+			
+			this.outputMap[code] = newText;
+		}; 		
 	}
 	simplified = function(){
 		var remove = ..table.remove;
@@ -275,12 +309,16 @@ class lexFile{
 	tostring = function(filter){
 		..table.sort(this.inputCodes);
 		
+		var replace = ..string.replace;
+		var hex  = ..string.hex;
+		var urlEncode = lambda(c) hex(c,"%");
 		var strBuilder = ..string.builder();
+		
 		for(i=1;#this.inputCodes;1){
 			var code = this.inputCodes[i]  
 			var texts = this.outputMap[code]
 			for(i=1;#texts;1){
-				var txt = texts[i];
+				var txt = replace(texts[i],"\s",urlEncode)
 				strBuilder.append(code+'\t'+txt+'\r\n');
 			}
 		}; 
@@ -519,7 +557,7 @@ find(__) = 反查编码，\n参数输入文本，返回匹配的编码，文本\
 getCode(__) = 返回指定编码的输出文本数组
 getVersion() = 返回输入法类型，\n可能返回的值为"98","86","06"，06版本为新世纪编码
 tostring() = 返回文本格式词库
-filter(过滤函数) = @.filter(\n	function(txt,code){\n		return true;__/*返回true保留，返回false删除该词条*/\n	}\n)	
+filter(过滤函数) = @.filter(\n	function(txt,code){\n		return true;__/*遍历顺序已经按按键的字母序排序,\n返回true保留，返回false删除该词条*/\n	}\n)	
 statistics() = 返回统计数据
 simplified() = 出简不出全
 combineCode(__) = 参数中输入词组，返回自动生成的编码,\n此函数使用五笔规则生成编码，不需要在码表中查找词组\n失败返回null,成功返回编码

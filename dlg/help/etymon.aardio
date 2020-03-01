@@ -37,7 +37,7 @@ tbs.skin({
 
 var showImage = function(winform,ver){
     winform.etymonImage.background = null;
-	var path = io.appData("/aardio/std/wubi-lex-files/etymon/v1/"+ver+".jpg")
+	var path = io.appData("/aardio/std/wubi/etymon/v1/"+ver+".jpg")
 	
 	if(!..io.exist(path)){  
 		winform.etymonImage.text = "请稍候，正在努力下载字根图 ......";

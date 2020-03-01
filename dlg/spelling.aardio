@@ -37,7 +37,7 @@ lbInk={cls="static";text="手写输入:";left=743;top=156;right=863;bottom=173;d
 menuItem={cls="plus";text="下拉列表项模板1";left=361;top=183;right=631;bottom=228;align="right";bgcolor=11525002;border={left=1;right=1;bottom=1;color=-3546113};tabstop=1;textPadding={right=20};z=5};
 menuItem2={cls="plus";text="下拉列表项模板2";left=361;top=228;right=631;bottom=273;align="right";bgcolor=11525002;border={left=1;right=1;bottom=1;color=-3546113};tabstop=1;textPadding={right=20};z=11};
 plusCode={cls="plus";left=265;top=232;right=499;bottom=282;align="right";dr=0.52;dt=1;font=LOGFONT(h=-37);textPadding={right=10};z=9};
-plusDownloadSpellingGif={cls="plus";text='\uF019  下载五笔拆分详细图解字库';left=681;top=468;right=960;bottom=504;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');hide=1;notify=1;tabstop=1;z=17};
+plusDownloadSpellingGif={cls="plus";text='\uF019  下载拆分图解字库';left=778;top=468;right=960;bottom=504;bgcolor=11580047;db=1;dr=1;font=LOGFONT(h=-16;name='FontAwesome');hide=1;notify=1;tabstop=1;z=17};
 plusEtymon={cls="plus";text="字根图";left=885;top=572;right=981;bottom=594;align="left";db=1;dr=1;font=LOGFONT(h=-13);iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=9}};iconText='\uF0E8';notify=1;tabstop=1;textPadding={left=25};z=40};
 plusHotkey={cls="plus";text="设置热键";left=788;top=572;right=884;bottom=594;align="left";db=1;dr=1;font=LOGFONT(h=-13);iconStyle={align="left";font=LOGFONT(name='FontAwesome');padding={left=9}};iconText='\uF11C ';notify=1;tabstop=1;textPadding={left=25};z=39};
 plusSpelling={cls="plus";left=311;top=303;right=688;bottom=359;color=255;dl=1;dr=1;dt=1;z=3};
@@ -184,12 +184,12 @@ var searchSpelling = win.debounce(function(str){
 	}
 	
 	var getSpellingGifPath = function(char){
-		var path = fsys.appdata("aardio\std\wubi\spelling\" 
+		var path = io.appData("aardio\std\wubi\spelling\" 
 				+ winform.wubiVersion + "\" + char + ".gif")
 				
 		if(!io.exist(path) ){
-			path = io.exist( fsys.appdata("aardio\std\wubi\spelling\86\" + char + ".gif") )
-				|| io.exist( fsys.appdata("aardio\std\wubi\spelling\98\" + char + ".gif") )
+			path = io.exist( io.appData("aardio\std\wubi\spelling\86\" + char + ".gif") )
+				|| io.exist( io.appData("aardio\std\wubi\spelling\98\" + char + ".gif") )
 		}
 		
 		return path;
@@ -251,8 +251,37 @@ var searchSpelling = win.debounce(function(str){
 			}
 		}
 	}
-	elseif(wubiSpellingGifPathA) { 
-		winform.plusSpellingGif.setBackground(string.loadBuffer(wubiSpellingGifPathA));
+	else{
+		var path = io.appData("aardio\std\wubi\spelling\" 
+				+ winform.wubiVersion + "\" + wchars[1] + ".gif")
+		
+		if(io.exist(path)){
+			winform.plusSpellingGif.setBackground(string.loadBuffer(path));	
+		} 
+		else {
+			thread.invoke( 
+				function(winform,ver,wchar){
+					import inet.http;
+					var bin = inet.http().get("http://wubi.aardio.com/download/spelling/"+ver+"/" + string.hex(wchar,"") + ".gif");
+					
+					if(bin){
+						var path = io.appData("aardio\std\wubi\spelling\" 	+ ver + "\" + wchar + ".gif")
+						string.save(path,bin);
+						
+						winform.plusSpellingGif.setBackground(bin);	
+					}	
+					else {
+						var path = io.exist( io.appData("aardio\std\wubi\spelling\86\" + wchar + ".gif") )
+							|| io.exist( io.appData("aardio\std\wubi\spelling\98\" + wchar + ".gif") )
+							
+						if(path){
+							winform.plusSpellingGif.setBackground(string.loadBuffer(path));	
+						}
+					}
+						
+				},winform,winform.wubiVersion,wchars[1]
+			)
+		}
 	}
 	
 	winform.plusTitle.text = "拼音：" + string.conv.pinyin(str,,true);

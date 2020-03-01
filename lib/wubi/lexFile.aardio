@@ -2,6 +2,7 @@
 import fsys;
 import fsys.codepage;
 import string.builder;
+import string.database;
 
 namespace wubi;
 
@@ -306,7 +307,28 @@ class lexFile{
 			}
 		}; 		
 	}; 
-	tostring = function(filter){
+	getTableData = function(){
+		..table.sort(this.inputCodes);
+		
+		var push = ..table.push;
+		var result = {};
+		for(i=1;#this.inputCodes;1){
+			var code = this.inputCodes[i]  
+			var texts = this.outputMap[code]
+			push( result,..table.append({code},texts));
+		};
+		
+		return result;
+	};
+	setTableData = function(result){
+		var push = ..table.push;
+		for(i=1;#result;1){ 
+			var code = result[i][1]
+			push(this.inputCodes,code);
+			this.outputMap[code] = ..table.slice(result[i],2);
+		} 
+	};
+	tostring = function(reverse,singleLine){
 		..table.sort(this.inputCodes);
 		
 		var replace = ..string.replace;
@@ -314,14 +336,42 @@ class lexFile{
 		var urlEncode = lambda(c) hex(c,"%");
 		var strBuilder = ..string.builder();
 		
-		for(i=1;#this.inputCodes;1){
-			var code = this.inputCodes[i]  
-			var texts = this.outputMap[code]
-			for(i=1;#texts;1){
-				var txt = replace(texts[i],"\s",urlEncode)
-				strBuilder.append(code+'\t'+txt+'\r\n');
+		if(reverse){
+			for(i=1;#this.inputCodes;1){
+				var code = this.inputCodes[i]  
+				var texts = this.outputMap[code]
+				for(i=1;#texts;1){
+					var txt = replace(texts[i],"\s",urlEncode)
+					strBuilder.append(txt+'\t'+code+'\r\n');
+				}
+			};  
+		}
+		else {
+			if(singleLine){
+				for(i=1;#this.inputCodes;1){
+					var code = this.inputCodes[i]  
+					var texts = this.outputMap[code]
+					strBuilder.append(code);
+					for(i=1;#texts;1){
+						var txt = replace(texts[i],"\s",urlEncode)
+						strBuilder.append('\t'+txt);
+					}
+					strBuilder.append('\r\n');
+				};
 			}
-		}; 
+			else {
+				for(i=1;#this.inputCodes;1){
+					var code = this.inputCodes[i]  
+					var texts = this.outputMap[code]
+					for(i=1;#texts;1){
+						var txt = replace(texts[i],"\s",urlEncode)
+						strBuilder.append(code+'\t'+txt+'\r\n');
+					}
+				}; 
+			}
+			
+			
+		}
 		
 		var ret = tostring(strBuilder) 
 		strBuilder.free();
@@ -556,10 +606,12 @@ clear() = 清空数据
 find(__) = 反查编码，\n参数输入文本，返回匹配的编码，文本\n可选用第二个参数指定编码的最小长度
 getCode(__) = 返回指定编码的输出文本数组
 getVersion() = 返回输入法类型，\n可能返回的值为"98","86","06"，06版本为新世纪编码
-tostring() = 返回文本格式词库
+tostring(.(reverse,singleLine) = 返回文本格式词库
 filter(过滤函数) = @.filter(\n	function(txt,code){\n		return true;__/*遍历顺序已经按按键的字母序排序,\n返回true保留，返回false删除该词条*/\n	}\n)	
 statistics() = 返回统计数据
 simplified() = 出简不出全
 combineCode(__) = 参数中输入词组，返回自动生成的编码,\n此函数使用五笔规则生成编码，不需要在码表中查找词组\n失败返回null,成功返回编码
 isEmpty() = 如果码表为空则返回true
+getTableData() = 返回表数据,\n返回表为包含所有编码的数组,\n每个编码为一个数组,第一列为编码,其余列为词语
+setTableData(__) = 载入参数指定的表数据,\n返回表为包含所有编码的数组,\n每个编码为一个数组,第一列为编码,其余列为词语
 end intellisense**/

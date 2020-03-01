@@ -982,25 +982,33 @@ var createMenuItems = function(){
 
 winform.editLex.enablePopMenu(createMenuItems)
 
+import ustring;
 winform.btnSearch.oncommand = function(id,event){
-	var txt = winform.editLex.text;
+	
 	var min,max = winform.editLex.getsel();
-	
 	if(max) min = max; 
-	min = string.bytes(txt,min+1);
 	
-	var i,j = string.find(txt,winform.editSearch.text,min,true);
+	var txt = string.toUnicode(winform.editLex.text);
+	var kw = string.toUnicode(string.trim(winform.editSearch.text));
+	 
+	var i,j = ustring.indexOf(txt,kw,min+1);
 	if((!(i&&j)) && (min>0)){
-		i,j = string.find(txt,winform.editSearch.text,0,true);
+		i,j =  ustring.indexOf(txt,kw,0);
 	}
 	
 	if(i&&j){
 		winform.editLex.setsel(i,j);
+		winform.editLex.scrollCaret();
 	}
 }
 
+winform.editSearch.editBox.onOk = function(){ 
+    winform.btnSearch.oncommand();
+    return true; 	
+}
+
 winform.btnSearch.skin( style.plainButton );
-winform.editSearch.setCueBannerText("输入查找文本（支持模式匹配）")
+winform.editSearch.setCueBannerText("请输入查找文本")
 
 winform.show() 
 win.loopMessage();
